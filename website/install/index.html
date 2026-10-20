@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DropMorph Windows Install</title>
+<meta name="description" content="DropMorph ko Windows 11 (aur Windows 10) pe install karne ka aasaan step-by-step guide.">
+<meta property="og:title" content="DropMorph: Windows 11 pe install kaise karein">
+<meta property="og:description" content="5 minute mein install. Step-by-step guide, screenshots jaisa.">
+<meta property="og:image" content="/og.png">
+<meta name="theme-color" content="#0D9488">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F7F7;--surface:#FFFFFF;--surface-alt:#E6EFEF;--text:#10201F;--muted:#55706D;--border:rgba(16,32,31,.10);
+  --accent:#0D9488;--accent-strong:#0B6F66;--accent-soft:rgba(13,148,136,.12);--coral:#FF6B35;--coral-soft:rgba(255,107,53,.14);
+  --warn-bg:#FFF6E5;--warn-border:#F2C46D;--warn-text:#7A4B00;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 10px 30px rgba(11,59,56,.08);--hero-a:#0B3B38;--hero-b:#0D9488;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1617;--surface:#162122;--surface-alt:#1E2C2D;--text:#E6F2F0;--muted:#94ADA9;--border:rgba(255,255,255,.09);
+  --accent:#2DD4BF;--accent-strong:#5EEAD4;--accent-soft:rgba(45,212,191,.14);--coral:#FF8A5C;--coral-soft:rgba(255,138,92,.16);
+  --warn-bg:#2B2210;--warn-border:#7A5A1C;--warn-text:#F5D08A;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);--hero-a:#071F1D;--hero-b:#0B6F66;
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1617;--surface:#162122;--surface-alt:#1E2C2D;--text:#E6F2F0;--muted:#94ADA9;--border:rgba(255,255,255,.09);
+  --accent:#2DD4BF;--accent-strong:#5EEAD4;--accent-soft:rgba(45,212,191,.14);--coral:#FF8A5C;--coral-soft:rgba(255,138,92,.16);
+  --warn-bg:#2B2210;--warn-border:#7A5A1C;--warn-text:#F5D08A;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);--hero-a:#071F1D;--hero-b:#0B6F66;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--accent)}
+code,kbd{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
+code{font-size:.88em;background:var(--surface-alt);padding:1px 6px;border-radius:6px;word-break:break-all}
+kbd{display:inline-block;padding:0 8px;border-radius:6px;border:1px solid var(--border);border-bottom-width:2px;background:var(--surface);font-size:.85em;color:var(--text)}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+
+nav{position:sticky;top:0;z-index:20;backdrop-filter:saturate(1.4) blur(12px);background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--border)}
+nav .wrap{display:flex;align-items:center;gap:14px;height:62px;max-width:1120px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;text-decoration:none;color:var(--text)}
+.brand img{width:30px;height:30px}
+.spacer{margin-left:auto}
+.theme-toggle{background:none;border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:#FF6B35;color:#fff}
+.btn-primary:hover{background:#F25A22}
+.btn-small{padding:8px 14px;font-size:14px;border-radius:10px}
+.btn-ghost{color:#fff;border-color:rgba(255,255,255,.7)}
+
+header{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;padding:52px 0 56px;position:relative;overflow:hidden}
+header::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:#FF6B35;opacity:.16;right:-140px;top:-180px}
+header .wrap{position:relative}
+.pill{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2)}
+h1{font-size:clamp(32px,5vw,50px);line-height:1.08;letter-spacing:-.03em;margin:16px 0 12px;font-weight:800}
+h1 span{color:#FFB599}
+header p{font-size:18px;opacity:.9;margin:0 0 24px;max-width:600px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.meta{font-size:13px;opacity:.75;margin-top:14px}
+
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 8px}
+.toc a{font-size:14px;font-weight:600;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);padding:7px 12px;border-radius:999px}
+.toc a:hover{border-color:var(--accent)}
+
+main{padding:16px 0 40px}
+.step{display:grid;grid-template-columns:52px 1fr;gap:18px;margin-top:40px}
+.num{width:52px;height:52px;border-radius:16px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800}
+:root[data-theme="dark"] .num{color:#05201D}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .num{color:#05201D}}
+.step h2{margin:6px 0 8px;font-size:24px;letter-spacing:-.02em;line-height:1.25}
+.step p,.step li{color:var(--muted)}
+.step p{margin:8px 0}
+.step ol,.step ul{padding-left:22px;margin:8px 0}
+.step li{margin:6px 0}
+.step b{color:var(--text)}
+@media (max-width:560px){.step{grid-template-columns:1fr;gap:10px}.num{width:44px;height:44px;font-size:19px;border-radius:13px}}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px 22px;box-shadow:var(--shadow);margin:14px 0}
+.warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text);border-radius:16px;padding:16px 18px;margin:14px 0}
+.warn b{color:inherit}
+.warn p,.warn li{color:inherit}
+.tip{background:var(--accent-soft);border-radius:16px;padding:14px 18px;margin:14px 0;color:var(--text)}
+.tip b{color:var(--accent-strong)}
+.win11{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--coral-soft);color:var(--coral);vertical-align:middle;margin-left:6px;letter-spacing:.02em}
+
+/* mock Windows dialogs */
+.mock{border-radius:12px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.18);margin:16px 0;max-width:520px;font-family:"Segoe UI",system-ui,sans-serif}
+.smart{background:#1F5FA8;color:#fff;padding:22px 24px}
+.smart .t{font-size:22px;font-weight:600;margin-bottom:10px}
+.smart p{color:#E6EEF8;margin:6px 0;font-size:14px}
+.smart .link{text-decoration:underline;color:#fff;font-weight:600}
+.smart .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.wbtn{font:600 13px "Segoe UI",sans-serif;padding:7px 18px;border-radius:4px;border:1px solid rgba(255,255,255,.7);color:#fff;background:transparent}
+.wbtn.hl{outline:3px solid #FFB599;outline-offset:2px}
+.uac{background:#fff;color:#1b1b1b}
+.uac .top{background:#2B6CB0;color:#fff;padding:12px 18px;font-size:14px}
+.uac .body{padding:16px 18px;font-size:14px}
+.uac .row{display:flex;justify-content:flex-end;gap:8px;padding:0 18px 16px}
+.uac .wbtn{color:#1b1b1b;border-color:#bbb;background:#f3f3f3}
+.uac .wbtn.yes{background:#0067C0;color:#fff;border-color:#0067C0}
+.setup{background:#fff;color:#1b1b1b;padding:16px 18px;font-size:14px}
+.setup .h{font-weight:600;margin-bottom:10px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:7px 0}
+.chk i{flex:none;width:16px;height:16px;border:1.5px solid #555;border-radius:3px;margin-top:3px;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:800}
+.chk i.on{background:#0067C0;border-color:#0067C0;color:#fff}
+.chk small{color:#666;display:block}
+
+.table{width:100%;border-collapse:collapse;font-size:15px;margin:10px 0}
+.table th,.table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.table th{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.table td:first-child{font-weight:700;color:var(--text)}
+.table td{color:var(--muted)}
+.wide{overflow-x:auto}
+
+/* donut how-to */
+.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+@media (max-width:700px){.ways{grid-template-columns:1fr}}
+.way{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 18px}
+.way h3{margin:0 0 6px;font-size:16px}
+.way p{margin:0;font-size:14.5px}
+
+details{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin:10px 0}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px;color:var(--text)}
+summary::after{content:"+";color:var(--accent);font-size:20px;line-height:1}
+details[open] summary::after{content:"−"}
+details p,details li{color:var(--muted)}
+
+.share{text-align:center;background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;border-radius:24px;padding:40px 22px;margin:56px 0 0}
+.share h2{margin:0 0 8px;font-size:26px}
+.share p{opacity:.88;margin:0 0 18px}
+.copy{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:8px 8px 8px 14px;border-radius:12px;max-width:100%}
+.copy code{background:none;color:#fff;font-size:14px;padding:0}
+.copy button{font:700 13px "Plus Jakarta Sans",sans-serif;border:0;border-radius:8px;padding:7px 12px;background:#fff;color:#0B3B38;cursor:pointer}
+footer{padding:30px 0 40px;color:var(--muted);font-size:14px;text-align:center}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/logo.svg" alt="">DropMorph</a>
+    <span class="spacer"></span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Switch theme">◐</button>
+    <a class="btn btn-primary btn-small" href="https://github.com/Cod4Nitish/DropMorph/releases/latest/download/DropMorph-1.12.0-win-Setup.exe">Download</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="pill">Windows 11 · Windows 10 · 5 minute</span>
+    <h1>DropMorph ko <span>Windows 11</span> pe install karo</h1>
+    <p>Bilkul aasaan step-by-step guide. Har screen jo aayegi, woh yahan pehle se dikhayi hai, to kahin atakna nahi padega.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph/releases/latest/download/DropMorph-1.12.0-win-Setup.exe">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
+        Setup download karo (112 MB)
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/Cod4Nitish/DropMorph/releases/latest">Saari files</a>
+    </div>
+    <div class="meta">Version 1.12.0 · Windows 10 (1809+) aur Windows 11 · Free</div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="toc">
+      <a href="#s1">1. Download</a><a href="#s2">2. Blue screen</a><a href="#s3">3. Yes dabao</a><a href="#s4">4. Options</a><a href="#s5">5. Use karo</a><a href="#help">Problem?</a>
+    </div>
+
+    <section class="step" id="s1">
+      <div class="num">1</div>
+      <div>
+        <h2>Setup download karo</h2>
+        <p>Upar wala <b>Setup download karo</b> button dabao. <code>DropMorph-1.12.0-win-Setup.exe</code> aapke <b>Downloads</b> folder mein aa jayegi.</p>
+        <div class="tip"><b>Edge / Chrome warning?</b> Browser bole "isn't commonly downloaded", to <b>⋯</b> (teen dots) dabao, phir <b>Keep</b> → <b>Keep anyway</b>.</div>
+      </div>
+    </section>
+
+    <section class="step" id="s2">
+      <div class="num">2</div>
+      <div>
+        <h2>Neeli "Windows protected your PC" screen</h2>
+        <p>Setup pe double-click karo. Windows 11 ek neeli screen dikha sakta hai. <b>Ghabraao mat.</b> Yeh isliye aata hai kyunki DropMorph naya app hai aur abhi code-signed nahi hai.</p>
+        <div class="mock smart" aria-hidden="true">
+          <div class="t">Windows protected your PC</div>
+          <p>Microsoft Defender SmartScreen prevented an unrecognized app from starting. Running this app might put your PC at risk.</p>
+          <p class="link">More info</p>
+          <div class="row"><span class="wbtn hl">Run anyway</span><span class="wbtn">Don't run</span></div>
+        </div>
+        <ol>
+          <li><b>More info</b> (underline wala text) dabao.</li>
+          <li>Neeche <b>Run anyway</b> button aa jayega, use dabao.</li>
+        </ol>
+        <div class="warn">
+          <p style="margin-top:0"><b>Windows 11: "Smart App Control blocked an app"?</b></p>
+          <p>Kuch naye Windows 11 PCs mein <b>Smart App Control</b> on hota hai. Yeh unsigned apps ko seedha block kar deta hai, aur isme "Run anyway" ka option hota hi nahi.</p>
+          <ul>
+            <li>Check karne ke liye: <b>Start → Settings → Privacy &amp; security → Windows Security → App &amp; browser control → Smart App Control settings</b>.</li>
+            <li>Ise <b>Off</b> karke hi DropMorph install hoga.</li>
+            <li style="margin-bottom:0"><b>Dhyan do:</b> Smart App Control ek baar off karne ke baad Windows reset kiye bina wapas on nahi hota. Agar aap yeh nahi chahte, to DropMorph abhi us PC pe nahi chalega.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" id="s3">
+      <div class="num">3</div>
+      <div>
+        <h2>"Allow this app to make changes?" → Yes</h2>
+        <p>Install ke liye admin permission chahiye, isliye Windows yeh poochega:</p>
+        <div class="mock uac" aria-hidden="true">
+          <div class="top">User Account Control</div>
+          <div class="body"><b>Do you want to allow this app from an unknown publisher to make changes to your device?</b><br><br>DropMorph-1.12.0-win-Setup.exe</div>
+          <div class="row"><span class="wbtn yes">Yes</span><span class="wbtn">No</span></div>
+        </div>
+        <p><b>Yes</b> dabao. Password maange to apne PC ka password ya PIN daalo.</p>
+      </div>
+    </section>
+
+    <section class="step" id="s4">
+      <div class="num">4</div>
+      <div>
+        <h2>Options chuno, phir Install</h2>
+        <p>Setup mein yeh options aayenge. Inme se zyada kaam ke options ko on rakho:</p>
+        <div class="mock setup" aria-hidden="true">
+          <div class="h">Options:</div>
+          <div class="chk"><i class="on">✓</i><span>Right-click menu<small>File pe right-click → DropMorph</small></span></div>
+          <div class="chk"><i class="on">✓</i><span>Also show it at the top of the Windows 11 menu<small>"Show more options" kholna nahi padega</small></span></div>
+          <div class="chk"><i class="on">✓</i><span>Start at sign-in<small>PC on hote hi tray mein ready</small></span></div>
+          <div class="chk"><i></i><span>Add the "dropmorph" command to PATH</span></div>
+          <div class="chk"><i></i><span>Create a desktop shortcut</span></div>
+        </div>
+        <div class="wide">
+        <table class="table">
+          <tr><th>Option</th><th>Kya karein</th></tr>
+          <tr><td>Right-click menu</td><td>✅ On rakho</td></tr>
+          <tr><td>Windows 11 menu ke top pe <span class="win11">WIN 11</span></td><td>✅ On rakho. Windows 11 mein naya chhota right-click menu hota hai. Isse DropMorph seedha usi mein dikhega.</td></tr>
+          <tr><td>Start at sign-in</td><td>✅ On rakho. <b>Ctrl-drag tabhi kaam karta hai jab DropMorph chalu ho.</b></td></tr>
+          <tr><td>"dropmorph" command</td><td>Sirf agar command line use karte ho</td></tr>
+          <tr><td>Desktop shortcut</td><td>Aapki marzi</td></tr>
+        </table>
+        </div>
+        <p><b>Conversion engines</b> (agla page, optional):</p>
+        <ul>
+          <li><b>FFmpeg</b>: video aur audio (MP4, MP3, WAV, MKV…). <b>Ise zaroor lo.</b></li>
+          <li><b>LibreOffice</b>: purani files (DOC, PPT, ODT, Pages, Keynote)</li>
+          <li><b>Ghostscript</b>: EPS/PS · <b>Pandoc</b>: LaTeX jaise text formats · <b>calibre</b>: MOBI/AZW3 e-books</li>
+        </ul>
+        <div class="tip"><b>Bina engine ke bhi</b> images, PDF, Word, Excel, PowerPoint, ZIP sab chalta hai. Engines baad mein bhi <b>Settings → Engines</b> se le sakte ho.</div>
+        <p><b>Install</b> → <b>Finish</b> dabao. DropMorph khul jayega, aur chune hue engines usi window mein download honge.</p>
+      </div>
+    </section>
+
+    <section class="step" id="s5">
+      <div class="num">5</div>
+      <div>
+        <h2>Use karo: Ctrl + drag + drop</h2>
+        <div class="card">
+          <ol style="margin:0">
+            <li><kbd>Ctrl</kbd> key dabake rakho.</li>
+            <li>Kisi bhi file ko mouse se thoda sa <b>drag</b> karo.</li>
+            <li>Cursor pe formats ka <b>donut</b> khul jayega.</li>
+            <li>Jo format chahiye (PNG, PDF, MP3…), uspe le jaake <b>chhod do</b>.</li>
+            <li>Nayi file <b>original file ke bagal mein</b> ban jayegi.</li>
+          </ol>
+        </div>
+        <p>Website pe iska <a href="/#demo">live demo</a> try kar sakte ho.</p>
+        <p><b>Aur tareeke:</b></p>
+        <div class="ways">
+          <div class="way"><h3>Right-click <span class="win11">WIN 11</span></h3><p>File pe right-click → <b>DropMorph</b> → format. Na dikhe to <b>Show more options</b> mein dekho.</p></div>
+          <div class="way"><h3>Drop zone</h3><p>DropMorph window kholo aur file us box mein daal do.</p></div>
+          <div class="way"><h3>Kai files ek saath</h3><p>Bahut saari files select karke ek saath drag karo. Sab parallel mein convert hongi.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="help" style="margin-top:56px">
+      <h2 style="font-size:26px;letter-spacing:-.02em;margin:0 0 10px">Problem aa rahi hai?</h2>
+      <details open><summary>Ctrl dabake drag karne pe donut nahi khul raha</summary>
+        <p>DropMorph chalu hona chahiye. Windows 11 mein taskbar ke right side pe <b>^</b> (teer) dabao, wahan DropMorph ka drop wala icon dikhna chahiye. Na dikhe to <b>Start</b> menu mein "DropMorph" search karke kholo.</p></details>
+      <details><summary>Right-click menu mein DropMorph nahi dikh raha <span class="win11">WIN 11</span></summary>
+        <p>Windows 11 ke chhote menu mein na ho to <b>Show more options</b> (ya <kbd>Shift</kbd> + right-click) dabao. Top pe chahiye to DropMorph ki <b>Settings → General</b> mein Explorer menu ka option on karo.</p></details>
+      <details><summary>"Run anyway" ka button hi nahi hai</summary>
+        <p>Yeh Smart App Control ki wajah se hai. Upar <a href="#s2">Step 2</a> ka peela box padho.</p></details>
+      <details><summary>Antivirus ne file delete/block kar di</summary>
+        <p>Naye unsigned apps ke saath kabhi-kabhi aisa hota hai. Antivirus ke quarantine mein jaake <b>Restore / Allow</b> karo. Setup seedha GitHub se download karo, kisi aur site se nahi.</p></details>
+      <details><summary>Video ya audio convert nahi ho raha</summary>
+        <p>DropMorph mein <b>Settings → Engines</b> pe jaake <b>FFmpeg</b> install karo.</p></details>
+      <details><summary>Bina install kiye chalana hai (Portable)</summary>
+        <p><a href="https://github.com/Cod4Nitish/DropMorph/releases/latest/download/DropMorph-1.12.0-win-Portable.zip">Portable zip</a> download karo. Pehle zip pe right-click → <b>Properties</b> → neeche <b>Unblock</b> tick karke OK dabao, phir unzip karke <code>DropMorph.exe</code> chalao.</p></details>
+      <details><summary>Update kaise karein?</summary>
+        <p>Kuch karne ki zaroorat nahi. Naya version aane pe DropMorph khud notice dikhayega. Ek click mein update ho jayega, aur settings aur engines bache rahenge.</p></details>
+      <details><summary>Uninstall kaise karein?</summary>
+        <p><b>Start → Settings → Apps → Installed apps</b> → DropMorph ke aage <b>⋯</b> → <b>Uninstall</b>.</p></details>
+      <details><summary>Kya meri files kahin upload hoti hain?</summary>
+        <p>Nahi. Sab kuch aapke PC pe hi convert hota hai. DropMorph internet sirf naya version check karne aur aapke chune hue engines download karne ke liye use karta hai.</p></details>
+    </section>
+
+    <div class="share">
+      <h2>Dosto ko bhejo</h2>
+      <p>Yeh link share karo. Isme download aur pura guide, dono hain.</p>
+      <div class="copy"><code id="shareUrl">https://dropmorph.vercel.app/install</code><button id="copyBtn" type="button">Copy</button></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <a href="/">DropMorph</a> · Made by <a href="https://github.com/cod4nitish">Nitish Singh</a> · <a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a>
+</footer>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('dm-theme'); if (t) root.dataset.theme = t; } catch {}
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('dm-theme', root.dataset.theme); } catch {}
+  });
+  const btn = document.getElementById('copyBtn');
+  btn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(document.getElementById('shareUrl').textContent); btn.textContent = 'Copied!'; }
+    catch { btn.textContent = 'Select karke copy karo'; }
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+})();
+</script>
+</body>
+</html>
