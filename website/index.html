@@ -56,9 +56,10 @@
 </header>
 
 <section class="sec" id="video"><div class="wrap video-grid">
-  <div class="phone"><video src="/media/dropmorph-30s.mp4" poster="/media/dropmorph-30s-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="30-second DropMorph demo: Ctrl-drag a file onto the format ring and it converts"></video></div>
+  <div class="phone"><video id="reel" src="/media/dropmorph-reel.mp4" poster="/media/dropmorph-reel-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="DropMorph demo video: Ctrl-drag a file onto the format ring and it converts"></video>
+    <button class="sound" id="reelSound" type="button" aria-pressed="false">🔊 Sound on</button></div>
   <div>
-    <div class="kicker">See it in 30 seconds</div>
+    <div class="kicker">See it in action</div>
     <h2>One drag. That's the whole app.</h2>
     <p class="video-lead">Hold Ctrl, drag a photo, drop it on PDF. A progress ring, and the PDF appears next to the original. The same works for Word, Excel, videos and 250 other formats.</p>
     <div class="feat-list" style="grid-template-columns:1fr">

@@ -9,6 +9,16 @@
     try { localStorage.setItem('dm-theme', root.dataset.theme); } catch {}
   });
 
+  // Demo reel: autoplays muted (browsers require it); the button turns sound on from the start.
+  const reel = document.getElementById('reel'), sound = document.getElementById('reelSound');
+  if (reel && sound) sound.addEventListener('click', () => {
+    const on = reel.muted;
+    reel.muted = !on;
+    if (on) { reel.currentTime = 0; reel.play().catch(() => {}); }
+    sound.textContent = on ? '🔇 Mute' : '🔊 Sound on';
+    sound.setAttribute('aria-pressed', String(on));
+  });
+
   const stage = document.getElementById('stage');
   if (!stage) return;
   const files = {
