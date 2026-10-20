@@ -23,7 +23,7 @@ public static class ExplorerMenuRegistration
     private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(3);
 
     /// <summary>A registered copy of the package.</summary>
-    /// <param name="FullName">Package full name, e.g. <c>DropMorph.ExplorerMenu_1.0.0.0_x64__c73vxh346rtay</c>.</param>
+    /// <param name="FullName">Package full name, e.g. <c>DropMorph.ExplorerMenu_1.0.0.0_x64__hsfbcx1hx2mgt</c>.</param>
     /// <param name="Version">Identity version from the full name.</param>
     /// <param name="ExternalLocation">Folder the package points at (null when Windows does not say).</param>
     public sealed record RegisteredPackage(string FullName, Version Version, string? ExternalLocation);

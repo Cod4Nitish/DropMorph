@@ -126,7 +126,7 @@ Filename: "{app}\{#AppExe}"; Parameters: "--uninstall-cleanup"; Flags: runhidden
 const
   // ExplorerMenuPackage in src/DropMorph.Platform.Windows (InstallerScriptTests keeps these in sync).
   ExplorerMenuName = 'DropMorph.ExplorerMenu';
-  ExplorerMenuFamily = 'DropMorph.ExplorerMenu_c73vxh346rtay';
+  ExplorerMenuFamily = 'DropMorph.ExplorerMenu_hsfbcx1hx2mgt';
   ExplorerMenuDll = 'DropMorphExplorerMenu.dll';
   ExplorerMenuPackageFile = 'DropMorphExplorerMenu.msix';
   ExplorerMenuMinimumBuild = 22000;

@@ -120,6 +120,8 @@ It connects to the internet only:
   [`engines.json`](src/DropMorph.Engines/Infrastructure/engines.json).
 - when you click a link, which opens your web browser.
 
+<!-- sponsors: src/DropMorph.App/Assets/Sponsors/sponsors.json -->
+
 ## License
 
 MIT, see [LICENSE](LICENSE). Bundled third-party components keep their own licenses, listed in

@@ -26,7 +26,7 @@ public static class ExplorerMenuPackage
     /// Package family name = name + "_" + a hash of <see cref="Publisher"/> (checked by a test against
     /// <c>PackageFamilyNameFromId</c>). Used to look the registration up without PowerShell.
     /// </summary>
-    public const string FamilyName = "DropMorph.ExplorerMenu_c73vxh346rtay";
+    public const string FamilyName = "DropMorph.ExplorerMenu_hsfbcx1hx2mgt";
 
     /// <summary>
     /// Version of the manifest, deliberately independent of the app version: registering an unsigned package with a

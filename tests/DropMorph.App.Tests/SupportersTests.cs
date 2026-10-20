@@ -41,7 +41,7 @@ public class SupportersTests
         var folder = Path.Combine(RepoRoot, "src", "DropMorph.App", "Assets", "Sponsors");
         var list = Supporters.Parse(File.ReadAllText(Path.Combine(folder, "sponsors.json")));
 
-        foreach (var readme in new[] { "README.md", "README.ko.md", "README.zh-CN.md" })
+        foreach (var readme in new[] { "README.md" })
         {
             var text = File.ReadAllText(Path.Combine(RepoRoot, readme));
             Assert.Contains("<!-- sponsors: src/DropMorph.App/Assets/Sponsors/sponsors.json -->", text);

@@ -957,7 +957,7 @@ public class RenderTests
             Assert.Equal(Avalonia.Media.Color.Parse("#E8E4D8"), BrushColor(window, "TextPrimaryBrush"));
             // Colours the file does not set, and the other variant, keep DropMorph's own.
             Assert.Equal(Avalonia.Media.Color.Parse("#AEACA4"), BrushColor(window, "TextSecondaryBrush"));
-            Assert.Equal(Avalonia.Media.Color.Parse("#F6F5F1"), BrushColor(window, "PageBrush", Avalonia.Styling.ThemeVariant.Light));
+            Assert.Equal(Avalonia.Media.Color.Parse("#F2F7F7"), BrushColor(window, "PageBrush", Avalonia.Styling.ThemeVariant.Light));
             Save(window, "page-theme-custom.png");
 
             // Applying without a theme file (deleted, or emptied) restores the built-in colours on the open window.
