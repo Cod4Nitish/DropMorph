@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Command Line File Converter: dropmorph convert &amp; watch | DropMorph</title>
+<meta name="description" content="Convert files from the command line with dropmorph convert, or automatically with dropmorph watch folders. Options, examples and exit codes.">
+<link rel="canonical" href="https://dropmorph.vercel.app/cli/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dropmorph.vercel.app/cli/">
+<meta property="og:title" content="Command Line File Converter: dropmorph convert &amp; watch | DropMorph">
+<meta property="og:description" content="Convert files from the command line with dropmorph convert, or automatically with dropmorph watch folders. Options, examples and exit codes.">
+<meta property="og:image" content="https://dropmorph.vercel.app/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0D9488">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="top" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/logo.svg" alt="" width="32" height="32">DropMorph</a>
+    <div class="navlinks"><a href="/#how">How it works</a><a href="/#features">Features</a><a href="/formats/">Formats</a><a href="/cli/" aria-current="page">Command line</a><a href="/install/">Install guide</a><a href="/#faq">FAQ</a></div>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch light or dark theme">◐</button>
+    <a class="btn btn-primary btn-small nav-dl" href="/#download">Download</a>
+  </div>
+</nav>
+<main id="main">
+
+<header class="hero"><div class="wrap hero-simple">
+  <div class="crumbs"><a href="/">DropMorph</a> › Command line</div>
+  <h1>The <span>dropmorph</span> command</h1>
+  <p class="lead">Convert files and folders from a terminal, a script or a scheduled task, with the same engines and presets as the app. Or let a watch folder do it on its own.</p>
+</div></header>
+<section class="sec"><div class="wrap narrow prose">
+  <div class="toc"><a href="#setup">Set up</a><a href="#usage">Usage</a><a href="#convert">convert</a><a href="#watch">watch</a><a href="#more">formats &amp; presets</a><a href="#exit">Exit codes</a></div>
+
+  <h2 id="setup">Set up</h2>
+  <p><b>Windows:</b> in Setup, tick <b>Add the "dropmorph" command to PATH</b>. Open a new terminal (PowerShell, Command Prompt or Windows Terminal) and run <code>dropmorph help</code>.</p>
+  <p><b>macOS and Linux:</b> <code>./install.sh</code> adds the command.</p>
+
+  <h2 id="usage">Usage</h2>
+<pre class="term">dropmorph convert &lt;files or folders...&gt; --to &lt;format&gt; [options]
+dropmorph convert &lt;files or folders...&gt; --preset &lt;preset&gt; [options]
+dropmorph watch &lt;folder&gt; --to &lt;format&gt; [options]
+dropmorph formats [&lt;format&gt;]
+dropmorph presets
+dropmorph help [&lt;command&gt;]
+dropmorph version</pre>
+
+  <h2 id="convert">convert</h2>
+  <p>Files can be wildcards (<code>*.heic</code>). Folders convert the files in them that DropMorph knows. Results are saved next to the sources unless you give <code>-o</code>.</p>
+<pre class="term"><span class="c"># a photo</span>
+<span class="p">&gt;</span> dropmorph convert photo.heic --to jpg
+<span class="c"># every PNG, smaller WebP files in a "converted" folder</span>
+<span class="p">&gt;</span> dropmorph convert *.png --to webp --quality 80 -o converted
+<span class="c"># a scans folder and its sub folders, with an app preset</span>
+<span class="p">&gt;</span> dropmorph convert D:\Scans --recursive --preset to-pdf
+<span class="c"># machine-readable result</span>
+<span class="p">&gt;</span> dropmorph convert report.docx --to pdf --json</pre>
+  <div class='tbl-wrap'><table class='tbl'><thead><tr><th>Option</th><th>What it does</th></tr></thead><tbody><tr><td><code>-t, --to &lt;format&gt;</code></td><td>Target format, e.g. jpg, png, pdf, docx, mp4 (see <code>dropmorph formats</code>)</td></tr><tr><td><code>-p, --preset &lt;preset&gt;</code></td><td>A preset from the app, by id or name (see <code>dropmorph presets</code>)</td></tr><tr><td><code>-o, --output &lt;folder&gt;</code></td><td>Save there instead of next to the sources</td></tr><tr><td><code>-r, --recursive</code></td><td>Include sub folders</td></tr><tr><td><code>-q, --quality &lt;1-100&gt;</code></td><td>Image quality for JPG, WebP, AVIF, …</td></tr><tr><td><code>--overwrite</code></td><td>Replace existing output files (default: add a number)</td></tr><tr><td><code>--skip</code></td><td>Leave existing output files alone</td></tr><tr><td><code>--keep-dates</code></td><td>Give converted files the created and modified dates of the originals</td></tr><tr><td><code>--zip</code></td><td>Save the result of each file as one ZIP</td></tr><tr><td><code>--json</code></td><td>Print the result as JSON, for scripts and other programs</td></tr><tr><td><code>--quiet</code></td><td>Print nothing but errors</td></tr></tbody></table></div>
+
+  <h2 id="watch">watch</h2>
+  <p>Converts files that land in a folder until you press <kbd>Ctrl</kbd>+<kbd>C</kbd>. A file is converted once it's complete: no longer growing or open in another program. Output goes to a <code>converted</code> folder inside it unless <code>-o</code> is given.</p>
+<pre class="term"><span class="c"># every new file in D:\Inbox becomes a PDF; originals are moved aside</span>
+<span class="p">&gt;</span> dropmorph watch D:\Inbox --to pdf --move-originals</pre>
+  <div class='tbl-wrap'><table class='tbl'><thead><tr><th>Option</th><th>What it does</th></tr></thead><tbody><tr><td><code>-t, --to &lt;format&gt;</code></td><td>Target format</td></tr><tr><td><code>-p, --preset &lt;preset&gt;</code></td><td>A preset from the app, by id or name</td></tr><tr><td><code>-o, --output &lt;folder&gt;</code></td><td>Where converted files go (default: <code>&lt;folder&gt;\converted</code>)</td></tr><tr><td><code>-r, --recursive</code></td><td>Also watch sub folders; their files keep the sub folder in the output</td></tr><tr><td><code>--move-originals</code></td><td>Move converted sources to <code>&lt;folder&gt;\originals</code>; files already waiting are converted at start</td></tr><tr><td><code>--settle &lt;seconds&gt;</code></td><td>How long a file must stay unchanged before converting (default 2)</td></tr><tr><td><code>--keep-dates</code></td><td>Keep the originals' created and modified dates</td></tr><tr><td><code>--zip</code></td><td>Save each file's result as one ZIP</td></tr><tr><td><code>--quiet</code></td><td>Print nothing but errors</td></tr></tbody></table></div>
+  <div class="tip"><b>Tip:</b> watch folders are also in the app (Settings → Watch folders), so they keep running in the tray without a terminal.</div>
+
+  <h2 id="more">formats and presets</h2>
+  <p><code>dropmorph formats</code> lists every format, and <code>dropmorph formats heic</code> shows what one format converts to. <code>dropmorph presets</code> lists the presets saved in the app, both built-in and your own; use them with <code>--preset</code>.</p>
+
+  <h2 id="exit">Exit codes</h2>
+  <div class="tbl-wrap"><table class="tbl"><tbody>
+    <tr><td><code>0</code></td><td>All files converted</td></tr>
+    <tr><td><code>1</code></td><td>Some files failed</td></tr>
+    <tr><td><code>2</code></td><td>Wrong arguments or a missing input</td></tr>
+    <tr><td><code>3</code></td><td>Nothing to convert</td></tr></tbody></table></div>
+</div></section>
+<section class="sec" style="padding-top:0"><div class="final">
+  <h2>Stop uploading files to convert them.</h2>
+  <p>Drag. Drop. Morphed. Free for Windows, macOS and Linux.</p>
+  <div class="cta" style="justify-content:center"><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph/releases/latest/download/DropMorph-1.12.0-win-Setup.exe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg> Download for Windows</a><a class="btn btn-ghost" href="/install/">Windows 11 install guide</a></div>
+</div></section>
+
+</main>
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="/" style="font-size:17px"><img src="/logo.svg" alt="" width="28" height="28">DropMorph</a>
+        <p style="margin:12px 0 0;max-width:300px">A free, offline file converter you use by dragging. 254 formats, nothing uploaded.</p>
+      </div>
+      <div><h4>Product</h4><a href="/#features">Features</a><a href="/formats/">All formats</a><a href="/cli/">Command line</a><a href="/install/">Windows install guide</a><a href="/#faq">FAQ</a></div>
+      <div><h4>Popular</h4><a href="/convert/heic-to-jpg/">HEIC → JPG</a><a href="/convert/pdf-to-word/">PDF → Word</a><a href="/convert/word-to-pdf/">Word → PDF</a><a href="/convert/excel-to-pdf/">Excel → PDF</a><a href="/convert/jpg-to-pdf/">JPG → PDF</a><a href="/convert/pdf-to-jpg/">PDF → JPG</a></div>
+      <div><h4>Project</h4><a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a><a href="https://github.com/Cod4Nitish/DropMorph/releases">All releases</a><a href="https://github.com/Cod4Nitish/DropMorph/issues">Report an issue</a><a href="https://github.com/Cod4Nitish/DropMorph/blob/main/LICENSE">MIT License</a><a href="https://github.com/Cod4Nitish/DropMorph/blob/main/THIRD-PARTY-NOTICES.md">Third-party notices</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 DropMorph · Made by <a href="https://github.com/cod4nitish">Nitish Singh</a></span><span>Version 1.12.0</span></div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
