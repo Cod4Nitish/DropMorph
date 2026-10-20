@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DropMorph.Core/DropMorph.Core.csproj" />
+    <Project Path="src/DropMorph.Engines/DropMorph.Engines.csproj" />
+    <Project Path="src/DropMorph.Platform.Windows/DropMorph.Platform.Windows.csproj" />
+    <Project Path="src/DropMorph.Platform.Linux/DropMorph.Platform.Linux.csproj" />
+    <Project Path="src/DropMorph.Platform.MacOS/DropMorph.Platform.MacOS.csproj" />
+    <Project Path="src/DropMorph.App/DropMorph.App.csproj" />
+    <Project Path="src/DropMorph.Cli/DropMorph.Cli.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DropMorph.Core.Tests/DropMorph.Core.Tests.csproj" />
+    <Project Path="tests/DropMorph.Engines.Tests/DropMorph.Engines.Tests.csproj" />
+    <Project Path="tests/DropMorph.App.Tests/DropMorph.App.Tests.csproj" />
+    <Project Path="tests/DropMorph.Cli.Tests/DropMorph.Cli.Tests.csproj" />
+    <Project Path="tests/DropMorph.Platform.Tests/DropMorph.Platform.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path=".editorconfig" />
+  </Folder>
+</Solution>

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DropMorph.Engines\DropMorph.Engines.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="DocumentFormat.OpenXml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Small OFL test fonts for FontTests (see Fonts/OFL.txt and Fonts/make-test-fonts.py). -->
+    <None Update="Fonts\*.ttf;Fonts\*.otf;Fonts\*.woff2" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Small Shapefiles written by GDAL for the geospatial tests (synthetic data; Geo/make-test-geo.py recreates them). -->
+    <None Update="Geo\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

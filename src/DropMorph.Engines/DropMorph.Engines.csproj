@@ -1,0 +1,49 @@
+<!--
+  DropMorph.Engines: IConverter implementations (one file per engine) and helpers to find external tools.
+  Register new engines in EngineRegistry.cs.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>DropMorph.Engines</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DropMorph.Core\DropMorph.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" />
+    <PackageReference Include="PDFsharp" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" />
+    <PackageReference Include="PDFtoImage" />
+    <PackageReference Include="Unhwp" />
+    <PackageReference Include="Markdig" />
+    <PackageReference Include="ExcelNumberFormat" />
+    <PackageReference Include="Svg.Skia" />
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" />
+    <PackageReference Include="SharpCompress" />
+    <PackageReference Include="ExcelDataReader" />
+    <PackageReference Include="PdfPig" />
+    <PackageReference Include="MimeKitLite" />
+    <PackageReference Include="ACadSharp" />
+    <PackageReference Include="AngleSharp" />
+    <PackageReference Include="YamlDotNet" />
+    <PackageReference Include="Tomlyn" />
+    <PackageReference Include="MsgReader" />
+    <PackageReference Include="SharpGLTF.Core" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="DropMorph" />
+    <InternalsVisibleTo Include="DropMorph.Engines.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Reference HWPX (styles, page setup) from pypandoc-hwpx (MIT), see Hwp/Hwpx/HwpxWriter.cs. -->
+    <EmbeddedResource Include="Hwp\Hwpx\blank.hwpx" LogicalName="DropMorph.Engines.Hwpx.blank.hwpx" />
+    <!-- Pinned downloads of optional engines, also read by build/fetch-engines.ps1. -->
+    <EmbeddedResource Include="Infrastructure\engines.json" LogicalName="DropMorph.Engines.engines.json" />
+  </ItemGroup>
+</Project>

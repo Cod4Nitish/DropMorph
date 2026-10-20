@@ -1,0 +1,5 @@
+; Exports of the Explorer context-menu COM server (see DropMorphExplorerMenu.c).
+LIBRARY DropMorphExplorerMenu
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE

@@ -1,0 +1,281 @@
+name: Linux and macOS packages
+
+# Linux packages are built on Ubuntu 24.04 but must run on Ubuntu 22.04 (glibc 2.35). The rhwp CLI release needs a
+# newer glibc, so it is built from pinned source on Ubuntu 22.04 first (linux-native, build/build-linux-native.py) and
+# replaces the download in the package. SharpHook (>= 8.0.1) ships libuiohook builds for glibc 2.34 and is packaged as
+# is. Every ELF file in a Linux package is then checked against glibc 2.35, and the x64 and arm64 packages are tried on
+# Ubuntu 22.04, which also catches a SharpHook or engine update that raises the requirement again.
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        default: ''
+        required: false
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Package version (empty uses Directory.Build.props)'
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  linux-native:
+    name: Linux native ${{ matrix.rid }} (Ubuntu 22.04)
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            rid: linux-x64
+          - runner: ubuntu-22.04-arm
+            rid: linux-arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      NATIVE_OUT: ${{ github.workspace }}/build/.cache/linux-native/${{ matrix.rid }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # Fails when engines.json moved to another rhwp version while build/build-linux-native.py still builds the old
+      # source (also when the build below comes from the cache).
+      - name: Check pinned sources
+        run: python3 build/build-linux-native.py check
+
+      - name: Restore native builds
+        id: native-cache
+        uses: actions/cache@v5
+        with:
+          path: build/.cache/linux-native/${{ matrix.rid }}
+          key: linux-native-${{ matrix.rid }}-ubuntu-22.04-${{ hashFiles('build/build-linux-native.py') }}
+
+      # rhwp's default features are pure Rust: a C toolchain for the linker and build scripts is enough.
+      - name: Build dependencies
+        if: steps.native-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config git
+          if ! command -v rustup >/dev/null; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
+            echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          fi
+
+      - name: Restore cargo downloads
+        if: steps.native-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: cargo-registry-${{ matrix.rid }}-${{ hashFiles('build/build-linux-native.py') }}
+          restore-keys: cargo-registry-${{ matrix.rid }}-
+
+      - name: Build rhwp
+        if: steps.native-cache.outputs.cache-hit != 'true'
+        run: python3 build/build-linux-native.py rhwp --output "$NATIVE_OUT/rhwp" --work "$RUNNER_TEMP/rhwp"
+
+      - name: Check glibc requirements
+        run: python3 build/check-elf-glibc.py --max 2.35 --needed "$NATIVE_OUT"
+
+      - name: Upload native builds
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-native-${{ matrix.rid }}
+          path: build/.cache/linux-native/${{ matrix.rid }}/
+          if-no-files-found: error
+
+  portable:
+    needs: linux-native
+    # macOS packages don't use the Linux builds: they still run when those failed (the Linux legs then stop at the
+    # download).
+    if: ${{ !cancelled() }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            rid: linux-x64
+          - runner: ubuntu-24.04-arm
+            rid: linux-arm64
+          - runner: macos-15
+            rid: osx-arm64
+          - runner: macos-15-intel
+            rid: osx-x64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Download Linux native builds
+        if: runner.os == 'Linux'
+        uses: actions/download-artifact@v8
+        with:
+          name: linux-native-${{ matrix.rid }}
+          path: ${{ runner.temp }}/linux-native
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Linux desktop dependencies
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates libc6 libgcc-s1 libgssapi-krb5-2 libicu74 libssl3t64 libstdc++6 tzdata zlib1g \
+            libfontconfig1 libfreetype6 libx11-6 libice6 libsm6 libxrandr2 libxkbcommon0 libxi6 libxtst6 libxt6 xvfb fonts-noto-cjk
+
+      - name: Fonts
+        run: ./build/fetch-fonts.ps1
+
+      - name: Restore engine downloads
+        uses: actions/cache@v5
+        with:
+          path: build/.cache/portable-downloads
+          key: portable-engines-${{ matrix.rid }}-${{ hashFiles('src/DropMorph.Engines/Infrastructure/engines.json') }}
+
+      - name: Build and test native projects
+        run: |
+          ./build/fetch-portable-engines.ps1 -Runtime '${{ matrix.rid }}' -Destination engines
+          dotnet build DropMorph.slnx -c Release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $projects = @('DropMorph.Core.Tests', 'DropMorph.Platform.Tests', 'DropMorph.Engines.Tests', 'DropMorph.Cli.Tests', 'DropMorph.App.Tests')
+          foreach ($project in $projects) {
+            $testArguments = @('test', "tests/$project/$project.csproj", '--no-build', '-c', 'Release', '--logger', 'trx', '--results-directory', "TestResults/${{ matrix.rid }}",
+              '--filter', 'FullyQualifiedName!=DropMorph.App.Tests.ExplorerMenuTests.Every_native_import_exists_in_the_dll_it_names&FullyQualifiedName!=DropMorph.App.Tests.ExplorerMenuTests.Reading_the_registered_package_never_throws')
+            if ($IsLinux) {
+              xvfb-run -a env -u WAYLAND_DISPLAY XDG_SESSION_TYPE=x11 dotnet @testArguments
+            } else {
+              dotnet @testArguments
+            }
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      # Linux: rhwp from linux-native instead of the download (see the top).
+      - name: Build portable package
+        env:
+          PACKAGE_VERSION: ${{ inputs.version }}
+        run: |
+          $native = @{}
+          if ($IsLinux) {
+            $native = @{ RhwpOverride = Join-Path $env:RUNNER_TEMP 'linux-native/rhwp' }
+          }
+          ./build/build-portable.ps1 -Runtime '${{ matrix.rid }}' -Version $env:PACKAGE_VERSION -SkipFonts @native
+
+      - name: Check archive and run native converters
+        run: ./build/smoke-portable.ps1 -Runtime '${{ matrix.rid }}'
+
+      - name: Check glibc requirements
+        if: runner.os == 'Linux'
+        shell: bash
+        run: python3 build/check-elf-glibc.py --max 2.35 "$DROPMORPH_SMOKE_PACKAGE"
+
+      - name: Launch native desktop app
+        shell: bash
+        run: python3 build/smoke-launch-app.py
+
+      - name: Collect DropMorph logs
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/dropmorph-screens"
+          for logs in "$HOME/Library/Application Support/DropMorph/logs" "$HOME/.config/DropMorph/logs"; do
+            if [ -d "$logs" ]; then cp -R "$logs" "$RUNNER_TEMP/dropmorph-screens/"; fi
+          done
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: portable-${{ matrix.rid }}
+          path: |
+            Releases/*-${{ matrix.rid }}.tar.gz
+            Releases/*-${{ matrix.rid }}-SHA256SUMS.txt
+          if-no-files-found: error
+
+      - name: Upload test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: unix-test-results-${{ matrix.rid }}
+          path: |
+            TestResults/${{ matrix.rid }}/
+            tests/DropMorph.App.Tests/bin/Release/net10.0/screenshots/
+            ${{ runner.temp }}/dropmorph-startup.log
+            ${{ runner.temp }}/dropmorph-screens/
+          if-no-files-found: ignore
+
+  # The packages built above, unpacked and started on the oldest supported Ubuntu, with only the runtime libraries a
+  # user installs from installer/linux/INSTALL.txt.
+  ubuntu-22-04:
+    name: Package on Ubuntu 22.04 (${{ matrix.rid }})
+    needs: portable
+    # Runs when another platform's package failed; a missing Linux package fails the download.
+    if: ${{ !cancelled() }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            rid: linux-x64
+          - runner: ubuntu-22.04-arm
+            rid: linux-arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Linux desktop dependencies (Ubuntu 22.04)
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates libc6 libgcc-s1 libgssapi-krb5-2 libicu70 libssl3 libstdc++6 tzdata zlib1g \
+            libfontconfig1 libfreetype6 libx11-6 libice6 libsm6 libxrandr2 libxkbcommon0 libxi6 libxtst6 libxt6 xvfb fonts-noto-cjk
+
+      - name: Download package
+        uses: actions/download-artifact@v8
+        with:
+          name: portable-${{ matrix.rid }}
+          path: Releases
+
+      - name: Check archive and run native converters
+        run: ./build/smoke-portable.ps1 -Runtime '${{ matrix.rid }}'
+
+      - name: Check glibc requirements
+        shell: bash
+        run: python3 build/check-elf-glibc.py --max 2.35 "$DROPMORPH_SMOKE_PACKAGE"
+
+      - name: Launch native desktop app
+        shell: bash
+        run: python3 build/smoke-launch-app.py
+
+      - name: Collect DropMorph logs
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/dropmorph-screens"
+          if [ -d "$HOME/.config/DropMorph/logs" ]; then cp -R "$HOME/.config/DropMorph/logs" "$RUNNER_TEMP/dropmorph-screens/"; fi
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ubuntu-22-04-results-${{ matrix.rid }}
+          path: |
+            ${{ runner.temp }}/dropmorph-startup.log
+            ${{ runner.temp }}/dropmorph-screens/
+          if-no-files-found: ignore

@@ -1,0 +1,27 @@
+<!-- Asked when the main window closes while AppSettings.CloseAction is Ask: keep DropMorph in the tray or quit, with
+     "Don't ask again" (Settings → General changes it later). -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="DropMorph.App.Views.CloseAskWindow"
+        Title="DropMorph"
+        Icon="avares://DropMorph/Assets/Icons/dropmorph.ico"
+        Width="440"
+        SizeToContent="Height"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+  <StackPanel Margin="22" Spacing="14">
+    <StackPanel Spacing="4">
+      <TextBlock Classes="h2" Text="{DynamicResource close.title}" />
+      <TextBlock Classes="caption" TextWrapping="Wrap" Text="{DynamicResource close.text}" />
+    </StackPanel>
+    <CheckBox x:Name="DontAsk" Content="{DynamicResource close.dont_ask}" />
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button MinWidth="88" HorizontalContentAlignment="Center" Content="{DynamicResource common.cancel}"
+              Click="OnCancel" IsCancel="True" />
+      <Button MinWidth="88" HorizontalContentAlignment="Center" Content="{DynamicResource close.quit}" Click="OnQuit" />
+      <Button Classes="accent" MinWidth="88" HorizontalContentAlignment="Center" Content="{DynamicResource close.tray}"
+              Click="OnTray" IsDefault="True" />
+    </StackPanel>
+  </StackPanel>
+</Window>

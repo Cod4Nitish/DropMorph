@@ -1,0 +1,26 @@
+<!--
+  Shared MSBuild settings for every project in the repository.
+  Keep project files small: anything common belongs here.
+-->
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Missing XML docs are reported by review, not by the compiler; documenting only the non-obvious
+         parameters of a member is fine (CS1573). -->
+    <NoWarn>$(NoWarn);CS1591;CS1573</NoWarn>
+
+    <Version>1.12.0</Version>
+    <Product>DropMorph</Product>
+    <Authors>Nitish Singh (cod4nitish)</Authors>
+    <Copyright>Copyright (c) 2026 Nitish Singh. Based on Filee, Copyright (c) 2026 Myeonggu Kim (KnifeLemon)</Copyright>
+
+    <!-- Single source of truth for the GitHub repository (used by the updater and the About page). -->
+    <DropMorphRepositoryUrl>https://github.com/cod4nitish/DropMorph</DropMorphRepositoryUrl>
+    <RepositoryUrl>$(DropMorphRepositoryUrl)</RepositoryUrl>
+  </PropertyGroup>
+</Project>

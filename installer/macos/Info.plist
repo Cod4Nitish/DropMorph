@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key><string>en</string>
+    <key>CFBundleLocalizations</key><array><string>en</string><string>ko</string><string>zh-Hans</string></array>
+    <key>CFBundleIdentifier</key><string>com.cod4nitish.dropmorph</string>
+    <key>CFBundleName</key><string>DropMorph</string>
+    <key>CFBundleDisplayName</key><string>DropMorph</string>
+    <key>CFBundleExecutable</key><string>DropMorph</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>__VERSION__</string>
+    <key>CFBundleVersion</key><string>__BUNDLE_VERSION__</string>
+    <key>CFBundleIconFile</key><string>dropmorph.icns</string>
+    <key>LSMinimumSystemVersion</key><string>14.0</string>
+    <key>NSHighResolutionCapable</key><true/>
+    <!-- "Convert with DropMorph" in Finder's right-click menu, answered by the running DropMorph (MacOSServicesProvider).
+         ServicesMenu.strings in ko.lproj and zh-Hans.lproj translate the title. An empty NSRequiredContext keeps
+         the service on by default. -->
+    <key>NSServices</key>
+    <array>
+        <dict>
+            <key>NSMenuItem</key><dict><key>default</key><string>Convert with DropMorph</string></dict>
+            <key>NSMessage</key><string>convertFiles</string>
+            <key>NSPortName</key><string>DropMorph</string>
+            <key>NSRequiredContext</key><dict/>
+            <key>NSSendFileTypes</key><array><string>public.item</string></array>
+        </dict>
+    </array>
+    <key>NSAppleEventsUsageDescription</key><string>DropMorph reads selected Finder files when you use a conversion shortcut.</string>
+    <key>NSInputMonitoringUsageDescription</key><string>DropMorph detects your conversion shortcut and drag gesture to show the conversion menu.</string>
+</dict>
+</plist>

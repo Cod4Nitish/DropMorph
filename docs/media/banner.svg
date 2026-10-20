@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B3B38"/>
+      <stop offset="1" stop-color="#0D9488"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="400" fill="url(#bg)"/>
+  <circle cx="1130" cy="60" r="180" fill="#FF6B35" opacity="0.18"/>
+  <circle cx="1210" cy="360" r="120" fill="#FFFFFF" opacity="0.06"/>
+  <g transform="translate(110 72) scale(0.5)">
+    <rect x="24" y="24" width="464" height="464" rx="120" fill="#0D9488"/>
+    <path fill="#0B6F66" d="M24 300 C120 250 220 360 330 310 C400 278 450 300 488 330 V368 A120 120 0 0 1 368 488 H144 A120 120 0 0 1 24 368 Z"/>
+    <path fill="#FFFFFF" d="M256 78 C256 78 128 226 128 312 A128 128 0 0 0 384 312 C384 226 256 78 256 78 Z"/>
+    <path fill="#0D9488" d="M216 250 h56 l32 32 v88 h-88 z"/>
+    <path fill="#FF6B35" d="M272 250 v32 h32 z"/>
+    <path fill="#FF6B35" d="M236 318 h48 v16 h-48 z"/>
+  </g>
+  <g font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" fill="#FFFFFF">
+    <text x="420" y="178" font-size="96" font-weight="700">DropMorph</text>
+    <text x="424" y="238" font-size="40" font-weight="600" fill="#FFB599">Drag. Drop. Morphed.</text>
+    <text x="424" y="292" font-size="26" opacity="0.85">254 formats · fully offline · free and open source</text>
+  </g>
+</svg>

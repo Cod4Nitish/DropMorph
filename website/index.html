@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DropMorph · Drag. Drop. Morphed.</title>
+<meta name="description" content="DropMorph is a free, offline file converter you use by dragging. Hold Ctrl, drag files and drop them on a format. 254 formats, nothing uploaded.">
+<meta property="og:title" content="DropMorph · Drag. Drop. Morphed.">
+<meta property="og:description" content="A free, offline file converter you use by dragging. 254 formats.">
+<meta property="og:image" content="/og.png">
+<meta name="theme-color" content="#0D9488">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F7F7;--surface:#FFFFFF;--surface-alt:#E6EFEF;--text:#10201F;--muted:#55706D;--border:rgba(16,32,31,.10);
+  --accent:#0D9488;--accent-strong:#0B6F66;--accent-soft:rgba(13,148,136,.12);--coral:#FF6B35;--coral-soft:rgba(255,107,53,.14);
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 10px 30px rgba(11,59,56,.08);--hero-a:#0B3B38;--hero-b:#0D9488;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1617;--surface:#162122;--surface-alt:#1E2C2D;--text:#E6F2F0;--muted:#94ADA9;--border:rgba(255,255,255,.09);
+  --accent:#2DD4BF;--accent-strong:#5EEAD4;--accent-soft:rgba(45,212,191,.14);--coral:#FF8A5C;--coral-soft:rgba(255,138,92,.16);
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);--hero-a:#071F1D;--hero-b:#0B6F66;
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1617;--surface:#162122;--surface-alt:#1E2C2D;--text:#E6F2F0;--muted:#94ADA9;--border:rgba(255,255,255,.09);
+  --accent:#2DD4BF;--accent-strong:#5EEAD4;--accent-soft:rgba(45,212,191,.14);--coral:#FF8A5C;--coral-soft:rgba(255,138,92,.16);
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);--hero-a:#071F1D;--hero-b:#0B6F66;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+code,kbd,pre{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
+kbd{display:inline-block;padding:1px 8px;border-radius:6px;border:1px solid var(--border);border-bottom-width:2px;background:var(--surface);font-size:.85em}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;backdrop-filter:saturate(1.4) blur(12px);background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--border)}
+nav .wrap{display:flex;align-items:center;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;text-decoration:none;letter-spacing:-.01em}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:22px;margin-left:auto;font-size:15px;font-weight:500}
+.navlinks a{text-decoration:none;color:var(--muted)}
+.navlinks a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:#FF6B35;color:#fff}
+.kbd-hero{background:#fff;color:#10201F;border-color:rgba(0,0,0,.2)}
+.btn-primary:hover{background:#F25A22}
+.btn-ghost{background:transparent;color:inherit;border-color:currentColor;opacity:.92}
+.btn-small{padding:8px 14px;font-size:14px;border-radius:10px}
+.theme-toggle{background:none;border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
+@media (max-width:760px){.navlinks{display:none}.nav-dl{margin-left:auto}}
+
+/* hero */
+.hero{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:#FF6B35;opacity:.16;right:-140px;top:-200px}
+.hero::after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:#fff;opacity:.05;left:-80px;bottom:-140px}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding-top:72px;padding-bottom:80px}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18)}
+.eyebrow b{color:#FFB599}
+h1{font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-.035em;margin:18px 0 18px;font-weight:800}
+h1 span{color:#FFB599}
+.lead{font-size:clamp(17px,2vw,20px);opacity:.9;max-width:520px;margin:0 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.cta small{display:block;width:100%;opacity:.75;font-size:13px;margin-top:4px}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr;padding-top:48px;padding-bottom:56px}}
+
+/* demo stage */
+.stage{position:relative;height:430px;border-radius:24px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);box-shadow:0 30px 60px rgba(0,0,0,.25);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.stage-bar{display:flex;align-items:center;gap:7px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.12);font-size:12.5px;opacity:.85}
+.stage-bar i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.3);display:inline-block}
+.stage-bar span{margin-left:8px}
+.hint{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:13.5px;opacity:.85;pointer-events:none;padding:0 12px}
+.chip{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px;width:92px;cursor:grab;touch-action:none;transition:left .35s cubic-bezier(.2,.8,.2,1),top .35s cubic-bezier(.2,.8,.2,1),opacity .2s}
+.chip.dragging{transition:none;cursor:grabbing;z-index:5}
+.chip .doc{width:56px;height:70px;border-radius:8px;position:relative;box-shadow:0 8px 18px rgba(0,0,0,.25);display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font:700 11px "JetBrains Mono",monospace;color:#fff}
+.chip .doc::after{content:"";position:absolute;right:0;top:0;width:16px;height:16px;background:rgba(255,255,255,.45);border-bottom-left-radius:6px;border-top-right-radius:8px}
+.chip .name{font-size:12.5px;font-weight:600;background:rgba(0,0,0,.25);padding:2px 8px;border-radius:6px;white-space:nowrap}
+.chip.result .doc{animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.donut{position:absolute;width:280px;height:280px;margin:-140px 0 0 -140px;pointer-events:none;opacity:0;transform:scale(.6);transition:opacity .15s,transform .2s cubic-bezier(.2,1.3,.4,1)}
+.donut.open{opacity:1;transform:scale(1)}
+.donut path{fill:rgba(255,255,255,.92);stroke:rgba(11,59,56,.25);stroke-width:1;transition:fill .12s}
+.donut path.hot{fill:#FF6B35}
+.donut text{font:700 13px "Plus Jakarta Sans",sans-serif;fill:#0B3B38;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.donut text.hot{fill:#fff}
+.ring{position:absolute;width:76px;height:76px;margin:-38px 0 0 -38px;pointer-events:none;opacity:0}
+.ring.on{opacity:1}
+.ring circle{fill:none;stroke-width:7}
+.ring .track{stroke:rgba(255,255,255,.2)}
+.ring .bar{stroke:#FFB599;stroke-linecap:round;stroke-dasharray:201;stroke-dashoffset:201;transform:rotate(-90deg);transform-origin:center}
+.ring.on .bar{animation:fill .9s ease-out forwards}
+@keyframes fill{to{stroke-dashoffset:0}}
+.picker{position:absolute;top:52px;right:14px;display:flex;gap:6px;z-index:6}
+.picker button{font:600 12px "Plus Jakarta Sans",sans-serif;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 10px;border-radius:8px;cursor:pointer}
+.picker button[aria-pressed="true"]{background:#fff;color:#0B3B38}
+
+/* sections */
+section{padding:88px 0}
+.sec-head{max-width:640px;margin-bottom:40px}
+.kicker{color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.025em;line-height:1.1;margin:10px 0 12px}
+.sec-head p{color:var(--muted);font-size:17px;margin:0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media (max-width:860px){.grid3,.grid2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px;box-shadow:var(--shadow)}
+.card h3{margin:14px 0 6px;font-size:19px;letter-spacing:-.01em}
+.card p{margin:0;color:var(--muted)}
+.icon{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.icon.coral{background:var(--coral-soft);color:var(--coral)}
+.icon svg{width:24px;height:24px}
+.feat-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;margin-top:22px}
+@media (max-width:700px){.feat-list{grid-template-columns:1fr}}
+.feat-list div{display:flex;gap:12px;align-items:flex-start}
+.feat-list b{display:block}
+.feat-list span{color:var(--muted);font-size:15px}
+.tick{flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:13px;margin-top:2px}
+
+/* formats */
+.alt{background:var(--surface-alt)}
+.formats{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.fmt{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px}
+.fmt h4{margin:0 0 6px;font-size:15.5px;display:flex;align-items:center;gap:8px}
+.fmt h4::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--accent)}
+.fmt:nth-child(3n+2) h4::before{background:var(--coral)}
+.fmt p{margin:0;color:var(--muted);font-size:14px}
+.note{color:var(--muted);font-size:14px;margin-top:20px}
+
+/* cli */
+.term{background:#0B1716;color:#D7F5EF;border-radius:18px;padding:22px 24px;font-size:14.5px;overflow-x:auto;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);margin:0}
+.term .p{color:#2DD4BF}
+.term .c{color:#6E8B87}
+
+/* install */
+.os{display:flex;flex-direction:column;gap:12px}
+.os h3{margin:0;display:flex;align-items:center;gap:10px}
+.os ol{margin:0;padding-left:20px;color:var(--muted)}
+.os ol li{margin:4px 0}
+.os .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--coral-soft);color:var(--coral)}
+.os .btn{align-self:flex-start;margin-top:auto}
+.btn-accent{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn-accent{color:#05201D}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-accent{color:#05201D}}
+
+/* faq */
+details{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 22px;margin-bottom:12px}
+summary{cursor:pointer;font-weight:700;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";color:var(--accent);font-size:22px;line-height:1}
+details[open] summary::after{content:"−"}
+details p{color:var(--muted);margin:10px 0 0}
+
+/* footer */
+.final{text-align:center;background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;border-radius:28px;padding:56px 24px;margin:0 20px}
+.final h2{margin-top:0}
+.final p{opacity:.88;margin:0 0 24px}
+footer{padding:40px 0 48px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="/logo.svg" alt="">DropMorph</a>
+    <div class="navlinks">
+      <a href="#demo">Demo</a><a href="#features">Features</a><a href="#formats">Formats</a><a href="#cli">CLI</a><a href="#download">Download</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Switch theme">◐</button>
+    <a class="btn btn-primary btn-small nav-dl" href="#download">Download</a>
+  </div>
+</nav>
+
+<header class="hero" id="demo">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Free · Offline · <b>254 formats</b></span>
+      <h1>Drag. Drop.<br><span>Morphed.</span></h1>
+      <p class="lead">DropMorph converts files right at your cursor. Hold <kbd class="kbd-hero">Ctrl</kbd>, drag a file and drop it on a format. No app window, no uploads, no waiting.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/cod4nitish/DropMorph/releases/latest">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
+          Download for Windows
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/cod4nitish/DropMorph">View on GitHub</a>
+        <small>Windows 10/11 · macOS and Linux preview · MIT license</small>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="Interactive demo: drag the file and drop it on a format">
+      <div class="stage-bar"><i></i><i></i><i></i><span>Try it: drag the file</span></div>
+      <div class="picker" id="picker"></div>
+      <svg class="donut" id="donut" viewBox="-140 -140 280 280"></svg>
+      <svg class="ring" id="ring" viewBox="0 0 76 76"><circle class="track" cx="38" cy="38" r="32"/><circle class="bar" cx="38" cy="38" r="32"/></svg>
+      <div class="hint" id="hint">Drag the file. A donut of formats opens, so drop it on one.</div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Why DropMorph</div>
+      <h2>Converting files shouldn't need a website or a tutorial.</h2>
+      <p>No uploading to some random converter site, no menus to dig through. The formats come to your cursor.</p>
+    </div>
+    <div class="grid3">
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3v5.5M21 12h-5.5M12 21v-5.5M3 12h5.5"/></svg></div>
+        <h3>Right at your cursor</h3>
+        <p>The donut opens where you already are, and shows only the formats that make sense for the files you're dragging.</p>
+      </div>
+      <div class="card">
+        <div class="icon coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
+        <h3>254 formats, built in</h3>
+        <p>Images, PDF, Word, Excel, PowerPoint, e-books, video, audio, archives, fonts, CAD and 3D, without Office or LibreOffice.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <h3>Stays on your computer</h3>
+        <p>Nothing is uploaded, ever. DropMorph works fully offline and saves the result right next to the original.</p>
+      </div>
+    </div>
+
+    <div class="feat-list">
+      <div><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><p style="margin:0"><b>Many files at once</b><span>Convert a whole batch in parallel. Multi-step routes (HWP → HWPX → DOCX) are found automatically.</span></p></div>
+      <div><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><p style="margin:0"><b>Watch folders</b><span>Every file that lands in a folder gets converted on its own.</span></p></div>
+      <div><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><p style="margin:0"><b>Presets per file type</b><span>Quality, size, DPI, PDF pages, compression, video and audio settings, output folder and file names.</span></p></div>
+      <div><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><p style="margin:0"><b>Other ways in</b><span>Right-click menu, keyboard shortcut, a drop zone and the <code>dropmorph</code> command.</span></p></div>
+      <div><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><p style="margin:0"><b>Your colours</b><span>Light and dark themes with your own accent colour.</span></p></div>
+      <div><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><p style="margin:0"><b>Speaks your language</b><span>English, हिन्दी, Español, 한국어, 简体中文 and Polski.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="formats" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Formats</div>
+      <h2>If you can drag it, you can morph it.</h2>
+      <p>A quick look at what goes in and what comes out.</p>
+    </div>
+    <div class="formats">
+      <div class="fmt"><h4>Images</h4><p>JPG, PNG, WEBP, AVIF, HEIC, TIFF, GIF, ICO, PSD, RAW, JPEG XL → any of these, PDF or SVG</p></div>
+      <div class="fmt"><h4>PDF</h4><p>→ DOCX, TXT, PNG, JPG, PPTX, CBZ · merge, split, page ranges, compress</p></div>
+      <div class="fmt"><h4>Documents</h4><p>DOCX, DOC, ODT, RTF, EML, MSG, Pages → PDF, DOCX, EPUB, TXT, HTML</p></div>
+      <div class="fmt"><h4>Spreadsheets</h4><p>XLSX, XLS, ODS, CSV, Numbers → PDF, XLSX, CSV, JSON, HTML</p></div>
+      <div class="fmt"><h4>Presentations</h4><p>PPTX, PPT, ODP, Keynote → PDF, PNG, JPG, DOCX</p></div>
+      <div class="fmt"><h4>Video</h4><p>MP4, MOV, MKV, WEBM, AVI → MP4 (H.264/HEVC/AV1), WEBM, GIF, MP3, 720p, subtitles</p></div>
+      <div class="fmt"><h4>Audio</h4><p>MP3, WAV, FLAC, M4A, OGG, OPUS, AIFF → MP3, M4A, WAV, FLAC, OGG, OPUS</p></div>
+      <div class="fmt"><h4>E-books</h4><p>EPUB, MOBI, AZW3, FB2, CBZ, CBR → PDF, EPUB, KEPUB, DOCX, TXT</p></div>
+      <div class="fmt"><h4>Archives</h4><p>ZIP, 7Z, RAR, TAR, GZ, ISO, DMG → extract, ZIP, 7Z, TAR</p></div>
+      <div class="fmt"><h4>Fonts and data</h4><p>TTF, OTF, WOFF2 ↔ each other · JSON, YAML, TOML, XML ↔ each other, CSV, XLSX</p></div>
+      <div class="fmt"><h4>CAD and 3D</h4><p>DWG, DXF → PDF, SVG, PNG · GLB, glTF, STL, OBJ, 3MF ↔ each other</p></div>
+      <div class="fmt"><h4>Maps</h4><p>Shapefile, GeoJSON, KML, KMZ, GPX ↔ each other, CSV, XLSX, JSON</p></div>
+    </div>
+    <p class="note">Most formats work out of the box. Some (video and audio, legacy Office, e-books) use an optional engine that DropMorph downloads only when you need it.</p>
+  </div>
+</section>
+
+<section id="cli">
+  <div class="wrap grid2" style="align-items:center">
+    <div class="sec-head" style="margin:0">
+      <div class="kicker">Command line</div>
+      <h2>Prefer typing? There's a command for that.</h2>
+      <p>The <code>dropmorph</code> command uses the same engines and presets as the app. Great for scripts and automation.</p>
+    </div>
+<pre class="term"><span class="c"># one file</span>
+<span class="p">$</span> dropmorph convert photo.heic --to jpg
+
+<span class="c"># a whole folder, smaller files</span>
+<span class="p">$</span> dropmorph convert *.png --to webp --quality 80 -o converted
+
+<span class="c"># convert everything that lands in a folder</span>
+<span class="p">$</span> dropmorph watch D:\Inbox --to pdf --move-originals</pre>
+  </div>
+</section>
+
+<section id="download" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Download</div>
+      <h2>Get DropMorph. It's free.</h2>
+      <p>Pick your system. Settings and engines are kept when DropMorph updates itself.</p>
+    </div>
+    <div class="grid3">
+      <div class="card os">
+        <h3>Windows</h3>
+        <ol><li>Download <code>DropMorph-…-win-Setup.exe</code></li><li>Run it (if SmartScreen warns: "More info" → "Run anyway")</li><li>Hold <kbd>Ctrl</kbd> and drag any file</li></ol>
+        <a class="btn btn-accent" href="https://github.com/cod4nitish/DropMorph/releases/latest">Download for Windows</a>
+      </div>
+      <div class="card os">
+        <h3>macOS <span class="badge">Preview</span></h3>
+        <ol><li>Download the <code>osx-arm64</code> or <code>osx-x64</code> package</li><li>Unpack it and run <code>./install.sh</code></li><li>Allow it in Privacy &amp; Security → Open Anyway</li></ol>
+        <a class="btn btn-accent" href="https://github.com/cod4nitish/DropMorph/releases/latest">Download for macOS</a>
+      </div>
+      <div class="card os">
+        <h3>Linux <span class="badge">Preview</span></h3>
+        <ol><li>Download the <code>linux-x64</code> or <code>arm64</code> package</li><li>Unpack it and run <code>./install.sh</code> (no root)</li><li>Drag gestures need X11; on Wayland use the drop zone</li></ol>
+        <a class="btn btn-accent" href="https://github.com/cod4nitish/DropMorph/releases/latest">Download for Linux</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="max-width:820px">
+    <div class="sec-head"><div class="kicker">FAQ</div><h2>Questions</h2></div>
+    <details open><summary>Are my files uploaded anywhere?</summary><p>No. Everything is converted on your own computer. DropMorph only goes online to check GitHub for a newer version, and to download an optional engine you choose to install.</p></details>
+    <details><summary>Is it really free?</summary><p>Yes. DropMorph is free and open source under the MIT license. No account, no watermark, no limits.</p></details>
+    <details><summary>Do I need Microsoft Office or LibreOffice?</summary><p>No. Word, Excel, PowerPoint, PDF and most other formats work out of the box. Only a few legacy formats use an optional engine.</p></details>
+    <details><summary>Why does Windows show a warning when I install?</summary><p>Releases aren't code-signed yet, so SmartScreen doesn't recognize them. Click "More info" → "Run anyway". The installer is built by GitHub Actions straight from the public source code.</p></details>
+  </div>
+</section>
+
+<div class="final">
+  <h2>Stop uploading files to convert them.</h2>
+  <p>Drag. Drop. Morphed. Free for Windows, macOS and Linux.</p>
+  <a class="btn btn-primary" href="https://github.com/cod4nitish/DropMorph/releases/latest">Download DropMorph</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#" style="font-size:16px"><img src="/logo.svg" alt="" style="width:26px;height:26px">DropMorph</a>
+    <span>Made by <a href="https://github.com/cod4nitish">Nitish Singh</a> · <a href="https://github.com/cod4nitish/DropMorph">GitHub</a> · <a href="https://github.com/cod4nitish/DropMorph/blob/main/LICENSE">MIT License</a></span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // Theme toggle: remembered per viewer, falls back to the system theme.
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('dm-theme'); if (t) root.dataset.theme = t; } catch {}
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('dm-theme', root.dataset.theme); } catch {}
+  });
+
+  // Interactive donut demo.
+  const files = {
+    jpg:  { name: 'trip.jpg',    color: '#0D9488', to: ['PNG', 'WEBP', 'PDF', 'AVIF', 'GIF', 'ICO'] },
+    docx: { name: 'report.docx', color: '#378ADD', to: ['PDF', 'TXT', 'EPUB', 'HTML', 'HWPX'] },
+    wav:  { name: 'song.wav',    color: '#D4537E', to: ['MP3', 'M4A', 'FLAC', 'OGG', 'OPUS', 'AAC'] },
+  };
+  const colorOf = { PDF:'#E04A3F', PNG:'#0D9488', WEBP:'#0B6F66', AVIF:'#0D9488', GIF:'#BA7517', ICO:'#639922', TXT:'#5F5E5A', EPUB:'#639922', HTML:'#FF6B35', HWPX:'#378ADD', MP3:'#D4537E', M4A:'#7F77DD', FLAC:'#0B6F66', OGG:'#BA7517', OPUS:'#378ADD', AAC:'#FF6B35' };
+  const stage = document.getElementById('stage'), donut = document.getElementById('donut'),
+        ring = document.getElementById('ring'), hint = document.getElementById('hint'), picker = document.getElementById('picker');
+  const R2 = 132, R1 = 58;
+  let kind = 'jpg', chip, results = [], drag = null;
+
+  Object.entries(files).forEach(([k, f]) => {
+    const b = document.createElement('button');
+    b.textContent = f.name.split('.').pop().toUpperCase();
+    b.setAttribute('aria-pressed', k === kind);
+    b.onclick = () => { kind = k; [...picker.children].forEach(c => c.setAttribute('aria-pressed', c === b)); reset(true); };
+    picker.appendChild(b);
+  });
+
+  function makeChip(name, color, cls) {
+    const el = document.createElement('div');
+    el.className = 'chip ' + (cls || '');
+    el.innerHTML = `<div class="doc" style="background:${color}">${name.split('.').pop().toUpperCase()}</div><div class="name">${name}</div>`;
+    stage.appendChild(el);
+    return el;
+  }
+  function home() { return { x: 40, y: stage.clientHeight / 2 - 52 }; }
+  function place(el, x, y) { el.style.left = x + 'px'; el.style.top = y + 'px'; }
+
+  function reset(clearResults) {
+    if (clearResults) { results.forEach(r => r.remove()); results = []; }
+    if (chip) chip.remove();
+    const f = files[kind];
+    chip = makeChip(f.name, f.color);
+    const h = home(); place(chip, h.x, h.y);
+    chip.addEventListener('pointerdown', start);
+  }
+
+  function arc(i, n, hot) {
+    const span = 2 * Math.PI / n, gap = .05, mid = -Math.PI / 2 + i * span;
+    const s = mid - span / 2 + gap / 2, e = mid + span / 2 - gap / 2, r2 = hot ? R2 + 6 : R2;
+    const p = (r, a) => `${(r * Math.cos(a)).toFixed(1)} ${(r * Math.sin(a)).toFixed(1)}`;
+    return `M${p(r2, s)} A${r2} ${r2} 0 0 1 ${p(r2, e)} L${p(R1, e)} A${R1} ${R1} 0 0 0 ${p(R1, s)} Z`;
+  }
+  function drawDonut(hot) {
+    const to = files[kind].to, n = to.length, span = 2 * Math.PI / n;
+    donut.innerHTML = to.map((fmt, i) => {
+      const a = -Math.PI / 2 + i * span, r = (R1 + R2) / 2;
+      return `<path class="${i === hot ? 'hot' : ''}" d="${arc(i, n, i === hot)}"/>` +
+             `<text class="${i === hot ? 'hot' : ''}" x="${(r * Math.cos(a)).toFixed(1)}" y="${(r * Math.sin(a)).toFixed(1)}">${fmt}</text>`;
+    }).join('');
+  }
+  function hitTest(x, y) {
+    const dx = x - drag.cx, dy = y - drag.cy, d = Math.hypot(dx, dy), n = files[kind].to.length;
+    if (d < R1 || d > R2 + 24) return -1;
+    const span = 2 * Math.PI / n;
+    let a = Math.atan2(dy, dx) + Math.PI / 2 + span / 2;
+    a = ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+    return Math.floor(a / span) % n;
+  }
+  function local(e) { const r = stage.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+
+  function start(e) {
+    e.preventDefault();
+    chip.setPointerCapture(e.pointerId);
+    const p = local(e), w = stage.clientWidth, h = stage.clientHeight;
+    const cx = Math.min(Math.max(p.x + 150, R2 + 10), w - R2 - 10), cy = Math.min(Math.max(p.y, R2 + 46), h - R2 - 10);
+    drag = { ox: p.x - chip.offsetLeft, oy: p.y - chip.offsetTop, cx, cy, hot: -1 };
+    chip.classList.add('dragging');
+    donut.style.left = cx + 'px'; donut.style.top = cy + 'px';
+    drawDonut(-1); donut.classList.add('open');
+    hint.textContent = 'Now drop it on a format';
+    chip.addEventListener('pointermove', move);
+    chip.addEventListener('pointerup', end, { once: true });
+    chip.addEventListener('pointercancel', end, { once: true });
+  }
+  function move(e) {
+    if (!drag) return;
+    const p = local(e);
+    place(chip, p.x - drag.ox, p.y - drag.oy);
+    const hot = hitTest(p.x, p.y);
+    if (hot !== drag.hot) { drag.hot = hot; drawDonut(hot); }
+  }
+  function end() {
+    chip.removeEventListener('pointermove', move);
+    chip.classList.remove('dragging');
+    donut.classList.remove('open');
+    const d = drag; drag = null;
+    if (!d || d.hot < 0) { const h = home(); place(chip, h.x, h.y); hint.textContent = 'Drag the file. A donut of formats opens, so drop it on one.'; return; }
+    const fmt = files[kind].to[d.hot];
+    chip.style.opacity = '0';
+    ring.style.left = d.cx + 'px'; ring.style.top = d.cy + 'px';
+    ring.classList.remove('on'); void ring.offsetWidth; ring.classList.add('on');
+    hint.textContent = `Converting to ${fmt}…`;
+    setTimeout(() => {
+      ring.classList.remove('on');
+      const base = files[kind].name.replace(/\.[^.]+$/, '');
+      const out = makeChip(`${base}.${fmt.toLowerCase()}`, colorOf[fmt] || '#0D9488', 'result');
+      place(out, d.cx - 46, d.cy - 52);
+      results.push(out);
+      if (results.length > 3) results.shift().remove();
+      hint.textContent = `Done: ${base}.${fmt.toLowerCase()} is saved next to the original. Try another one!`;
+      reset(false);
+    }, 950);
+  }
+
+  reset(true);
+  addEventListener('resize', () => { if (!drag) { const h = home(); place(chip, h.x, h.y); } });
+})();
+</script>
+</body>
+</html>

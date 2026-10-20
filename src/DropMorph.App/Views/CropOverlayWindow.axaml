@@ -1,0 +1,143 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DropMorph.App.ViewModels"
+        xmlns:c="using:DropMorph.App.Controls"
+        x:Class="DropMorph.App.Views.CropOverlayWindow"
+        x:DataType="vm:CropOverlayViewModel"
+        Title="{DynamicResource preset.crop}"
+        Icon="avares://DropMorph/Assets/Icons/dropmorph.ico"
+        Width="960" Height="680" MinWidth="680" MinHeight="500"
+        WindowDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        Topmost="True"
+        CanResize="True">
+  
+  <Window.Styles>
+    <Style Selector="Button.aspect">
+      <Setter Property="Padding" Value="10,5" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Background" Value="{DynamicResource SurfaceAltBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SubtleBorderBrush}" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.aspect:pointerover">
+      <Setter Property="Opacity" Value="0.85" />
+    </Style>
+    <Style Selector="Button.aspect.active">
+      <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource OnAccentBrush}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+    </Style>
+    <Style Selector="Button.aspect.active:pointerover">
+      <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="Opacity" Value="0.9" />
+    </Style>
+  </Window.Styles>
+
+  <!-- Overlay card with soft rounded corners and theme styling -->
+  <Border Margin="16" CornerRadius="{DynamicResource SoftRadius}"
+          Background="{DynamicResource SurfaceBrush}"
+          BorderBrush="{DynamicResource SubtleBorderBrush}" BorderThickness="1"
+          ClipToBounds="True"
+          BoxShadow="{DynamicResource CardShadow}">
+    <DockPanel>
+      <!-- Top header bar -->
+      <Border DockPanel.Dock="Top" Height="48" Padding="16,0" BorderBrush="{DynamicResource SubtleBorderBrush}" BorderThickness="0,0,0,1"
+              Background="{DynamicResource SurfaceAltBrush}">
+        <DockPanel VerticalAlignment="Center">
+          <Button DockPanel.Dock="Right" Classes="icon" Command="{Binding CancelCommand}"
+                  ToolTip.Tip="{DynamicResource common.cancel}" Margin="4,0,0,0">
+            <PathIcon Width="12" Height="12" Data="{StaticResource Icon.Close}" Foreground="{DynamicResource TextSecondaryBrush}" />
+          </Button>
+
+          <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+            <PathIcon Width="16" Height="16" Data="{StaticResource Icon.Crop}" Foreground="{DynamicResource AccentBrush}" />
+            <TextBlock Text="{DynamicResource preset.crop}" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" />
+            <TextBlock Text="—" Foreground="{DynamicResource TextSecondaryBrush}" IsVisible="{Binding IsEditing}" />
+            <TextBlock Text="{Binding CurrentFileName}" IsVisible="{Binding IsEditing}" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" TextTrimming="CharacterEllipsis" MaxWidth="360" />
+            
+            <Border IsVisible="{Binding HasMultipleFiles}" Background="{DynamicResource AccentSoftBrush}" CornerRadius="10" Padding="8,2">
+              <TextBlock Text="{Binding CounterText}" FontSize="11" Foreground="{DynamicResource TextPrimaryBrush}" />
+            </Border>
+
+            <Border IsVisible="{Binding HasStatusNotice}" Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource SubtleBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="8,2">
+              <TextBlock Text="{Binding StatusNotice}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"
+                         TextTrimming="CharacterEllipsis" MaxWidth="320" />
+            </Border>
+          </StackPanel>
+        </DockPanel>
+      </Border>
+
+      <!-- Bottom toolbar -->
+      <Border DockPanel.Dock="Bottom" Padding="16,12" BorderBrush="{DynamicResource SubtleBorderBrush}" BorderThickness="0,1,0,0"
+              Background="{DynamicResource SurfaceAltBrush}">
+        <DockPanel>
+          <!-- Action Buttons on the Right -->
+          <Button DockPanel.Dock="Right" Content="{DynamicResource common.close}" Command="{Binding CancelCommand}"
+                  IsVisible="{Binding IsFinished}" IsDefault="{Binding IsFinished}" Classes="accent" FontWeight="SemiBold" Padding="14,6" CornerRadius="6" />
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" IsVisible="{Binding IsEditing}">
+            <Button Content="{DynamicResource crop.reset}" Command="{Binding ResetCommand}"
+                    Classes="aspect" />
+            <Button Content="{DynamicResource crop.skip}" Command="{Binding SkipCommand}"
+                    IsVisible="{Binding HasMultipleFiles}" Classes="aspect" />
+            <Button Content="{DynamicResource common.cancel}" Command="{Binding CancelCommand}"
+                    IsCancel="True" Classes="aspect" />
+            <Button Content="{DynamicResource crop.save}" Command="{Binding CropAndSaveCommand}"
+                    IsDefault="{Binding IsEditing}" Classes="accent" FontWeight="SemiBold" Padding="14,6" CornerRadius="6" />
+          </StackPanel>
+
+          <!-- Aspect ratio selector on the Left -->
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" IsVisible="{Binding IsEditing}">
+            <TextBlock Text="{DynamicResource crop.aspect_title}" VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,2,0" />
+            <Button Classes="aspect" Classes.active="{Binding IsAspectFree}" Content="{DynamicResource crop.aspect_free}" Command="{Binding SetAspectCommand}" CommandParameter="free" />
+            <Button Classes="aspect" Classes.active="{Binding IsAspectSquare}" Content="1:1" Command="{Binding SetAspectCommand}" CommandParameter="1:1" />
+            <Button Classes="aspect" Classes.active="{Binding IsAspect43}" Content="4:3" Command="{Binding SetAspectCommand}" CommandParameter="4:3" />
+            <Button Classes="aspect" Classes.active="{Binding IsAspect169}" Content="16:9" Command="{Binding SetAspectCommand}" CommandParameter="16:9" />
+            <Button Classes="aspect" Classes.active="{Binding IsAspectOriginal}" Content="{DynamicResource crop.aspect_original}" Command="{Binding SetAspectCommand}" CommandParameter="original" />
+
+            <Border Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource SubtleBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8,4" Margin="6,0,0,0">
+              <TextBlock Text="{Binding DimensionsText}" FontSize="11" FontFamily="Consolas, monospace" Foreground="{DynamicResource TextSecondaryBrush}" />
+            </Border>
+          </StackPanel>
+        </DockPanel>
+      </Border>
+
+      <!-- Center image viewport and interactive crop canvas -->
+      <Grid Background="{DynamicResource PageBrush}">
+        <c:CropCanvas x:Name="Canvas"
+                      SourceImage="{Binding PreviewImage}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch" IsVisible="{Binding IsEditing}" />
+
+        <!-- After the last file, when files failed or were skipped -->
+        <Border IsVisible="{Binding IsFinished}" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="560" Margin="24"
+                Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource SubtleBorderBrush}" BorderThickness="1"
+                CornerRadius="{DynamicResource SoftRadius}" Padding="20,16">
+          <StackPanel Spacing="10">
+            <TextBlock Text="{Binding Summary}" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" />
+            <ScrollViewer MaxHeight="320">
+              <ItemsControl ItemsSource="{Binding Problems}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="x:String">
+                    <TextBlock Text="{Binding}" FontSize="12" Margin="0,2" TextWrapping="Wrap" Foreground="{DynamicResource TextSecondaryBrush}" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+          </StackPanel>
+        </Border>
+
+        <!-- Loading spinner / busy indicator -->
+        <Border IsVisible="{Binding IsBusy}" Background="#44000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+          <ProgressBar IsIndeterminate="True" Width="80" Height="4" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+      </Grid>
+    </DockPanel>
+  </Border>
+</Window>

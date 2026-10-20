@@ -1,0 +1,40 @@
+// Version information of the Explorer context-menu DLL. build/build-explorer-menu.ps1 passes the app version as
+// DROPMORPH_VERSION_MAJOR/MINOR/PATCH and DROPMORPH_VERSION_TEXT.
+
+#include <winver.h>
+
+#ifndef DROPMORPH_VERSION_MAJOR
+#define DROPMORPH_VERSION_MAJOR 0
+#define DROPMORPH_VERSION_MINOR 0
+#define DROPMORPH_VERSION_PATCH 0
+#define DROPMORPH_VERSION_TEXT "0.0.0"
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION DROPMORPH_VERSION_MAJOR, DROPMORPH_VERSION_MINOR, DROPMORPH_VERSION_PATCH, 0
+PRODUCTVERSION DROPMORPH_VERSION_MAJOR, DROPMORPH_VERSION_MINOR, DROPMORPH_VERSION_PATCH, 0
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+FILEFLAGS 0
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_DLL
+FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "DropMorph contributors"
+            VALUE "FileDescription", "DropMorph File Explorer context menu"
+            VALUE "FileVersion", DROPMORPH_VERSION_TEXT
+            VALUE "InternalName", "DropMorphExplorerMenu"
+            VALUE "LegalCopyright", "Copyright (c) DropMorph contributors. MIT License."
+            VALUE "OriginalFilename", "DropMorphExplorerMenu.dll"
+            VALUE "ProductName", "DropMorph"
+            VALUE "ProductVersion", DROPMORPH_VERSION_TEXT
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

@@ -1,0 +1,27 @@
+<!--
+  DropMorph.Cli: the "dropmorph" command line. Converts files and watches folders without the tray app, with the same
+  engines, presets and settings. Published next to DropMorph.exe as dropmorph-cli.exe (one runtime for both); the installer
+  puts a "dropmorph" shim on PATH (cli\dropmorph.cmd).
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>dropmorph-cli</AssemblyName>
+    <RootNamespace>DropMorph.Cli</RootNamespace>
+    <ApplicationIcon>..\DropMorph.App\Assets\Icons\dropmorph.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DropMorph.Core\DropMorph.Core.csproj" />
+    <ProjectReference Include="..\DropMorph.Engines\DropMorph.Engines.csproj" />
+  </ItemGroup>
+
+  <!-- Error messages and built-in preset names, in English (the app's translation file). -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\DropMorph.App\Assets\i18n\en.json" LogicalName="DropMorph.Cli.en.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="DropMorph.Cli.Tests" />
+  </ItemGroup>
+</Project>
