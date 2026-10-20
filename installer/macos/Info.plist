@@ -2,8 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
     <key>CFBundleDevelopmentRegion</key><string>en</string>
-    <key>CFBundleLocalizations</key><array><string>en</string><string>ko</string><string>zh-Hans</string></array>
+    <!-- The app's languages; each has an .lproj folder with ServicesMenu.strings, so macOS also uses the user's
+         language for the app (menus, dialogs) instead of falling back to English. -->
+    <key>CFBundleLocalizations</key><array><string>en</string><string>es</string><string>hi</string><string>ko</string><string>pl</string><string>zh-Hans</string></array>
     <key>CFBundleIdentifier</key><string>com.cod4nitish.dropmorph</string>
     <key>CFBundleName</key><string>DropMorph</string>
     <key>CFBundleDisplayName</key><string>DropMorph</string>
@@ -14,8 +17,12 @@
     <key>CFBundleIconFile</key><string>dropmorph.icns</string>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>NSHighResolutionCapable</key><true/>
+    <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
+    <key>NSHumanReadableCopyright</key><string>Copyright (c) 2026 Nitish Singh. MIT license.</string>
+    <!-- Keeps Intel Macs with two GPUs on the power-saving one: DropMorph's windows don't need the discrete GPU. -->
+    <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
     <!-- "Convert with DropMorph" in Finder's right-click menu, answered by the running DropMorph (MacOSServicesProvider).
-         ServicesMenu.strings in ko.lproj and zh-Hans.lproj translate the title. An empty NSRequiredContext keeps
+         ServicesMenu.strings in each .lproj folder translates the title. An empty NSRequiredContext keeps
          the service on by default. -->
     <key>NSServices</key>
     <array>
@@ -28,6 +35,12 @@
         </dict>
     </array>
     <key>NSAppleEventsUsageDescription</key><string>DropMorph reads selected Finder files when you use a conversion shortcut.</string>
+    <!-- Shown when macOS first asks for access to these folders (converting a file saves the result next to it). -->
+    <key>NSDesktopFolderUsageDescription</key><string>DropMorph converts the files you drop and saves the results next to them.</string>
+    <key>NSDocumentsFolderUsageDescription</key><string>DropMorph converts the files you drop and saves the results next to them.</string>
+    <key>NSDownloadsFolderUsageDescription</key><string>DropMorph converts the files you drop and saves the results next to them.</string>
+    <key>NSRemovableVolumesUsageDescription</key><string>DropMorph converts files on removable drives and saves the results next to them.</string>
+    <key>NSNetworkVolumesUsageDescription</key><string>DropMorph converts files on network drives and saves the results next to them.</string>
     <key>NSInputMonitoringUsageDescription</key><string>DropMorph detects your conversion shortcut and drag gesture to show the conversion menu.</string>
 </dict>
 </plist>

@@ -22,8 +22,13 @@ function Invoke-Checked([string]$name, [scriptblock]$command) {
 $archives = @(Get-ChildItem -LiteralPath $Packages -Filter "*-$Runtime.tar.gz")
 if ($archives.Count -ne 1) { throw "Expected one portable archive for $Runtime in $Packages, found $($archives.Count)." }
 $archive = $archives[0]
-$expected = (Get-Content -LiteralPath (Join-Path $Packages ($archive.Name.Replace('.tar.gz', '-SHA256SUMS.txt')))).Split(' ')[0]
-if ((Get-FileHash -LiteralPath $archive.FullName -Algorithm SHA256).Hash -ne $expected) { throw 'Archive checksum mismatch.' }
+# One "<sha256>  <file>" line per file: the tar.gz, and on macOS also the .dmg.
+$checksums = @{}
+foreach ($line in Get-Content -LiteralPath (Join-Path $Packages ($archive.Name.Replace('.tar.gz', '-SHA256SUMS.txt')))) {
+    $hash, $file = $line -split '\s+', 2
+    if ($file) { $checksums[$file.Trim()] = $hash }
+}
+if ((Get-FileHash -LiteralPath $archive.FullName -Algorithm SHA256).Hash -ne $checksums[$archive.Name]) { throw 'Archive checksum mismatch.' }
 
 if (Test-Path -LiteralPath $WorkDir) { throw "$WorkDir already exists. Use a fresh folder." }
 New-Item -ItemType Directory -Path $WorkDir | Out-Null
@@ -32,6 +37,23 @@ Invoke-Checked 'Archive extraction' { tar -xzf $archive.FullName -C $smoke }
 $package = Join-Path $smoke ($archive.Name.Replace('.tar.gz', ''))
 if ($IsMacOS) {
     Invoke-Checked 'Extracted app signature' { codesign --verify --deep --strict (Join-Path $package 'DropMorph.app') }
+    # The disk image: checksum, then mounted read-only, it holds the same signed app and the Applications link.
+    $image = Join-Path $Packages $archive.Name.Replace('.tar.gz', '.dmg')
+    if (-not (Test-Path -LiteralPath $image)) { throw "No disk image next to $($archive.Name)." }
+    if ((Get-FileHash -LiteralPath $image -Algorithm SHA256).Hash -ne $checksums[(Split-Path $image -Leaf)]) { throw 'Disk image checksum mismatch.' }
+    $mount = Join-Path $smoke 'dmg'
+    New-Item -ItemType Directory -Path $mount | Out-Null
+    Invoke-Checked 'Mount disk image' { hdiutil attach $image -readonly -nobrowse -mountpoint $mount }
+    try {
+        Invoke-Checked 'Disk image app signature' { codesign --verify --deep --strict (Join-Path $mount 'DropMorph.app') }
+        foreach ($name in @('install.sh', 'uninstall.sh', 'INSTALL.txt')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $mount $name))) { throw "The disk image has no $name." }
+        }
+        if ((Get-Item -LiteralPath (Join-Path $mount 'Applications')).Target -ne '/Applications') { throw 'The disk image has no Applications link.' }
+    }
+    finally {
+        hdiutil detach $mount -force | Out-Null
+    }
 }
 $bin = if ($IsMacOS) { Join-Path $package 'DropMorph.app/Contents/MacOS' } else { $package }
 $cli = Join-Path $bin 'dropmorph-cli'

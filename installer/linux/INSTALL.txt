@@ -5,7 +5,10 @@ an application launcher and ~/.local/bin/dropmorph, and does not require root.
 Run ./uninstall.sh to remove this installation and DropMorph-downloaded engines.
 Your settings and converted files are kept. If integration cleanup fails, the
 installation is kept so you can fix the error and run the uninstaller again.
-An existing installation is never overwritten; uninstall it before replacing it.
+To update, run the install.sh of a newer package: it replaces the installed app and
+keeps your settings and engines. Other files in the way are never overwritten.
+install.sh warns about missing system libraries and prints the command that installs
+them on Ubuntu/Debian, Fedora, Arch and openSUSE.
 
 DropMorph runs on Ubuntu 22.04 or newer and other distributions with glibc 2.35 or
 newer. The .NET runtime is bundled; its native system libraries are still

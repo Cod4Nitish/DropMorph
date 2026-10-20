@@ -201,6 +201,7 @@ jobs:
           name: portable-${{ matrix.rid }}
           path: |
             Releases/*-${{ matrix.rid }}.tar.gz
+            Releases/*-${{ matrix.rid }}.dmg
             Releases/*-${{ matrix.rid }}-SHA256SUMS.txt
           if-no-files-found: error
 

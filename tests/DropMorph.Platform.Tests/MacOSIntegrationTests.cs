@@ -37,7 +37,12 @@ public sealed class MacOSIntegrationTests
         // Each translation names the same menu title.
         foreach (var strings in Directory.GetFiles(installer, "ServicesMenu.strings", SearchOption.AllDirectories))
             Assert.StartsWith($"\"{MacOSServicesProvider.MenuItem}\" = ", File.ReadAllLines(strings).Single(l => l.StartsWith('"')));
-        Assert.Equal(3, Directory.GetFiles(installer, "ServicesMenu.strings", SearchOption.AllDirectories).Length);
+        // Every language in CFBundleLocalizations has a translation, and there is none for a language it doesn't list.
+        var languages = Property(root, "CFBundleLocalizations").Elements("string").Select(x => x.Value).Order();
+        var translated = Directory.GetDirectories(installer, "*.lproj").Select(x => Path.GetFileNameWithoutExtension(x)!).Order();
+        Assert.Equal(languages, translated);
+        foreach (var language in languages)
+            Assert.True(File.Exists(Path.Combine(installer, language + ".lproj", "ServicesMenu.strings")), language);
     }
 
     private static string RepositoryRoot()

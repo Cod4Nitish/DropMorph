@@ -9,6 +9,7 @@ using DropMorph.App.Services;
 using DropMorph.App.Services.Triggers;
 using DropMorph.Core.Localization;
 using DropMorph.Core.Platform;
+using DropMorph.Core.Profiles;
 using DropMorph.Core.Settings;
 using DropMorph.Platform.Linux;
 using DropMorph.Platform.MacOS;
@@ -22,10 +23,16 @@ public sealed partial class TriggerGestureViewModel : ObservableObject
     private readonly Action _save;
     private bool _loading = true;
 
-    public TriggerGestureViewModel(TriggerGesture gesture, ILocalizer loc, Action save)
+    public TriggerGestureViewModel(TriggerGesture gesture, ILocalizer loc, Action save, IReadOnlyList<ToolbarProfile>? profiles = null)
     {
         _gesture = gesture;
         _save = save;
+        // The donut a keyboard shortcut opens: chosen by the files' type, or one toolbar (a category shortcut). A
+        // profile the user has since deleted stays listed by its id, so the shortcut isn't changed behind their back.
+        Profiles = [new Choice<string?>(null, loc["triggers.toolbar_auto"]),
+            .. (profiles ?? []).Select(p => new Choice<string?>(p.Id, loc.DisplayName(p)))];
+        if (gesture.ProfileId is { } missing && Profiles.All(p => p.Value != missing))
+            Profiles.Add(new Choice<string?>(missing, missing));
         Kinds = Enum.GetValues<TriggerKind>().Select(k => new Choice<TriggerKind>(k, loc[$"triggers.kind.{k}"])).ToList();
         Buttons = Enum.GetValues<TriggerMouseButton>().Where(b => b != TriggerMouseButton.None)
             .Select(b => new Choice<TriggerMouseButton>(b, loc[$"triggers.button.{b}"])).ToList();
@@ -49,6 +56,7 @@ public sealed partial class TriggerGestureViewModel : ObservableObject
         DragThreshold = gesture.DragThreshold;
         HoldMilliseconds = gesture.HoldMilliseconds;
         Scope = Scopes.First(s => s.Value == gesture.Scope);
+        Profile = Profiles.First(p => p.Value == gesture.ProfileId);
         _loading = false;
     }
 
@@ -56,6 +64,7 @@ public sealed partial class TriggerGestureViewModel : ObservableObject
     public IReadOnlyList<Choice<TriggerKind>> Kinds { get; }
     public IReadOnlyList<Choice<TriggerMouseButton>> Buttons { get; }
     public IReadOnlyList<Choice<TriggerScope>> Scopes { get; }
+    public List<Choice<string?>> Profiles { get; }
     public string RecordLabel { get; }
     public string RecordingLabel { get; }
     public string SystemLabel { get; }
@@ -75,6 +84,7 @@ public sealed partial class TriggerGestureViewModel : ObservableObject
     [ObservableProperty, NotifyPropertyChangedFor(nameof(ThresholdText))] private int _dragThreshold;
     [ObservableProperty] private int _holdMilliseconds;
     [ObservableProperty] private Choice<TriggerScope> _scope = null!;
+    [ObservableProperty] private Choice<string?> _profile = null!;
     [ObservableProperty, NotifyPropertyChangedFor(nameof(KeyText))] private bool _isRecording;
 
     public bool UsesMouse => Kind.Value != TriggerKind.KeyChord;
@@ -83,12 +93,14 @@ public sealed partial class TriggerGestureViewModel : ObservableObject
     public bool UsesHold => Kind.Value == TriggerKind.Hold;
     public string KeyText => IsRecording ? RecordingLabel : string.IsNullOrEmpty(Key) ? "—" : Key;
     public string ThresholdText => DragThreshold == 0 ? SystemLabel : $"{DragThreshold}px";
-    public string Summary => GestureText.Describe(_gesture);
+    public string Summary => GestureText.Describe(_gesture)
+        + (UsesKey && Profile.Value is not null ? $"  →  {Profile.Label}" : "");
 
     // Runs before OnPropertyChanged below, which reads every choice.
     partial void OnKindChanged(Choice<TriggerKind>? oldValue, Choice<TriggerKind> newValue) => Choices.Restore(oldValue, newValue, v => Kind = v);
     partial void OnButtonChanged(Choice<TriggerMouseButton>? oldValue, Choice<TriggerMouseButton> newValue) => Choices.Restore(oldValue, newValue, v => Button = v);
     partial void OnScopeChanged(Choice<TriggerScope>? oldValue, Choice<TriggerScope> newValue) => Choices.Restore(oldValue, newValue, v => Scope = v);
+    partial void OnProfileChanged(Choice<string?>? oldValue, Choice<string?> newValue) => Choices.Restore(oldValue, newValue, v => Profile = v);
 
     protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -106,6 +118,7 @@ public sealed partial class TriggerGestureViewModel : ObservableObject
         _gesture.DragThreshold = Math.Clamp(DragThreshold, 0, 200);
         _gesture.HoldMilliseconds = Math.Clamp(HoldMilliseconds, 150, 3000);
         _gesture.Scope = Scope.Value;
+        _gesture.ProfileId = Kind.Value == TriggerKind.KeyChord ? Profile.Value : null;
         OnPropertyChanged(nameof(Summary));
         _save();
     }
@@ -161,7 +174,7 @@ public sealed partial class TriggersPageViewModel : ObservableObject, IDisposabl
         if (triggers is not null)
             triggers.StatusChanged += OnTriggerStatusChanged;
         foreach (var gesture in store.Settings.Triggers)
-            Gestures.Add(new TriggerGestureViewModel(gesture, loc, Save));
+            Gestures.Add(new TriggerGestureViewModel(gesture, loc, Save, store.Profiles));
         ExcludedApps = new ExcludedAppsViewModel(store.Settings.ExcludedProcesses, platform, Save);
     }
 
@@ -230,7 +243,17 @@ public sealed partial class TriggersPageViewModel : ObservableObject, IDisposabl
     {
         var gesture = new TriggerGesture { Modifiers = ModifierKeys.Alt, Button = TriggerMouseButton.Left };
         _store.Settings.Triggers.Add(gesture);
-        Gestures.Add(new TriggerGestureViewModel(gesture, _loc, Save));
+        Gestures.Add(new TriggerGestureViewModel(gesture, _loc, Save, _store.Profiles));
+        Save();
+    }
+
+    /// <summary>A new keyboard shortcut (Alt + a key to record) that opens the donut for the selected files.</summary>
+    [RelayCommand]
+    private void AddShortcut()
+    {
+        var gesture = new TriggerGesture { Kind = TriggerKind.KeyChord, Modifiers = ModifierKeys.Alt, Button = TriggerMouseButton.None };
+        _store.Settings.Triggers.Add(gesture);
+        Gestures.Add(new TriggerGestureViewModel(gesture, _loc, Save, _store.Profiles) { IsRecording = true });
         Save();
     }
 

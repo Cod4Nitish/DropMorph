@@ -88,7 +88,7 @@ public partial class App : Application
                 var files = OperatingSystem.IsMacOS()
                     ? await Task.Run(platform.GetFileManagerSelection) : platform.GetFileManagerSelection();
                 if (files.Count > 0 && !store.Settings.Paused)
-                    radial.ShowForFiles(e.X, e.Y, files);
+                    radial.ShowForFiles(e.X, e.Y, files, profileId: e.Gesture?.ProfileId);
                 else if (files.Count == 0 && Throttle.TryEnter("empty-selection", out var held))
                     log.LogInformation("The selection shortcut found no selected files in {Window}{Elevation}{Held}",
                         platform.DescribeForegroundWindow() is { Length: > 0 } window ? window : "the foreground window",

@@ -1,4 +1,5 @@
-# Builds the Linux or macOS portable package (tar.gz + SHA256SUMS) on its own operating system.
+# Builds the Linux or macOS portable package (tar.gz + SHA256SUMS) on its own operating system. On macOS it also builds
+# a disk image (.dmg) with the same contents and an Applications shortcut, so the app can be dragged into Applications.
 #
 # Linux packages must run on Ubuntu 22.04 (glibc 2.35). rhwp's Linux release needs a newer glibc, so CI builds it from
 # source on Ubuntu 22.04 (build/build-linux-native.py) and passes it in:
@@ -48,7 +49,8 @@ New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 $OutputDir = (Resolve-Path -LiteralPath $OutputDir).Path
 $archive = Join-Path $OutputDir "$packageName.tar.gz"
 $sums = Join-Path $OutputDir "$packageName-SHA256SUMS.txt"
-if ((Test-Path -LiteralPath $archive) -or (Test-Path -LiteralPath $sums)) {
+$diskImage = Join-Path $OutputDir "$packageName.dmg"
+if ((Test-Path -LiteralPath $archive) -or (Test-Path -LiteralPath $sums) -or (Test-Path -LiteralPath $diskImage)) {
     throw "Package $packageName already exists. Use another output folder or version."
 }
 $stage = Join-Path $root ('build/.cache/portable/' + [Guid]::NewGuid().ToString('N'))
@@ -143,8 +145,32 @@ Invoke-Checked 'Installer permissions' { chmod +x (Join-Path $package 'install.s
 $temporaryArchive = "$archive.$([Guid]::NewGuid().ToString('N')).partial"
 Invoke-Checked 'Create tar.gz' { tar -czf $temporaryArchive -C $stage $packageName }
 Move-Item -LiteralPath $temporaryArchive -Destination $archive
-"$((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant())  $packageName.tar.gz" |
-    Set-Content -LiteralPath $sums -Encoding ascii
+$checksums = @("$((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant())  $packageName.tar.gz")
+
+if ($Runtime.StartsWith('osx-')) {
+    # The disk image: the package folder (app, install.sh, uninstall.sh, INSTALL.txt, notices) plus a link to
+    # /Applications to drop the app on. hdiutil on CI runners sometimes fails with "Resource busy": retried.
+    $applications = Join-Path $package 'Applications'
+    Invoke-Checked 'Applications link' { ln -s /Applications $applications }
+    $temporaryImage = Join-Path $stage "$packageName.dmg"
+    $created = $false
+    foreach ($attempt in 1..4) {
+        hdiutil create -volname 'DropMorph' -srcfolder $package -fs HFS+ -format UDZO -ov $temporaryImage
+        if ($LASTEXITCODE -eq 0) { $created = $true; break }
+        Write-Warning "hdiutil create failed (attempt $attempt), trying again"
+        Start-Sleep -Seconds (5 * $attempt)
+    }
+    if (-not $created) { throw 'hdiutil create failed.' }
+    Remove-Item -LiteralPath $applications
+    if ($SigningIdentity -ne '-') {
+        Invoke-Checked 'Sign disk image' { codesign --force --sign $SigningIdentity --timestamp $temporaryImage }
+    }
+    Invoke-Checked 'Verify disk image' { hdiutil verify $temporaryImage }
+    Move-Item -LiteralPath $temporaryImage -Destination $diskImage
+    $checksums += "$((Get-FileHash -LiteralPath $diskImage -Algorithm SHA256).Hash.ToLowerInvariant())  $packageName.dmg"
+    Write-Host "Disk image: $diskImage"
+}
+$checksums | Set-Content -LiteralPath $sums -Encoding ascii
 Write-Host "Package: $archive"
 Write-Host "Checksums: $sums"
 Write-Host "Unpacked build retained for testing: $package"

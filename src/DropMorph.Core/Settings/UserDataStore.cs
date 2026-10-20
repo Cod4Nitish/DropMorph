@@ -396,6 +396,15 @@ internal static class SettingsMigrations
         if (settings.SchemaVersion < 21)
             InsertBefore(settings.EnginePriority, "wic", settings.EnginePriority.Contains("ffmpeg") ? "ffmpeg" : "pandoc");
 
+        // v29: two-key shortcuts that open the images / documents / video / any-files donut. Not added again when
+        //      the user already has a shortcut for a profile, or one of the keys is taken.
+        if (settings.SchemaVersion < 29 && settings.Triggers.Count > 0 && !settings.Triggers.Any(t => t.ProfileId is not null))
+        {
+            settings.Triggers.AddRange(TriggerGesture.CategoryShortcuts().Where(category => !settings.Triggers.Any(t =>
+                t.Kind == TriggerKind.KeyChord && t.Modifiers == category.Modifiers
+                && string.Equals(t.Key, category.Key, StringComparison.OrdinalIgnoreCase))));
+        }
+
         if (settings.Triggers.Count == 0)
             settings.Triggers = TriggerGesture.Defaults();
 

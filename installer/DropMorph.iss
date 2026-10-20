@@ -109,7 +109,7 @@ Name: "contextmenu"; Description: "{cm:TaskContextMenu}"; GroupDescription: "{cm
 Name: "contextmenu\top"; Description: "{cm:TaskModernMenu}"; GroupDescription: "{cm:GroupOptions}"; Check: IsFreshInstall and IsExplorerMenuSupported
 Name: "startup"; Description: "{cm:TaskStartup}"; GroupDescription: "{cm:GroupOptions}"; Check: IsFreshInstall
 Name: "cli"; Description: "{cm:TaskCli}"; GroupDescription: "{cm:GroupOptions}"; Check: not IsCliOnPath
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
 Source: "{#PublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs

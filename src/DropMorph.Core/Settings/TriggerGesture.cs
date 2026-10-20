@@ -72,6 +72,12 @@ public sealed class TriggerGesture
 
     public TriggerScope Scope { get; set; } = TriggerScope.FileManager;
 
+    /// <summary>
+    /// For <see cref="TriggerKind.KeyChord"/>: the toolbar profile to open (e.g. "images"), whatever the selected files
+    /// are; null opens the one their type selects (see <see cref="Profiles.ProfileSelector.ForShortcut"/>).
+    /// </summary>
+    public string? ProfileId { get; set; }
+
     public TriggerGesture Clone() => (TriggerGesture)MemberwiseClone();
 
     /// <summary>Default gestures for the current OS.</summary>
@@ -83,6 +89,28 @@ public sealed class TriggerGesture
         [
             new() { Kind = TriggerKind.Drag, Modifiers = dragModifier, Button = TriggerMouseButton.Left },
             new() { Kind = TriggerKind.KeyChord, Modifiers = ModifierKeys.Ctrl | ModifierKeys.Alt, Button = TriggerMouseButton.None, Key = "Space" },
+            .. CategoryShortcuts(),
         ];
     }
+
+    /// <summary>
+    /// Two-key shortcuts for the main kinds of files: Alt (Option on macOS) + I images, D documents, V video, O any
+    /// files. Each opens that toolbar for the files selected in the file manager.
+    /// </summary>
+    public static List<TriggerGesture> CategoryShortcuts() =>
+    [
+        Category("I", "images"),
+        Category("D", "office"),
+        Category("V", "video"),
+        Category("O", "mixed"),
+    ];
+
+    private static TriggerGesture Category(string key, string profileId) => new()
+    {
+        Kind = TriggerKind.KeyChord,
+        Modifiers = ModifierKeys.Alt,
+        Button = TriggerMouseButton.None,
+        Key = key,
+        ProfileId = profileId,
+    };
 }

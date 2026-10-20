@@ -91,16 +91,24 @@ public sealed partial class RadialViewModel(UserDataStore store, ILocalizer loc,
         HitBackground = "#01000000";
     }
 
-    /// <summary>Fills the donut for the given files.</summary>
-    public void Load(IReadOnlyList<string> files, bool clickMode)
+    /// <summary>
+    /// The toolbar profile a category shortcut opened the donut with (<see cref="TriggerGesture.ProfileId"/>); null when
+    /// the files' type selects it.
+    /// </summary>
+    public string? ProfileId { get; private set; }
+
+    /// <summary>Fills the donut for the given files, with the profile <paramref name="profileId"/> names if it exists.</summary>
+    public void Load(IReadOnlyList<string> files, bool clickMode, string? profileId = null)
     {
         IsClickMode = clickMode;
         Files = files;
+        ProfileId = profileId;
         DonutOpacity = 1;
         HitBackground = "Transparent";
         ApplyAppearance();
 
-        var profile = ProfileSelector.Select(store.Profiles, files);
+        var profile = (profileId is null ? null : store.Profiles.FirstOrDefault(p => p.Id == profileId))
+                      ?? ProfileSelector.Select(store.Profiles, files);
         var formats = ProfileSelector.DetectFormats(files);
         Presets = (profile?.PresetIds ?? [])
             .Select(store.FindPreset)

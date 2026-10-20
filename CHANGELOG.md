@@ -14,6 +14,29 @@ without lines shows the English ones):
 - `recommended`: bug fixes. The card shows once per version.
 - `optional`: new features only. No card, the sidebar button only.
 
+## 1.12.1
+
+<!-- update
+level: optional
+en: Alt + I / D / V / O open the images, documents, video or any-files donut
+en: macOS: disk image (.dmg), easier install and updates
+-->
+
+- New two-key shortcuts: select files and press Alt (Option on macOS) + **I** for the images donut, **D** documents,
+  **V** video or **O** any files. With a mixed selection only the files of that type are used. Change the keys, the
+  donut each one opens, or add your own with **Add keyboard shortcut** on the Shortcuts page.
+
+- macOS: each release also comes as a disk image (`.dmg`): open it and drag DropMorph into Applications.
+- One command installs or updates DropMorph: `curl -fsSL https://dropmorph.vercel.app/install.sh | sh` on macOS and
+  Linux, `irm https://dropmorph.vercel.app/install.ps1 | iex` in Windows PowerShell. It picks the right package and
+  checks its checksum.
+- macOS and Linux: running `install.sh` from a newer package now updates DropMorph in place, keeping settings and
+  engines. On macOS it removes the download quarantine, so the first start isn't blocked, and opens DropMorph.
+- macOS: Finder's "Convert with DropMorph" menu item is translated into Hindi, Spanish and Polish too, and macOS
+  explains why DropMorph asks for access to the Desktop, Documents and Downloads folders.
+- Linux: `install.sh` warns about missing system libraries and prints the command that installs them.
+- New guides: [macOS](docs/MACOS.md) and [Linux](docs/LINUX.md).
+
 ## 1.12.0
 
 <!-- update

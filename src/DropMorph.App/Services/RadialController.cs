@@ -97,13 +97,16 @@ public sealed class RadialController(
     /// <summary>
     /// Opens the donut for known files (click mode). Shortcuts among them stand for the files they point to.
     /// <paramref name="forAnotherProcess"/>: the files came from a later launch or the Services menu, so on macOS the
-    /// donut may lose focus once while DropMorph becomes the active app.
+    /// donut may lose focus once while DropMorph becomes the active app. <paramref name="profileId"/>: the toolbar a
+    /// category shortcut opens (<see cref="ProfileSelector.ForShortcut"/>).
     /// </summary>
-    public void ShowForFiles(int x, int y, IReadOnlyList<string> files, bool forAnotherProcess = false)
+    public void ShowForFiles(int x, int y, IReadOnlyList<string> files, bool forAnotherProcess = false, string? profileId = null)
     {
         files = platform.ResolveShortcuts(files);
         if (files.Count == 0)
             return;
+        var (profile, shortcutFiles) = ProfileSelector.ForShortcut(store.Profiles, files, profileId);
+        files = shortcutFiles;
         ReleaseProgressToToast();
         if (forAnotherProcess && OperatingSystem.IsMacOS())
             _grace.Start();
@@ -112,7 +115,7 @@ public sealed class RadialController(
         var window = EnsureWindow();
         _dropped = false;
         _converted = false;
-        viewModel.Load(files, clickMode: true);
+        viewModel.Load(files, clickMode: true, profileId is null ? null : profile?.Id);
         viewModel.FitToThisDonut();
         window.DonutControl.AllowContextEdit = true;
         PlaceAndShow(window, x, y, activate: true);
@@ -382,7 +385,7 @@ public sealed class RadialController(
             if (await windows.EditPresetAsync(preset, _window))
             {
                 store.SaveLibrary();
-                viewModel.Load(viewModel.Files, viewModel.IsClickMode);
+                viewModel.Load(viewModel.Files, viewModel.IsClickMode, viewModel.ProfileId);
             }
         }
         finally

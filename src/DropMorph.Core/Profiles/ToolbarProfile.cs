@@ -90,6 +90,23 @@ public static class ProfileSelector
         ?? profiles.FirstOrDefault(p => p.IsFallback)
         ?? profiles.FirstOrDefault();
 
+    /// <summary>
+    /// The profile and files for a shortcut that names a profile (<see cref="Settings.TriggerGesture.ProfileId"/>): that
+    /// profile, for the selected files of its types when the selection mixes types (all of them when none or all fit,
+    /// and always for a mixed-selection profile). A profile id that no longer exists, or none, selects as usual.
+    /// </summary>
+    public static (ToolbarProfile? Profile, IReadOnlyList<string> Files) ForShortcut(
+        IReadOnlyList<ToolbarProfile> profiles, IReadOnlyList<string> filePaths, string? profileId)
+    {
+        var profile = profileId is null ? null : profiles.FirstOrDefault(p => p.Id == profileId);
+        if (profile is null)
+            return (Select(profiles, filePaths), filePaths);
+        if (profile.IsFallback)
+            return (profile, filePaths);
+        var fitting = filePaths.Where(path => profile.Matches(FormatRegistry.ExtensionOf(path))).ToList();
+        return (profile, fitting.Count > 0 ? fitting : filePaths);
+    }
+
     /// <summary>Formats of the given files that DropMorph recognises.</summary>
     public static IReadOnlyList<FileFormat> DetectFormats(IEnumerable<string> filePaths) =>
         filePaths.Select(FormatRegistry.Detect).OfType<FileFormat>().Distinct().ToList();
