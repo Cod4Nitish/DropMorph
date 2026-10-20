@@ -18,6 +18,12 @@ VERSION = "1.12.0"
 RELEASED = "2026-10-20"
 SETUP_URL = f"{GH}/releases/latest/download/DropMorph-{VERSION}-win-Setup.exe"
 PORTABLE_URL = f"{GH}/releases/latest/download/DropMorph-{VERSION}-win-Portable.zip"
+MAC_ARM_URL = f"{GH}/releases/latest/download/DropMorph-{VERSION}-osx-arm64.tar.gz"
+MAC_INTEL_URL = f"{GH}/releases/latest/download/DropMorph-{VERSION}-osx-x64.tar.gz"
+LINUX_X64_URL = f"{GH}/releases/latest/download/DropMorph-{VERSION}-linux-x64.tar.gz"
+LINUX_ARM_URL = f"{GH}/releases/latest/download/DropMorph-{VERSION}-linux-arm64.tar.gz"
+INSTALL_SH = f"curl -fsSL {BASE}/install.sh | sh"
+INSTALL_PS1 = f"irm {BASE}/install.ps1 | iex"
 FORMAT_COUNT = 254
 
 ENGINES = {"¹": "Ghostscript", "²": "LibreOffice", "³": "Pandoc", "⁴": "calibre", "⁵": "FFmpeg"}
@@ -60,6 +66,44 @@ def tick():
     return f'<span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>'
 
 
+def gh_icon():
+    return ('<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>')
+
+
+# OS marks for the download cards (Apple and Linux from Simple Icons, CC0); fill follows currentColor.
+OS_LOGOS = {
+    "android": '<path d="M6.2 9.2h11.6a1 1 0 0 1 1 1v7.3a1.6 1.6 0 0 1-1.6 1.6h-.9v2.4a1.3 1.3 0 0 1-2.6 0v-2.4h-3.4v2.4a1.3 1.3 0 0 1-2.6 0v-2.4h-.9a1.6 1.6 0 0 1-1.6-1.6v-7.3a1 1 0 0 1 1-1zM3.4 9.6a1.3 1.3 0 0 1 1.3 1.3v5.2a1.3 1.3 0 0 1-2.6 0v-5.2a1.3 1.3 0 0 1 1.3-1.3zm17.2 0a1.3 1.3 0 0 1 1.3 1.3v5.2a1.3 1.3 0 0 1-2.6 0v-5.2a1.3 1.3 0 0 1 1.3-1.3zM16.3 2.1l-1.2 2.1A6.2 6.2 0 0 1 18.6 8H5.4a6.2 6.2 0 0 1 3.5-3.8L7.7 2.1a.3.3 0 0 1 .5-.3l1.3 2.1a6.8 6.8 0 0 1 5 0l1.3-2.1a.3.3 0 0 1 .5.3zM9.3 5.6a.7.7 0 1 0 0 1.4.7.7 0 0 0 0-1.4zm5.4 0a.7.7 0 1 0 0 1.4.7.7 0 0 0 0-1.4z"/>',
+    "windows": '<rect x="1" y="1" width="10.5" height="10.5"/><rect x="12.5" y="1" width="10.5" height="10.5"/><rect x="1" y="12.5" width="10.5" height="10.5"/><rect x="12.5" y="12.5" width="10.5" height="10.5"/>',
+    "mac": '<path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/>',
+    "linux": '<path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z"/>',
+}
+
+
+def os_logo(name):
+    return f'<svg class="os-logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">{OS_LOGOS[name]}</svg>'
+
+
+def star_card():
+    return (f'<div class="star-card"><div class="icon">{gh_icon()}</div><p><b>Like DropMorph? Help the developer: give it a ⭐ on GitHub.</b>'
+            f'<span>DropMorph is free. A star takes one click and helps other people find it.</span></p>'
+            f'<a class="btn btn-primary" href="{GH}">{gh_icon()} Star on GitHub<span class="stars" data-stars hidden></span></a></div>')
+
+
+# site.js points these at the visitor's computer (Mac, Linux, phone → download section); without JS they stay Windows.
+def dl_btn():
+    return (f'<a class="btn btn-primary" href="{SETUP_URL}" data-dl data-arm="{MAC_ARM_URL}" data-intel="{MAC_INTEL_URL}">'
+            f'{icon("download")} <span>Download for Windows</span></a>')
+
+
+def guide_btn(label="Install guide"):
+    return f'<a class="btn btn-ghost" href="/install/" data-guide>{label}</a>'
+
+
+def cmd_box(label, cmd):
+    return (f'<div class="cmd-box"><span>{label}</span><div class="cmd">'
+            f'<pre tabindex="0" aria-label="Install command">{esc(cmd)}</pre><button type="button" data-copy>Copy</button></div></div>')
+
+
 # ─────────────────────────── layout ───────────────────────────
 
 NAV = [("How it works", "/#how"), ("Features", "/#features"), ("Formats", "/formats/"),
@@ -98,10 +142,11 @@ def page(path, title, desc, body, active=None, jsonld=(), extra_head=""):
 <a class="skip" href="#main">Skip to content</a>
 <nav class="top" aria-label="Main">
   <div class="wrap">
-    <a class="brand" href="/"><img src="/logo.svg" alt="" width="32" height="32">DropMorph</a>
+    <a class="brand" href="/"><img src="/logo.svg" alt="" width="32" height="32"><span>DropMorph</span></a>
     <div class="navlinks">{nav}</div>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch light or dark theme">◐</button>
-    <a class="btn btn-primary btn-small nav-dl" href="/#download">Download</a>
+    <a class="btn btn-line btn-small nav-star" href="{GH}" aria-label="Star DropMorph on GitHub">{gh_icon()}<span>Star</span><span class="stars" data-stars hidden></span></a>
+    <a class="btn btn-primary btn-small nav-dl" href="/#download">{icon("download")}Download</a>
   </div>
 </nav>
 <main id="main">
@@ -114,11 +159,11 @@ def page(path, title, desc, body, active=None, jsonld=(), extra_head=""):
         <a class="brand" href="/" style="font-size:17px"><img src="/logo.svg" alt="" width="28" height="28">DropMorph</a>
         <p style="margin:12px 0 0;max-width:300px">A free, offline file converter you use by dragging. {FORMAT_COUNT} formats, nothing uploaded.</p>
       </div>
-      <div><h4>Product</h4><a href="/#features">Features</a><a href="/formats/">All formats</a><a href="/cli/">Command line</a><a href="/install/">Windows install guide</a><a href="/#faq">FAQ</a></div>
+      <div><h4>Product</h4><a href="/#features">Features</a><a href="/formats/">All formats</a><a href="/cli/">Command line</a><a href="/#download">Download</a><a href="/install/">Windows install guide</a><a href="/install/mac/">Mac install guide</a><a href="/install/linux/">Linux install guide</a><a href="/#faq">FAQ</a></div>
       <div><h4>Popular</h4>{popular}</div>
       <div><h4>Project</h4><a href="{GH}">GitHub</a><a href="{GH}/releases">All releases</a><a href="{GH}/issues">Report an issue</a><a href="{GH}/blob/main/LICENSE">MIT License</a><a href="{GH}/blob/main/THIRD-PARTY-NOTICES.md">Third-party notices</a></div>
     </div>
-    <div class="foot-bottom"><span>© 2026 DropMorph · Made by <a href="https://github.com/cod4nitish">Nitish Singh</a></span><span>Version {VERSION}</span></div>
+    <div class="foot-bottom"><span>© 2026 DropMorph · Developed by <a class="dev-name" href="https://github.com/cod4nitish">Nitish Singh</a></span><span>Version {VERSION}</span></div>
   </div>
 </footer>
 <script src="/assets/site.js" defer></script>
@@ -239,8 +284,8 @@ def conv_page(c):
   <div class="crumbs"><a href="/">DropMorph</a> › <a href="/formats/">Formats</a> › {esc(c["from"])} to {esc(c["to"])}</div>
   <h1>{esc(c["from"])} <span>→</span> {esc(c["to"])}</h1>
   <p class="lead">{esc(c["intro"])}</p>
-  <div class="cta"><a class="btn btn-primary" href="{SETUP_URL}">{icon("download")} Download for Windows</a><a class="btn btn-ghost" href="/install/">Install guide</a>
-  <small>Free · Offline · Windows 10 &amp; 11 · macOS and Linux preview</small></div>
+  <div class="cta">{dl_btn()}{guide_btn()}
+  <small>Free · Offline · Windows 10 &amp; 11 · macOS 14+ · Linux</small></div>
 </div></header>
 
 <section class="sec"><div class="wrap">
@@ -289,7 +334,8 @@ def final_cta():
     return f"""<section class="sec" style="padding-top:0"><div class="final">
   <h2>Stop uploading files to convert them.</h2>
   <p>Drag. Drop. Morphed. Free for Windows, macOS and Linux.</p>
-  <div class="cta" style="justify-content:center"><a class="btn btn-primary" href="{SETUP_URL}">{icon("download")} Download for Windows</a><a class="btn btn-ghost" href="/install/">Windows 11 install guide</a></div>
+  <div class="cta" style="justify-content:center">{dl_btn()}{guide_btn()}<a class="btn btn-ghost" href="/#download">All downloads</a></div>
+  {star_card()}
 </div></section>"""
 
 
@@ -306,13 +352,14 @@ HOME_FAQ = [
     (f"Which file formats does DropMorph support?", f"{FORMAT_COUNT} formats in 18 groups: images, PDF, Word, Excel, PowerPoint, e-books, video, audio, subtitles, archives, CAD, fonts, data files, 3D models and map data. See the full list on the Formats page."),
     ("Do I need Microsoft Office or LibreOffice?", "No. DOCX, XLSX, PPTX, PDF and most other formats work out of the box. Only older and rare formats such as DOC, PPT and Pages use the optional LibreOffice engine."),
     ("What are the optional engines?", "Free programs DropMorph downloads only when you need them: FFmpeg for video and audio, LibreOffice for older office files, Pandoc for markup, Ghostscript for PostScript and calibre for rare e-books. Each is pinned to an official download and checked before use."),
-    ("Does installing need administrator rights?", "The Windows Setup asks for administrator permission once. The portable ZIP runs without installing."),
+    ("Does installing need administrator rights?", "The Windows Setup asks for administrator permission once, and the portable ZIP runs without installing. On macOS and Linux DropMorph installs into your own user folder, without an administrator password."),
     ("Can I convert many files at once?", "Yes. Select as many files as you like and drop them together; they convert in parallel. Watch folders convert every file that lands in them."),
     ("Can I convert from the Windows 11 right-click menu?", "Yes. Setup can add DropMorph to the right-click menu, including the top of the compact Windows 11 menu."),
     ("Can it convert from the command line or automatically?", "Yes. The dropmorph command converts files and folders, and dropmorph watch converts everything that lands in a folder. See the Command line page."),
     ("How do I convert a file, for example HEIC to JPG?", "Hold Ctrl, drag the HEIC photo and drop it on JPG in the donut. The JPG is saved next to the original."),
     ("Why use DropMorph instead of an online converter?", "Online converters upload your files to someone else's server, show ads and limit file sizes. DropMorph is faster, private, has no limits and works without internet."),
-    ("Which operating systems are supported?", "Windows 10 (1809 or newer) and Windows 11 are fully supported. macOS 14+ and Linux (Ubuntu 22.04+) are available as previews."),
+    ("Which operating systems are supported?", "Windows 10 (1809 or newer) and Windows 11; macOS 14 Sonoma or newer, on Apple silicon (M1–M4) and Intel Macs; and Linux (Ubuntu 22.04 or newer and similar), on x64 and ARM64."),
+    ("Can I use it on my phone?", "DropMorph is a desktop app for Windows, macOS and Linux; it doesn't run on Android or iPhone. You can open this site on your phone and share the download link to your computer."),
 ]
 
 FEATURES = [
@@ -336,7 +383,7 @@ def home():
     faq = "".join(f"<details{' open' if i == 0 else ''}><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for i, (q, a) in enumerate(HOME_FAQ))
     glance = [("Price", "Free (MIT license)"), ("Version", f"{VERSION}, released {RELEASED}"),
               ("Windows", "Windows 10 (1809+) and 11 · Setup 112 MB or portable ZIP"),
-              ("macOS / Linux", "Preview: macOS 14+, Ubuntu 22.04+ (x64 and ARM64)"),
+              ("macOS", "macOS 14+ · Apple silicon (M1–M4) and Intel"), ("Linux", "Ubuntu 22.04+ and similar · x64 and ARM64"),
               ("Formats", f"{FORMAT_COUNT} in 18 groups"), ("Internet", "Not needed to convert. Used only for update checks and optional engines"),
               ("Languages", "English, हिन्दी, Español, 한국어, 简体中文, Polski"), ("Ways in", "Ctrl + drag donut, right-click menu, shortcut, drop zone, command line, watch folders"),
               ("Account", "None. No sign-up, no telemetry")]
@@ -349,9 +396,11 @@ def home():
       <h1>Drag. Drop.<br><span>Morphed.</span></h1>
       <p class="lead">The free file converter that lives at your cursor. Hold <kbd class="kbd-hero">Ctrl</kbd>, drag a file and drop it on a format. No app window, no uploads, no waiting.</p>
       <div class="cta">
-        <a class="btn btn-primary" href="{SETUP_URL}">{icon("download")} Download for Windows</a>
-        <a class="btn btn-ghost" href="/install/">Install guide</a>
-        <small>Windows 10 &amp; 11 · macOS and Linux preview · v{VERSION}</small>
+        {dl_btn()}
+        {guide_btn()}
+        <small>Free for Windows 10 &amp; 11, macOS 14+ and Linux · v{VERSION}</small>
+        <small class="gh-line">Free &amp; open source. <a href="{GH}">⭐ Star it on GitHub</a> to help the developer.</small>
+        <a class="dev-badge" href="https://github.com/cod4nitish">Developed by <b>Nitish Singh</b></a>
       </div>
     </div>
     <div class="stage" id="stage" aria-label="Interactive demo: drag the file and drop it on a format">
@@ -464,29 +513,63 @@ def home():
 </div></section>
 
 <section class="sec" id="download"><div class="wrap">
-  <div class="sec-head"><div class="kicker">Download</div><h2>Get DropMorph. It's free.</h2><p>Settings and engines are kept when DropMorph updates itself.</p></div>
-  <div class="grid3">
-    <div class="card"><h3 style="margin-top:0">Windows 10 &amp; 11</h3><p>Setup adds the right-click menu, start at sign-in and the <code>dropmorph</code> command. Or use the portable ZIP.</p>
-      <div class="cta" style="margin-top:16px"><a class="btn btn-accent" href="{SETUP_URL}">Setup (112 MB)</a><a class="btn btn-line" href="{PORTABLE_URL}">Portable ZIP</a></div>
-      <p style="margin-top:12px"><a href="/install/" style="color:var(--accent);font-weight:700">Windows 11 install guide →</a></p></div>
-    <div class="card"><h3 style="margin-top:0">macOS <span class="eng">Preview</span></h3><p>macOS 14+, Apple silicon and Intel. Unpack and run <code>./install.sh</code>, then allow it in Privacy &amp; Security.</p>
-      <div class="cta" style="margin-top:16px"><a class="btn btn-accent" href="{GH}/releases/latest">Download for macOS</a></div></div>
-    <div class="card"><h3 style="margin-top:0">Linux <span class="eng">Preview</span></h3><p>Ubuntu 22.04+, x64 and ARM64. Unpack and run <code>./install.sh</code> (no root). Drag gestures need X11.</p>
-      <div class="cta" style="margin-top:16px"><a class="btn btn-accent" href="{GH}/releases/latest">Download for Linux</a></div></div>
+  <div class="sec-head"><div class="kicker">Download</div><h2>Get DropMorph. It's free.</h2><p>Windows, macOS and Linux, with Android and iPhone help below. Pick your computer. Download the file, or install with one command. Settings and engines are kept when DropMorph updates itself.</p></div>
+  <div class="tip phone-note" role="note"><p><b>On a phone?</b> DropMorph runs on a computer (Windows, Mac or Linux), not on Android or iPhone. The files below still download, but to install it, open this page on your computer.</p>
+    <button class="btn btn-accent btn-small" type="button" data-share>Share link</button></div>
+  <div class="os-grid">
+    <article class="card os-card" data-os="windows" aria-labelledby="os-win">
+      <div class="os-head"><h3 id="os-win">{os_logo("windows")}Windows</h3><span class="os-you">Your computer</span></div>
+      <p class="os-req">Windows 10 (1809+) and 11, 64-bit</p>
+      <p>Setup adds the right-click menu, start at sign-in and the <code>dropmorph</code> command. The portable ZIP runs without installing.</p>
+      <div class="os-btns"><a class="btn btn-accent" href="{SETUP_URL}">{icon("download")} Setup (112 MB)</a><a class="btn btn-line" href="{PORTABLE_URL}">{icon("download")} Portable ZIP</a></div>
+      {cmd_box("Or one command in PowerShell", INSTALL_PS1)}
+      <a class="os-guide" href="/install/">Windows install guide →</a>
+    </article>
+    <article class="card os-card" data-os="mac" aria-labelledby="os-mac">
+      <div class="os-head"><h3 id="os-mac">{os_logo("mac")}macOS</h3><span class="os-you">Your computer</span></div>
+      <p class="os-req">macOS 14 Sonoma or newer</p>
+      <p>The one command below is the easiest: it picks the right file for your Mac and installs it, without the "Open Anyway" step.</p>
+      <div class="os-btns"><a class="btn btn-accent" href="{MAC_ARM_URL}" data-arch="arm">{icon("download")} Apple silicon (M1–M4)<span class="rec-tag">Your Mac</span></a><a class="btn btn-accent" href="{MAC_INTEL_URL}" data-arch="intel">{icon("download")} Intel Mac<span class="rec-tag">Your Mac</span></a></div>
+      <p class="os-hint">Which one? Apple menu → About This Mac → <b>Chip</b> (Apple M1–M4) or <b>Processor</b> (Intel).</p>
+      {cmd_box("Or one command in Terminal", INSTALL_SH)}
+      <a class="os-guide" href="/install/mac/">Mac install guide →</a>
+    </article>
+    <article class="card os-card" data-os="linux" aria-labelledby="os-linux">
+      <div class="os-head"><h3 id="os-linux">{os_logo("linux")}Linux</h3><span class="os-you">Your computer</span></div>
+      <p class="os-req">Ubuntu 22.04+ and similar</p>
+      <p>Unpack and run <code>./install.sh</code>, no root needed. Drag gestures need an X11 session.</p>
+      <div class="os-btns"><a class="btn btn-accent" href="{LINUX_X64_URL}">{icon("download")} x64 (most PCs)</a><a class="btn btn-line" href="{LINUX_ARM_URL}">{icon("download")} ARM64</a></div>
+      {cmd_box("Or one command in a terminal", INSTALL_SH)}
+      <a class="os-guide" href="/install/linux/">Linux install guide →</a>
+    </article>
   </div>
-  <p class="note">Windows releases aren't code-signed yet, so SmartScreen may warn: click "More info" → "Run anyway". Every release is built by GitHub Actions from the public source code, with SHA-256 checksums.</p>
+  <div class="sec-head phone-head"><h3>On a phone? Android &amp; iPhone</h3><p>DropMorph is a computer app, so there is no phone version yet. Send the link to your computer and install it there in a minute.</p></div>
+  <div class="os-grid phone-grid">
+    <article class="card os-card" data-os="android" aria-labelledby="os-android">
+      <div class="os-head"><h3 id="os-android">{os_logo("android")}Android</h3><span class="os-soon">Coming soon</span><span class="os-you">Your phone</span></div>
+      <p>Open this page on your Windows, Mac or Linux computer to install DropMorph. Share the link to yourself (WhatsApp, email, Telegram).</p>
+      <div class="os-btns"><button class="btn btn-accent" type="button" data-share>Send link to my computer</button><a class="btn btn-line" href="{GH}">{gh_icon()} ⭐ Star to vote for a phone app</a></div>
+    </article>
+    <article class="card os-card" data-os="ios" aria-labelledby="os-ios">
+      <div class="os-head"><h3 id="os-ios">{os_logo("mac")}iPhone &amp; iPad</h3><span class="os-soon">Coming soon</span><span class="os-you">Your phone</span></div>
+      <p>Open this page on your Mac or PC to install DropMorph. Tip: on an iPhone, AirDrop the link to your Mac.</p>
+      <div class="os-btns"><button class="btn btn-accent" type="button" data-share>Send link to my computer</button><a class="btn btn-line" href="{GH}">{gh_icon()} ⭐ Star to vote for a phone app</a></div>
+    </article>
+  </div>
+  <p class="note">Releases aren't code-signed yet. On Windows, SmartScreen may warn: click "More info" → "Run anyway". On a Mac, the one command avoids the warning; the Mac guide shows the manual way. Every release is built by GitHub Actions from the public source code, with SHA-256 checksums. <a href="{GH}/releases">All releases</a></p>
+  {star_card()}
 </div></section>
 {final_cta()}
 """
     ld = [{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "DropMorph",
            "description": f"Free, offline drag-and-drop file converter for {FORMAT_COUNT} formats.",
-           "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows 10, Windows 11, macOS, Linux",
+           "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows 10, Windows 11, macOS 14+, Linux",
            "softwareVersion": VERSION, "downloadUrl": SETUP_URL, "url": BASE + "/", "license": GH + "/blob/main/LICENSE",
            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
            "author": {"@type": "Person", "name": "Nitish Singh", "url": "https://github.com/cod4nitish"}},
           faq_ld(HOME_FAQ)]
     return page("/", "DropMorph: Free File Converter for Windows, Offline | Drag. Drop. Morphed.",
-                f"Convert {FORMAT_COUNT} file formats by dragging: PDF to Word, Excel to PDF, HEIC to JPG, MP4 to MP3 and more. Free, offline, nothing uploaded. Windows 10 & 11.",
+                f"Convert {FORMAT_COUNT} file formats by dragging: PDF to Word, Excel to PDF, HEIC to JPG, MP4 to MP3 and more. Free, offline, nothing uploaded. Windows, macOS and Linux.",
                 body, jsonld=ld)
 
 
@@ -505,7 +588,7 @@ def formats_page():
   <div class="crumbs"><a href="/">DropMorph</a> › Formats</div>
   <h1>{FORMAT_COUNT} formats in <span>18 groups</span></h1>
   <p class="lead">Everything DropMorph reads and writes. Unmarked formats work out of the box, without Office or LibreOffice. Marked ones use a free engine DropMorph downloads the first time you need it.</p>
-  <div class="cta"><a class="btn btn-primary" href="{SETUP_URL}">{icon("download")} Download for Windows</a></div>
+  <div class="cta">{dl_btn()}</div>
 </div></header>
 <section class="sec"><div class="wrap">
   <div class="sec-head"><div class="kicker">Popular conversions</div><h2>Step-by-step guides</h2></div>
@@ -565,7 +648,7 @@ def cli_page():
 
   <h2 id="setup">Set up</h2>
   <p><b>Windows:</b> in Setup, tick <b>Add the "dropmorph" command to PATH</b>. Open a new terminal (PowerShell, Command Prompt or Windows Terminal) and run <code>dropmorph help</code>.</p>
-  <p><b>macOS and Linux:</b> <code>./install.sh</code> adds the command.</p>
+  <p><b>macOS and Linux:</b> the one-line installer (<code>{INSTALL_SH}</code>) or the package's <code>./install.sh</code> adds the command.</p>
 
   <h2 id="usage">Usage</h2>
 <pre class="term">dropmorph convert &lt;files or folders...&gt; --to &lt;format&gt; [options]
@@ -620,7 +703,7 @@ def main():
     write("cli/index.html", cli_page())
     for c in CONVERSIONS:
         write(f"convert/{c['slug']}/index.html", conv_page(c))
-    urls = ["/", "/install/", "/formats/", "/cli/"] + [f"/convert/{c['slug']}/" for c in CONVERSIONS]
+    urls = ["/", "/install/", "/install/mac/", "/install/linux/", "/formats/", "/cli/"] + [f"/convert/{c['slug']}/" for c in CONVERSIONS]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
           "".join(f"  <url><loc>{BASE}{u}</loc><lastmod>{RELEASED}</lastmod></url>\n" for u in urls) + "</urlset>\n")
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")

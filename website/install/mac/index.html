@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DropMorph Mac Install</title>
+<meta name="description" content="DropMorph ko Mac (macOS 14+, Apple silicon aur Intel) pe install karne ka aasaan guide: ek command ya step-by-step.">
+<meta property="og:title" content="DropMorph: Mac pe install kaise karein">
+<meta property="og:description" content="DropMorph ko Mac (macOS 14+, Apple silicon aur Intel) pe install karne ka aasaan guide: ek command ya step-by-step.">
+<meta property="og:image" content="/og.png">
+<meta name="theme-color" content="#0D9488">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F7F7;--surface:#FFFFFF;--surface-alt:#E6EFEF;--text:#10201F;--muted:#55706D;--border:rgba(16,32,31,.10);
+  --accent:#0D9488;--accent-strong:#0B6F66;--accent-soft:rgba(13,148,136,.12);--coral:#FF6B35;--coral-soft:rgba(255,107,53,.14);
+  --warn-bg:#FFF6E5;--warn-border:#F2C46D;--warn-text:#7A4B00;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 10px 30px rgba(11,59,56,.08);--hero-a:#0B3B38;--hero-b:#0D9488;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1617;--surface:#162122;--surface-alt:#1E2C2D;--text:#E6F2F0;--muted:#94ADA9;--border:rgba(255,255,255,.09);
+  --accent:#2DD4BF;--accent-strong:#5EEAD4;--accent-soft:rgba(45,212,191,.14);--coral:#FF8A5C;--coral-soft:rgba(255,138,92,.16);
+  --warn-bg:#2B2210;--warn-border:#7A5A1C;--warn-text:#F5D08A;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);--hero-a:#071F1D;--hero-b:#0B6F66;
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1617;--surface:#162122;--surface-alt:#1E2C2D;--text:#E6F2F0;--muted:#94ADA9;--border:rgba(255,255,255,.09);
+  --accent:#2DD4BF;--accent-strong:#5EEAD4;--accent-soft:rgba(45,212,191,.14);--coral:#FF8A5C;--coral-soft:rgba(255,138,92,.16);
+  --warn-bg:#2B2210;--warn-border:#7A5A1C;--warn-text:#F5D08A;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);--hero-a:#071F1D;--hero-b:#0B6F66;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--accent)}
+code,kbd{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
+code{font-size:.88em;background:var(--surface-alt);padding:1px 6px;border-radius:6px;word-break:break-all}
+kbd{display:inline-block;padding:0 8px;border-radius:6px;border:1px solid var(--border);border-bottom-width:2px;background:var(--surface);font-size:.85em;color:var(--text)}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+
+nav{position:sticky;top:0;z-index:20;backdrop-filter:saturate(1.4) blur(12px);background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--border)}
+nav .wrap{display:flex;align-items:center;gap:14px;height:62px;max-width:1120px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;text-decoration:none;color:var(--text)}
+.brand img{width:30px;height:30px}
+.spacer{margin-left:auto}
+.theme-toggle{background:none;border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:#FF6B35;color:#fff}
+.btn-primary:hover{background:#F25A22}
+.btn-small{padding:8px 14px;font-size:14px;border-radius:10px}
+.btn-ghost{color:#fff;border-color:rgba(255,255,255,.7)}
+
+header{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;padding:52px 0 56px;position:relative;overflow:hidden}
+header::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:#FF6B35;opacity:.16;right:-140px;top:-180px}
+header .wrap{position:relative}
+.pill{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2)}
+h1{font-size:clamp(32px,5vw,50px);line-height:1.08;letter-spacing:-.03em;margin:16px 0 12px;font-weight:800}
+h1 span{color:#FFB599}
+header p{font-size:18px;opacity:.9;margin:0 0 24px;max-width:600px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.meta{font-size:13px;opacity:.75;margin-top:14px}
+
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 8px}
+.toc a{font-size:14px;font-weight:600;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);padding:7px 12px;border-radius:999px}
+.toc a:hover{border-color:var(--accent)}
+
+main{padding:16px 0 40px}
+.step{display:grid;grid-template-columns:52px 1fr;gap:18px;margin-top:40px}
+.num{width:52px;height:52px;border-radius:16px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800}
+:root[data-theme="dark"] .num{color:#05201D}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .num{color:#05201D}}
+.step h2{margin:6px 0 8px;font-size:24px;letter-spacing:-.02em;line-height:1.25}
+.step p,.step li{color:var(--muted)}
+.step p{margin:8px 0}
+.step ol,.step ul{padding-left:22px;margin:8px 0}
+.step li{margin:6px 0}
+.step b{color:var(--text)}
+@media (max-width:560px){.step{grid-template-columns:1fr;gap:10px}.num{width:44px;height:44px;font-size:19px;border-radius:13px}}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px 22px;box-shadow:var(--shadow);margin:14px 0}
+.warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text);border-radius:16px;padding:16px 18px;margin:14px 0}
+.warn b{color:inherit}
+.warn p,.warn li{color:inherit}
+.tip{background:var(--accent-soft);border-radius:16px;padding:14px 18px;margin:14px 0;color:var(--text)}
+.tip b{color:var(--accent-strong)}
+.win11{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--coral-soft);color:var(--coral);vertical-align:middle;margin-left:6px;letter-spacing:.02em}
+
+/* mock Windows dialogs */
+.mock{border-radius:12px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.18);margin:16px 0;max-width:520px;font-family:"Segoe UI",system-ui,sans-serif}
+.smart{background:#1F5FA8;color:#fff;padding:22px 24px}
+.smart .t{font-size:22px;font-weight:600;margin-bottom:10px}
+.smart p{color:#E6EEF8;margin:6px 0;font-size:14px}
+.smart .link{text-decoration:underline;color:#fff;font-weight:600}
+.smart .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.wbtn{font:600 13px "Segoe UI",sans-serif;padding:7px 18px;border-radius:4px;border:1px solid rgba(255,255,255,.7);color:#fff;background:transparent}
+.wbtn.hl{outline:3px solid #FFB599;outline-offset:2px}
+.uac{background:#fff;color:#1b1b1b}
+.uac .top{background:#2B6CB0;color:#fff;padding:12px 18px;font-size:14px}
+.uac .body{padding:16px 18px;font-size:14px}
+.uac .row{display:flex;justify-content:flex-end;gap:8px;padding:0 18px 16px}
+.uac .wbtn{color:#1b1b1b;border-color:#bbb;background:#f3f3f3}
+.uac .wbtn.yes{background:#0067C0;color:#fff;border-color:#0067C0}
+.setup{background:#fff;color:#1b1b1b;padding:16px 18px;font-size:14px}
+.setup .h{font-weight:600;margin-bottom:10px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:7px 0}
+.chk i{flex:none;width:16px;height:16px;border:1.5px solid #555;border-radius:3px;margin-top:3px;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:800}
+.chk i.on{background:#0067C0;border-color:#0067C0;color:#fff}
+.chk small{color:#666;display:block}
+
+.table{width:100%;border-collapse:collapse;font-size:15px;margin:10px 0}
+.table th,.table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.table th{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.table td:first-child{font-weight:700;color:var(--text)}
+.table td{color:var(--muted)}
+.wide{overflow-x:auto}
+
+/* donut how-to */
+.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+@media (max-width:700px){.ways{grid-template-columns:1fr}}
+.way{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 18px}
+.way h3{margin:0 0 6px;font-size:16px}
+.way p{margin:0;font-size:14.5px}
+
+details{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin:10px 0}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px;color:var(--text)}
+summary::after{content:"+";color:var(--accent);font-size:20px;line-height:1}
+details[open] summary::after{content:"−"}
+details p,details li{color:var(--muted)}
+
+.share{text-align:center;background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;border-radius:24px;padding:40px 22px;margin:56px 0 0}
+.share h2{margin:0 0 8px;font-size:26px}
+.share p{opacity:.88;margin:0 0 18px}
+.copy{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:8px 8px 8px 14px;border-radius:12px;max-width:100%}
+.copy code{background:none;color:#fff;font-size:14px;padding:0}
+.copy button{font:700 13px "Plus Jakarta Sans",sans-serif;border:0;border-radius:8px;padding:7px 12px;background:#fff;color:#0B3B38;cursor:pointer}
+footer{padding:30px 0 40px;color:var(--muted);font-size:14px;text-align:center}
+footer a{color:var(--muted)}
+
+/* shared by the Windows, macOS and Linux guides */
+.os-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.os-tabs a{font-size:14px;font-weight:700;text-decoration:none;color:#fff;padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}
+.os-tabs a[aria-current="page"]{background:#fff;color:#0B3B38;border-color:#fff}
+.os-tabs a:hover{border-color:#fff}
+.choose{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){.choose{grid-template-columns:1fr}}
+.choose a{display:block;text-decoration:none;background:var(--surface);border:2px solid var(--border);border-radius:16px;padding:14px 16px;color:var(--text)}
+.choose a:hover,.choose a.rec{border-color:var(--accent)}
+.choose a b{display:block;font-size:16px}
+.choose a small{color:var(--muted)}
+.choose a .rec-tag{display:none;font-size:11px;font-weight:800;color:var(--accent);margin-left:6px}
+.choose a.rec .rec-tag{display:inline}
+pre.term{background:#10201F;color:#E6F2F0;border-radius:12px;padding:14px 16px;overflow-x:auto;font:14px/1.6 "JetBrains Mono",ui-monospace,monospace;margin:12px 0;white-space:pre}
+pre.term .c{color:#7FA8A3}
+.oneline{background:var(--surface);border:2px solid var(--accent);border-radius:18px;padding:18px 20px;margin:22px 0 6px;box-shadow:var(--shadow)}
+.oneline h2{margin:0 0 4px;font-size:20px}
+.oneline p{margin:4px 0;color:var(--muted)}
+.cmd{display:flex;align-items:stretch;gap:8px;margin:12px 0 6px}
+.cmd pre.term{flex:1;margin:0;min-width:0}
+.cmd button{flex:none;font:700 13px "Plus Jakarta Sans",sans-serif;border:0;border-radius:10px;padding:0 14px;background:var(--accent);color:#fff;cursor:pointer}
+:root[data-theme="dark"] .cmd button{color:#05201D}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cmd button{color:#05201D}}
+.phone{display:none}
+.is-phone .phone{display:block}
+.sharebtn{font:700 13px "Plus Jakarta Sans",sans-serif;border:0;border-radius:8px;padding:6px 12px;background:var(--accent);color:#fff;cursor:pointer;margin-left:4px}
+/* mock macOS dialogs */
+.macdlg{background:#ECECEC;color:#1d1d1f;border-radius:14px;padding:20px 22px;text-align:center;max-width:300px;font-family:-apple-system,system-ui,sans-serif;box-shadow:0 18px 40px rgba(0,0,0,.22);margin:16px 0}
+.macdlg .ico{width:52px;height:52px;margin:0 auto 10px;border-radius:12px;background:url(/logo.svg) center/70% no-repeat,linear-gradient(135deg,#E6F2F0,#fff)}
+.macdlg .t{font-weight:700;font-size:14px;margin-bottom:6px}
+.macdlg p{font-size:12px;color:#3a3a3c;margin:0 0 14px}
+.macdlg .mbtn{display:block;font-size:13px;padding:6px;border-radius:7px;background:#fff;margin-top:6px;color:#1d1d1f}
+.macdlg .mbtn.blue{background:#0A84FF;color:#fff}
+.macset{background:#fff;color:#1d1d1f;border-radius:12px;padding:16px 18px;max-width:480px;font:13px -apple-system,system-ui,sans-serif;box-shadow:0 18px 40px rgba(0,0,0,.18);margin:16px 0}
+.macset .h{font-weight:700;font-size:15px;margin-bottom:10px}
+.macset .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-top:1px solid #e5e5e5}
+.macset .ob{flex:none;background:#E9E9EB;border-radius:6px;padding:4px 10px;font-weight:600;outline:3px solid #FFB599;outline-offset:2px}
+.macset .sw{width:34px;height:20px;border-radius:999px;background:#34C759;position:relative;flex:none}
+.macset .sw::after{content:"";position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+.star-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:10px;border:1px solid var(--border);color:var(--text);text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap}
+.star-btn:hover{border-color:var(--accent)}
+.star-btn svg{width:16px;height:16px}
+@media (max-width:480px){.star-btn .lbl{display:none}}
+.star-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px 20px;margin:40px 0 0;box-shadow:var(--shadow)}
+.star-card p{margin:0;color:var(--muted)}
+.star-card b{color:var(--text)}
+.star-btn .lbl-s{display:none}
+@media (max-width:480px){.star-btn .lbl-s{display:inline}}
+/* grid items default to min-width:auto: a long command would widen the page */
+.step>div{min-width:0}
+pre.term,.cmd{max-width:100%}
+@media (max-width:480px){nav .wrap{gap:8px}.theme-toggle{display:none}nav .btn-small{padding:7px 10px}.brand{font-size:16px}}
+nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/logo.svg" alt="">DropMorph</a>
+    <span class="spacer"></span>
+    <a class="star-btn" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="lbl">⭐ Star on GitHub</span><span aria-hidden="true" class="lbl-s">⭐</span></a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Switch theme">◐</button>
+    <a class="btn btn-primary btn-small" href="#s1">Download</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <nav class="os-tabs" aria-label="Operating system"><a href="/install/">Windows</a><a href="/install/mac/" aria-current="page">macOS</a><a href="/install/linux/">Linux</a></nav>
+    <span class="pill">macOS 14+ · Apple silicon (M1–M4) aur Intel · 5 minute</span>
+    <h1>DropMorph ko <span>Mac</span> pe install karo</h1>
+    <p>Ek command, ya download karke Applications mein daalo. Dono tareeke neeche hain.</p>
+    <div class="cta">
+      <a class="btn btn-primary" id="macMain" href="#s1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg> <span id="macMainText">Mac ke liye download karo</span></a>
+      <a class="btn btn-ghost" href="https://github.com/Cod4Nitish/DropMorph/releases/latest">Saari files</a>
+    </div>
+    <div class="meta">Version 1.12.0 · macOS 14 Sonoma ya naya · Free</div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tip phone"><b>Phone pe ho?</b> DropMorph computer ka app hai (Windows, Mac, Linux). File phone pe bhi download ho jayegi, lekin install aur use computer pe hi hoga. Sabse aasaan: yeh link apne computer pe kholo. <button type="button" class="sharebtn" data-share>Link share karo</button></div>
+    <section class="oneline" id="quick">
+      <h2>⚡ Sabse aasaan: ek command</h2>
+      <p><b>Terminal</b> kholo (<kbd>⌘</kbd> + <kbd>Space</kbd> → "Terminal"), yeh paste karke <kbd>Return</kbd> dabao:</p>
+      <div class="cmd"><pre class="term">curl -fsSL https://dropmorph.vercel.app/install.sh | sh</pre><button type="button" data-copy>Copy</button></div>
+      <p style="font-size:14px">Yeh aapke Mac (Apple silicon ya Intel) ke liye sahi file khud chunta hai, checksum check karta hai, DropMorph ko <code>~/Applications</code> mein install karke khol deta hai aur <code>dropmorph</code> command bhi add karta hai. <b>"Open Anyway" ki zaroorat nahi padti.</b> Phir seedha <a href="#s4">Step 4</a> pe jao. Dobara chalane se update ho jata hai.</p>
+    </section>
+
+    <div class="toc">
+      <a href="#quick">⚡ Ek command</a><a href="#s1">1. Sahi file</a><a href="#s2">2. Applications</a><a href="#s3">3. Open Anyway</a><a href="#s4">4. Accessibility</a><a href="#s5">5. Use karo</a><a href="#s6">Video/Audio</a><a href="#help">Problem?</a>
+    </div>
+
+    <section class="step" id="s1">
+      <div class="num">1</div>
+      <div>
+        <h2>Ya phir: apne Mac ke hisaab se file download karo</h2>
+        <p>Pata karo aapka Mac kaunsa hai: upar left mein <b> Apple menu → About This Mac</b>.</p>
+        <div class="choose">
+          <a id="dlArm" href="https://github.com/Cod4Nitish/DropMorph/releases/latest/download/DropMorph-1.12.0-osx-arm64.tar.gz"><b>Apple silicon <span class="rec-tag">AAPKE LIYE</span></b><small>"Chip: Apple M1 / M2 / M3 / M4" likha ho · osx-arm64</small></a>
+          <a id="dlIntel" href="https://github.com/Cod4Nitish/DropMorph/releases/latest/download/DropMorph-1.12.0-osx-x64.tar.gz"><b>Intel Mac <span class="rec-tag">AAPKE LIYE</span></b><small>"Processor: … Intel …" likha ho · osx-x64</small></a>
+        </div>
+        <div class="tip"><b>Galat file le li?</b> Intel wali file M1/M2 pe bhi chal jaati hai (thodi slow). Apple silicon wali Intel Mac pe nahi chalti.</div>
+      </div>
+    </section>
+
+    <section class="step" id="s2">
+      <div class="num">2</div>
+      <div>
+        <h2>Unzip karo aur Applications mein daalo</h2>
+        <ol>
+          <li><b>Downloads</b> folder kholo aur <code>DropMorph-1.12.0-osx-….tar.gz</code> pe <b>double-click</b> karo. Ek folder ban jayega. (Safari aksar yeh khud kar deta hai.)</li>
+          <li>Folder ke andar <b>DropMorph</b> app hai. Use Finder ke left side mein <b>Applications</b> pe <b>drag</b> karke chhod do.</li>
+          <li>Applications (ya Launchpad) se <b>DropMorph</b> pe double-click karo.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="step" id="s3">
+      <div class="num">3</div>
+      <div>
+        <h2>"DropMorph Not Opened" aaye to: Open Anyway</h2>
+        <p>Pehli baar Mac yeh bol sakta hai. <b>Ghabraao mat.</b> Yeh isliye aata hai kyunki DropMorph free app hai aur Apple ki paid notarization nahi hai.</p>
+        <div class="macdlg" aria-hidden="true">
+          <div class="ico"></div>
+          <div class="t">"DropMorph" Not Opened</div>
+          <p>Apple could not verify "DropMorph" is free of malware that may harm your Mac or compromise your privacy.</p>
+          <span class="mbtn blue">Done</span><span class="mbtn">Move to Bin</span>
+        </div>
+        <ol>
+          <li><b>Done</b> dabao (Move to Bin <b>nahi</b>).</li>
+          <li><b> Apple menu → System Settings → Privacy &amp; Security</b> kholo.</li>
+          <li>Neeche scroll karo. <i>"DropMorph" was blocked…</i> ke aage <b>Open Anyway</b> dabao.</li>
+          <li>Mac ka password daalo, phir dobara <b>Open Anyway</b>. Ab DropMorph khul jayega. Yeh sirf ek baar karna hai.</li>
+        </ol>
+        <div class="macset" aria-hidden="true">
+          <div class="h">Privacy &amp; Security</div>
+          <div class="row"><span>"DropMorph" was blocked to protect your Mac.</span><span class="ob">Open Anyway</span></div>
+        </div>
+        <div class="warn">
+          <p style="margin-top:0"><b>"DropMorph is damaged and can't be opened"?</b></p>
+          <p>App kharab nahi hai, yeh download ka quarantine mark hai. <b>Terminal</b> mein yeh paste karke <kbd>Return</kbd> dabao, phir DropMorph normal kholo:</p>
+          <div class="cmd"><pre class="term">xattr -dr com.apple.quarantine /Applications/DropMorph.app</pre><button type="button" data-copy>Copy</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" id="s4">
+      <div class="num">4</div>
+      <div>
+        <h2>Accessibility on karo (donut ke liye zaroori)</h2>
+        <p>Option-drag se donut kholne ke liye DropMorph ko mouse aur keys dekhni padti hain:</p>
+        <ol>
+          <li><b>System Settings → Privacy &amp; Security → Accessibility</b>.</li>
+          <li>List mein <b>DropMorph</b> ka switch <b>on</b> karo. Turant kaam karne lagega.</li>
+        </ol>
+        <div class="macset" aria-hidden="true">
+          <div class="h">Accessibility</div>
+          <div class="row"><span>Allow the applications below to control your computer.</span></div>
+          <div class="row"><b>DropMorph</b><span class="sw"></span></div>
+        </div>
+        <div class="tip"><b>Aur kaam ki settings</b> (DropMorph → Settings → General): <b>Start DropMorph when I sign in</b> on rakho, taaki Mac on hote hi donut ready ho. <b>Convert with DropMorph</b> on karne se Finder ke right-click menu mein bhi aa jayega.</div>
+        <p>Pehli baar shortcut use karoge to Mac poochega ki DropMorph Finder ko control kare: <b>OK</b> dabao.</p>
+      </div>
+    </section>
+
+    <section class="step" id="s5">
+      <div class="num">5</div>
+      <div>
+        <h2>Use karo: ⌥ Option + drag + drop</h2>
+        <div class="card">
+          <ol style="margin:0">
+            <li><kbd>⌥ Option</kbd> key dabake rakho.</li>
+            <li>Finder ya desktop se kisi bhi file ko thoda sa <b>drag</b> karo.</li>
+            <li>Cursor pe formats ka <b>donut</b> khul jayega.</li>
+            <li>Jo format chahiye (JPG, PDF, MP3…), uspe le jaake <b>chhod do</b>.</li>
+            <li>Nayi file <b>original file ke bagal mein</b> ban jayegi.</li>
+          </ol>
+        </div>
+        <p>DropMorph upar <b>menu bar</b> mein (top right) rehta hai. Window band karne pe bhi chalu rehta hai.</p>
+        <div class="ways">
+          <div class="way"><h3>Right-click</h3><p>Finder mein file pe right-click → <b>Quick Actions / Services</b> → <b>Convert with DropMorph</b>.</p></div>
+          <div class="way"><h3>Drop zone</h3><p>DropMorph window kholo aur file us box mein daal do.</p></div>
+          <div class="way"><h3>HEIC → JPG</h3><p>iPhone ki photos (HEIC) ek saath select karke JPG pe drop karo.</p></div>
+        </div>
+        <div class="tip"><b>2-key shortcuts:</b> Finder mein files select karo aur dabao <kbd>⌥ Option</kbd> + <kbd>I</kbd> (Images), <kbd>D</kbd> (Documents), <kbd>V</kbd> (Video) ya <kbd>O</kbd> (Other). Us type ka donut khul jayega. Keys DropMorph → <b>Settings → Shortcuts</b> mein badal sakte ho.</div>
+      </div>
+    </section>
+
+    <section class="step" id="s6">
+      <div class="num">+</div>
+      <div>
+        <h2>Video aur audio ke liye FFmpeg (optional)</h2>
+        <p>Images, PDF, Word, Excel, PowerPoint, ZIP bina kuch install kiye chalte hain. <b>Video/audio</b> (MP4, MOV, MP3, WAV) ke liye Mac pe FFmpeg <a href="https://brew.sh">Homebrew</a> se aata hai. Terminal mein:</p>
+        <pre class="term"><span class="c"># Homebrew nahi hai to pehle yeh (ek baar):</span>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+<span class="c"># phir FFmpeg (aur EPS/PS ke liye Ghostscript):</span>
+brew install ffmpeg ghostscript</pre>
+        <p>Phir DropMorph → <b>Settings → Engines → Check again</b>. LibreOffice (DOC, PPT, Pages, Keynote), Pandoc aur calibre wahi <b>Install</b> button se aa jaate hain.</p>
+      </div>
+    </section>
+
+    <section id="help" style="margin-top:56px">
+      <h2 style="font-size:26px;letter-spacing:-.02em;margin:0 0 10px">Problem aa rahi hai?</h2>
+      <details open><summary>Option dabake drag karne pe donut nahi khul raha</summary>
+        <p>1) DropMorph chalu hona chahiye (menu bar mein drop wala icon). 2) <b>System Settings → Privacy &amp; Security → Accessibility</b> mein DropMorph on ho. 3) Update ke baad on dikh raha ho phir bhi kaam na kare: DropMorph ko list mein select karke <b>−</b> se hatao, phir <b>+</b> se Applications/DropMorph dobara add karke on karo.</p></details>
+      <details><summary>"Open Anyway" button nahi dikh raha</summary>
+        <p>Pehle DropMorph ek baar kholne ki koshish karo (tab hi button aata hai), phir Privacy &amp; Security mein sabse neeche dekho. Ya upar wala <code>xattr</code> command chala do, ya <a href="#quick">ek command</a> se install karo.</p></details>
+      <details><summary>Right-click mein "Convert with DropMorph" nahi hai</summary>
+        <p>DropMorph → <b>Settings → General</b> mein on karo. Finder menu mein yeh neeche <b>Quick Actions</b> ya <b>Services</b> ke andar hota hai. Phir bhi na dikhe to ek baar log out / log in karo.</p></details>
+      <details><summary>Video ya audio convert nahi ho raha</summary>
+        <p>FFmpeg chahiye: upar <a href="#s6">Video/Audio</a> wala step dekho (<code>brew install ffmpeg</code>).</p></details>
+      <details><summary><code>dropmorph: command not found</code></summary>
+        <pre class="term">echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zprofile && source ~/.zprofile</pre></details>
+      <details><summary>Update kaise karein?</summary>
+        <p>Naya version aane pe DropMorph notice dikhayega. <a href="#quick">Wahi ek command</a> dobara chala do, ya nayi file download karke purane DropMorph ki jagah Applications mein daal do (Replace). Settings aur engines bache rahenge.</p></details>
+      <details><summary>Uninstall kaise karein?</summary>
+        <p>DropMorph ko menu bar se Quit karo, phir Applications se <b>Bin</b> mein daal do. Pura saaf karna ho to <code>~/Library/Application Support/DropMorph</code> folder bhi delete kar do.</p></details>
+      <details><summary>Kya meri files kahin upload hoti hain?</summary>
+        <p>Nahi. Sab kuch aapke Mac pe hi convert hota hai. DropMorph internet sirf naya version check karne aur aapke chune hue engines download karne ke liye use karta hai.</p></details>
+    </section>
+
+    <div class="star-card"><p><b>DropMorph pasand aaya?</b> Free hai aur hamesha rahega. Developer ki help karo: GitHub pe ek ⭐ star do, isse aur log isse dhoondh paate hain.</p><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener">⭐ Star on GitHub</a></div>
+
+    <div class="share">
+      <h2>Mac wale dosto ko bhejo</h2>
+      <p>Yeh link share karo. Isme download aur pura guide, dono hain.</p>
+      <div class="copy"><code id="shareUrl">https://dropmorph.vercel.app/install/mac</code><button id="copyBtn" type="button">Copy</button></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <a href="/">DropMorph</a> · Made by <a href="https://github.com/cod4nitish">Nitish Singh</a> · <a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a>
+</footer>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('dm-theme'); if (t) root.dataset.theme = t; } catch {}
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('dm-theme', root.dataset.theme); } catch {}
+  });
+  const ua = navigator.userAgent;
+  const phone = /Android|iPhone|iPod/i.test(ua) || (/iPad|Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  if (phone) root.classList.add('is-phone');
+  const url = document.getElementById('shareUrl').textContent;
+  const flash = (btn, text) => { const old = btn.dataset.label || (btn.dataset.label = btn.textContent); btn.textContent = text; setTimeout(() => btn.textContent = old, 2000); };
+  const copy = async (btn, text) => {
+    try { await navigator.clipboard.writeText(text); flash(btn, 'Copied!'); } catch { flash(btn, 'Select karke copy karo'); }
+  };
+  document.querySelectorAll('[data-share]').forEach(b => b.addEventListener('click', async () => {
+    if (navigator.share) { try { await navigator.share({ title: 'DropMorph', text: 'DropMorph: free file converter. Computer pe kholo:', url }); } catch {} return; }
+    copy(b, url);
+  }));
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => copy(b, b.previousElementSibling.textContent.trim())));
+  document.getElementById('copyBtn').addEventListener('click', e => copy(e.currentTarget, url));
+  // Apple silicon or Intel: Chrome and Firefox name the GPU ("Apple M1", "Intel ..."); Safari says "Apple GPU" only on
+  // Apple silicon. When unsure, the main button goes to step 1 where both are offered.
+  let arch = '';
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    const ext = gl && gl.getExtension('WEBGL_debug_renderer_info');
+    const gpu = gl ? String(gl.getParameter(ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER)) : '';
+    if (/Apple (M\d|GPU)/.test(gpu)) arch = 'arm'; else if (/Intel|AMD|Radeon|NVIDIA/i.test(gpu)) arch = 'intel';
+  } catch {}
+  if (!phone && /Macintosh/.test(ua) && arch) {
+    const pick = document.getElementById(arch === 'arm' ? 'dlArm' : 'dlIntel');
+    pick.classList.add('rec');
+    document.getElementById('macMain').href = pick.href;
+    document.getElementById('macMainText').textContent = arch === 'arm' ? 'Download (Apple silicon)' : 'Download (Intel Mac)';
+  }
+})();
+</script>
+</body>
+</html>

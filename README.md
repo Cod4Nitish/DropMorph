@@ -9,8 +9,9 @@
 
 <p align="center">
   <a href="https://dropmorph.vercel.app/"><b>Website</b></a> ·
-  <a href="https://github.com/cod4nitish/DropMorph/releases/latest"><b>Download</b></a> ·
+  <a href="#download"><b>Download</b></a> ·
   <a href="#install">Install</a> ·
+  <a href="#screenshots">Screenshots</a> ·
   <a href="#command-line">Command line</a> ·
   <a href="#development">Development</a>
 </p>
@@ -19,8 +20,14 @@
   <a href="https://github.com/cod4nitish/DropMorph/actions/workflows/ci.yml"><img src="https://github.com/cod4nitish/DropMorph/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/cod4nitish/DropMorph/releases/latest"><img src="https://img.shields.io/github/v/release/cod4nitish/DropMorph?color=0D9488&label=release" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0B6F66" alt="Windows 10 | 11">
-  <img src="https://img.shields.io/badge/macOS%20%7C%20Linux-preview-FF6B35" alt="macOS | Linux preview">
+  <img src="https://img.shields.io/badge/macOS-14%2B-FF6B35" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/Linux-x64%20%7C%20ARM64-FF6B35" alt="Linux x64 | ARM64">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0D9488" alt="MIT license"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/cod4nitish/DropMorph/stargazers"><img src="https://img.shields.io/github/stars/cod4nitish/DropMorph?style=for-the-badge&logo=github&label=Star%20DropMorph&color=FF6B35" alt="Star DropMorph on GitHub"></a><br>
+  <sub>DropMorph is free. If it saves you time, <b>give it a ⭐</b> (top right of this page): it helps the developer and helps others find it.</sub>
 </p>
 
 <table>
@@ -31,19 +38,113 @@
   </tr>
 </table>
 
+## Download
+
+Version 1.12.0. Pick your system and click to download; the buttons link straight to the files.
+
+<table>
+  <tr>
+    <th width="33%">Windows</th>
+    <th width="33%">macOS</th>
+    <th width="33%">Linux</th>
+  </tr>
+  <tr>
+    <td valign="top" align="center">
+      <a href="https://github.com/cod4nitish/DropMorph/releases/download/v1.12.0/DropMorph-1.12.0-win-Setup.exe"><img src="https://img.shields.io/badge/Download-Windows%20Setup-0D9488?style=for-the-badge&logo=windows&logoColor=white" alt="Download for Windows (Setup)"></a><br>
+      <a href="https://github.com/cod4nitish/DropMorph/releases/download/v1.12.0/DropMorph-1.12.0-win-Portable.zip"><img src="https://img.shields.io/badge/Download-Portable%20ZIP-0B6F66?style=for-the-badge&logo=windows&logoColor=white" alt="Download for Windows (portable ZIP)"></a>
+      <br><br>
+      64-bit Windows 10 (1809 or newer) or Windows 11.<br>
+      Setup is recommended; the ZIP runs without installing.
+      <br><br>
+      <a href="https://dropmorph.vercel.app/install/">Step-by-step guide</a>
+    </td>
+    <td valign="top" align="center">
+      <a href="https://github.com/cod4nitish/DropMorph/releases/download/v1.12.0/DropMorph-1.12.0-osx-arm64.tar.gz"><img src="https://img.shields.io/badge/Download-Apple%20silicon%20(M1%E2%80%93M4)-0D9488?style=for-the-badge&logo=apple&logoColor=white" alt="Download for Mac with Apple silicon (M1 to M4)"></a><br>
+      <a href="https://github.com/cod4nitish/DropMorph/releases/download/v1.12.0/DropMorph-1.12.0-osx-x64.tar.gz"><img src="https://img.shields.io/badge/Download-Intel%20Mac-0B6F66?style=for-the-badge&logo=apple&logoColor=white" alt="Download for Intel Mac"></a>
+      <br><br>
+      macOS 14 Sonoma or newer.<br>
+      <b>Which one?</b> Apple menu → <b>About This Mac</b>:<br>
+      <b>Chip</b>: Apple M1, M2, M3, M4 → Apple silicon<br>
+      <b>Processor</b>: Intel → Intel Mac
+      <br><br>
+      <a href="docs/MACOS.md">macOS guide</a> · <a href="https://dropmorph.vercel.app/install/mac/">Hinglish guide</a>
+    </td>
+    <td valign="top" align="center">
+      <a href="https://github.com/cod4nitish/DropMorph/releases/download/v1.12.0/DropMorph-1.12.0-linux-x64.tar.gz"><img src="https://img.shields.io/badge/Download-Linux%20x64-0D9488?style=for-the-badge&logo=linux&logoColor=white" alt="Download for Linux x64"></a><br>
+      <a href="https://github.com/cod4nitish/DropMorph/releases/download/v1.12.0/DropMorph-1.12.0-linux-arm64.tar.gz"><img src="https://img.shields.io/badge/Download-Linux%20ARM64-0B6F66?style=for-the-badge&logo=linux&logoColor=white" alt="Download for Linux ARM64"></a>
+      <br><br>
+      Ubuntu 22.04+ or any distribution with glibc 2.35+, and Python 3.<br>
+      <code>uname -m</code> prints <code>x86_64</code> → x64, <code>aarch64</code> → ARM64.
+      <br><br>
+      <a href="docs/LINUX.md">Linux guide</a> · <a href="https://dropmorph.vercel.app/install/linux/">Hinglish guide</a>
+    </td>
+  </tr>
+</table>
+
+**Or install with one command.** It downloads the latest release for your computer (on a Mac it picks Apple silicon or
+Intel for you), checks its SHA-256 checksum and installs it.
+
+macOS and Linux, in Terminal:
+
+```sh
+curl -fsSL https://dropmorph.vercel.app/install.sh | sh
+```
+
+Windows, in PowerShell:
+
+```powershell
+irm https://dropmorph.vercel.app/install.ps1 | iex
+```
+
+All files and their `SHA256SUMS` are on the [Releases page](https://github.com/cod4nitish/DropMorph/releases/latest).
+DropMorph is a desktop app: it does not run on Android phones, iPhones or iPads.
+
 ## Install
 
-Download from [Releases](https://github.com/cod4nitish/DropMorph/releases/latest).
+What to do with the file you downloaded:
 
-- **Windows 10/11**: run `DropMorph-<version>-win-Setup.exe`, or unzip the `win-Portable.zip` and run `DropMorph.exe`.
-  Setup can add the Explorer menu, start at sign-in, the `dropmorph` command and optional engines.
-- **macOS 14+** (preview): unpack the `osx-arm64` or `osx-x64` package and run `./install.sh`.
-  The build isn't notarized, so allow the first start in System Settings → Privacy & Security → **Open Anyway**.
-- **Linux x64/ARM64** (preview, Ubuntu 22.04+): unpack the package and run `./install.sh` (no root, needs Python 3).
-  Drag gestures need X11. On Wayland, use the drop zone and the file manager's right-click menu.
+- **Windows**: run `DropMorph-<version>-win-Setup.exe`. Setup can add the Explorer menu, start at sign-in, the
+  `dropmorph` command and optional engines. For the portable version, right-click the ZIP → Properties → **Unblock**,
+  then unzip it and run `DropMorph.exe`.
+  Releases are not code-signed, so SmartScreen may warn when you run Setup ("More info" → "Run anyway").
+- **macOS**: double-click the `.tar.gz`, then run `./install.sh` from the unpacked folder in Terminal. It copies
+  DropMorph to `~/Applications`, adds the `dropmorph` command and removes the download quarantine mark, so macOS doesn't
+  block the first start. Releases after 1.12.0 also come as a `.dmg` to drag into Applications. Then allow DropMorph
+  under System Settings → Privacy & Security → **Accessibility** for the <kbd>Option</kbd>-drag donut.
+  The **[macOS guide](docs/MACOS.md)** covers permissions, engines (Homebrew), updates and troubleshooting.
+- **Linux**: unpack the package and run `./install.sh` (no root). It checks the system libraries and prints the install
+  command for your distribution. Drag gestures need X11; on Wayland, use the drop zone and the file manager's
+  right-click menu. The **[Linux guide](docs/LINUX.md)** covers libraries per distribution, X11/Wayland, engines,
+  updates and troubleshooting.
 
-Releases are not code-signed, so Windows SmartScreen may warn when you run the installer ("More info" → "Run anyway").
-DropMorph shows new releases in its menu and updates itself, keeping your settings and engines.
+**Updates**: DropMorph shows new releases in its menu. On Windows it updates itself; on macOS and Linux, run the new
+package's `install.sh` or the one-command install again. Settings and engines are kept either way.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/media/donut.svg" alt="The donut: hold Ctrl, drag a file and drop it on a format" width="100%"><br>
+      <sub><b>The donut.</b> Hold <kbd>Ctrl</kbd> (<kbd>Option</kbd> on macOS), drag files and drop them on a format.</sub>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/media/office-uses.png" alt="Everyday conversions: PDF to Word, smaller PDFs, Excel to PDF, HEIC to JPG, merge and split PDFs, video to MP3" width="100%"><br>
+      <sub><b>Everyday office work.</b> PDF ↔ Word, smaller PDFs, Excel → PDF, iPhone HEIC → JPG, merge and split, video → MP3.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/media/website-home.png" alt="The DropMorph website" width="100%"><br>
+      <sub><b>Website.</b> <a href="https://dropmorph.vercel.app/">dropmorph.vercel.app</a></sub>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/media/website-mac-guide.png" alt="The macOS install guide on the website" width="100%"><br>
+      <sub><b>Install guides.</b> Step by step for <a href="https://dropmorph.vercel.app/install/">Windows</a>,
+      <a href="https://dropmorph.vercel.app/install/mac/">macOS</a> and <a href="https://dropmorph.vercel.app/install/linux/">Linux</a>.</sub>
+    </td>
+  </tr>
+</table>
 
 ## Features
 
@@ -52,6 +153,8 @@ DropMorph shows new releases in its menu and updates itself, keeping your settin
   video and audio, output folder and file names.
 - **Many files at once**, in parallel. Routes with several steps (HWP → HWPX → DOCX) are found automatically.
 - **Watch folders** convert every file that lands in them.
+- **Two-key shortcuts**: select files and press Alt (Option on macOS) + I, D, V or O for the images, documents, video
+  or any-files donut. Every key and donut can be changed on the Shortcuts page.
 - **Other ways in**: the right-click menu, a keyboard shortcut, the drop zone and the [`dropmorph` command](#command-line).
 - Light and dark themes with your own accent colour, in English, हिन्दी, Español, 한국어, 简体中文 and Polski.
 
@@ -106,7 +209,7 @@ dotnet run --project src/DropMorph.App
 dotnet test
 ```
 
-[Architecture](docs/ARCHITECTURE.md) · [Engines](docs/ENGINES.md) · [Adding a converter](docs/ADDING-A-CONVERTER.md) ·
+[Architecture](docs/ARCHITECTURE.md) · [Engines](docs/ENGINES.md) · [macOS](docs/MACOS.md) · [Linux](docs/LINUX.md) · [Adding a converter](docs/ADDING-A-CONVERTER.md) ·
 [Adding a language](docs/ADDING-A-LANGUAGE.md) · [Contributing](CONTRIBUTING.md)
 
 ## Privacy

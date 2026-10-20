@@ -138,6 +138,60 @@ details p,details li{color:var(--muted)}
 .copy button{font:700 13px "Plus Jakarta Sans",sans-serif;border:0;border-radius:8px;padding:7px 12px;background:#fff;color:#0B3B38;cursor:pointer}
 footer{padding:30px 0 40px;color:var(--muted);font-size:14px;text-align:center}
 footer a{color:var(--muted)}
+
+/* shared by the Windows, macOS and Linux guides */
+.os-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.os-tabs a{font-size:14px;font-weight:700;text-decoration:none;color:#fff;padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35)}
+.os-tabs a[aria-current="page"]{background:#fff;color:#0B3B38;border-color:#fff}
+.os-tabs a:hover{border-color:#fff}
+.choose{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media (max-width:560px){.choose{grid-template-columns:1fr}}
+.choose a{display:block;text-decoration:none;background:var(--surface);border:2px solid var(--border);border-radius:16px;padding:14px 16px;color:var(--text)}
+.choose a:hover,.choose a.rec{border-color:var(--accent)}
+.choose a b{display:block;font-size:16px}
+.choose a small{color:var(--muted)}
+.choose a .rec-tag{display:none;font-size:11px;font-weight:800;color:var(--accent);margin-left:6px}
+.choose a.rec .rec-tag{display:inline}
+pre.term{background:#10201F;color:#E6F2F0;border-radius:12px;padding:14px 16px;overflow-x:auto;font:14px/1.6 "JetBrains Mono",ui-monospace,monospace;margin:12px 0;white-space:pre}
+pre.term .c{color:#7FA8A3}
+.oneline{background:var(--surface);border:2px solid var(--accent);border-radius:18px;padding:18px 20px;margin:22px 0 6px;box-shadow:var(--shadow)}
+.oneline h2{margin:0 0 4px;font-size:20px}
+.oneline p{margin:4px 0;color:var(--muted)}
+.cmd{display:flex;align-items:stretch;gap:8px;margin:12px 0 6px}
+.cmd pre.term{flex:1;margin:0;min-width:0}
+.cmd button{flex:none;font:700 13px "Plus Jakarta Sans",sans-serif;border:0;border-radius:10px;padding:0 14px;background:var(--accent);color:#fff;cursor:pointer}
+:root[data-theme="dark"] .cmd button{color:#05201D}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cmd button{color:#05201D}}
+.phone{display:none}
+.is-phone .phone{display:block}
+.sharebtn{font:700 13px "Plus Jakarta Sans",sans-serif;border:0;border-radius:8px;padding:6px 12px;background:var(--accent);color:#fff;cursor:pointer;margin-left:4px}
+/* mock macOS dialogs */
+.macdlg{background:#ECECEC;color:#1d1d1f;border-radius:14px;padding:20px 22px;text-align:center;max-width:300px;font-family:-apple-system,system-ui,sans-serif;box-shadow:0 18px 40px rgba(0,0,0,.22);margin:16px 0}
+.macdlg .ico{width:52px;height:52px;margin:0 auto 10px;border-radius:12px;background:url(/logo.svg) center/70% no-repeat,linear-gradient(135deg,#E6F2F0,#fff)}
+.macdlg .t{font-weight:700;font-size:14px;margin-bottom:6px}
+.macdlg p{font-size:12px;color:#3a3a3c;margin:0 0 14px}
+.macdlg .mbtn{display:block;font-size:13px;padding:6px;border-radius:7px;background:#fff;margin-top:6px;color:#1d1d1f}
+.macdlg .mbtn.blue{background:#0A84FF;color:#fff}
+.macset{background:#fff;color:#1d1d1f;border-radius:12px;padding:16px 18px;max-width:480px;font:13px -apple-system,system-ui,sans-serif;box-shadow:0 18px 40px rgba(0,0,0,.18);margin:16px 0}
+.macset .h{font-weight:700;font-size:15px;margin-bottom:10px}
+.macset .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-top:1px solid #e5e5e5}
+.macset .ob{flex:none;background:#E9E9EB;border-radius:6px;padding:4px 10px;font-weight:600;outline:3px solid #FFB599;outline-offset:2px}
+.macset .sw{width:34px;height:20px;border-radius:999px;background:#34C759;position:relative;flex:none}
+.macset .sw::after{content:"";position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+.star-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:10px;border:1px solid var(--border);color:var(--text);text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap}
+.star-btn:hover{border-color:var(--accent)}
+.star-btn svg{width:16px;height:16px}
+@media (max-width:480px){.star-btn .lbl{display:none}}
+.star-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px 20px;margin:40px 0 0;box-shadow:var(--shadow)}
+.star-card p{margin:0;color:var(--muted)}
+.star-card b{color:var(--text)}
+.star-btn .lbl-s{display:none}
+@media (max-width:480px){.star-btn .lbl-s{display:inline}}
+/* grid items default to min-width:auto: a long command would widen the page */
+.step>div{min-width:0}
+pre.term,.cmd{max-width:100%}
+@media (max-width:480px){nav .wrap{gap:8px}.theme-toggle{display:none}nav .btn-small{padding:7px 10px}.brand{font-size:16px}}
+nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
 </style>
 </head>
 <body>
@@ -146,6 +200,7 @@ footer a{color:var(--muted)}
   <div class="wrap">
     <a class="brand" href="/"><img src="/logo.svg" alt="">DropMorph</a>
     <span class="spacer"></span>
+    <a class="star-btn" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="lbl">⭐ Star on GitHub</span><span aria-hidden="true" class="lbl-s">⭐</span></a>
     <button class="theme-toggle" id="themeToggle" aria-label="Switch theme">◐</button>
     <a class="btn btn-primary btn-small" href="https://github.com/Cod4Nitish/DropMorph/releases/latest/download/DropMorph-1.12.0-win-Setup.exe">Download</a>
   </div>
@@ -153,6 +208,7 @@ footer a{color:var(--muted)}
 
 <header>
   <div class="wrap">
+    <nav class="os-tabs" aria-label="Operating system"><a href="/install/" aria-current="page">Windows</a><a href="/install/mac/">macOS</a><a href="/install/linux/">Linux</a></nav>
     <span class="pill">Windows 11 · Windows 10 · 5 minute</span>
     <h1>DropMorph ko <span>Windows 11</span> pe install karo</h1>
     <p>Bilkul aasaan step-by-step guide. Har screen jo aayegi, woh yahan pehle se dikhayi hai, to kahin atakna nahi padega.</p>
@@ -169,8 +225,15 @@ footer a{color:var(--muted)}
 
 <main>
   <div class="wrap">
+    <div class="tip phone"><b>Phone pe ho?</b> DropMorph computer ka app hai (Windows, Mac, Linux). File phone pe bhi download ho jayegi, lekin install aur use computer pe hi hoga. Sabse aasaan: yeh link apne computer pe kholo. <button type="button" class="sharebtn" data-share>Link share karo</button></div>
+    <section class="oneline" id="quick">
+      <h2>⚡ Sabse aasaan: ek command</h2>
+      <p><b>Start</b> pe right-click → <b>Terminal</b> (ya <b>PowerShell</b>) kholo, yeh paste karke <kbd>Enter</kbd> dabao:</p>
+      <div class="cmd"><pre class="term">irm https://dropmorph.vercel.app/install.ps1 | iex</pre><button type="button" data-copy>Copy</button></div>
+      <p style="font-size:14px">Yeh latest version GitHub se download karta hai, checksum check karta hai aur Setup chalu karta hai. Phir neeche <a href="#s3">Step 3</a> se aage badho. Command nahi chalana? Neeche ke steps follow karo.</p>
+    </section>
     <div class="toc">
-      <a href="#s1">1. Download</a><a href="#s2">2. Blue screen</a><a href="#s3">3. Yes dabao</a><a href="#s4">4. Options</a><a href="#s5">5. Use karo</a><a href="#help">Problem?</a>
+      <a href="#quick">⚡ Ek command</a><a href="#s1">1. Download</a><a href="#s2">2. Blue screen</a><a href="#s3">3. Yes dabao</a><a href="#s4">4. Options</a><a href="#s5">5. Use karo</a><a href="#help">Problem?</a>
     </div>
 
     <section class="step" id="s1">
@@ -234,7 +297,7 @@ footer a{color:var(--muted)}
           <div class="chk"><i class="on">✓</i><span>Also show it at the top of the Windows 11 menu<small>"Show more options" kholna nahi padega</small></span></div>
           <div class="chk"><i class="on">✓</i><span>Start at sign-in<small>PC on hote hi tray mein ready</small></span></div>
           <div class="chk"><i></i><span>Add the "dropmorph" command to PATH</span></div>
-          <div class="chk"><i></i><span>Create a desktop shortcut</span></div>
+          <div class="chk"><i class="on">✓</i><span>Create a desktop shortcut<small>Desktop pe DropMorph ka icon</small></span></div>
         </div>
         <div class="wide">
         <table class="table">
@@ -243,7 +306,7 @@ footer a{color:var(--muted)}
           <tr><td>Windows 11 menu ke top pe <span class="win11">WIN 11</span></td><td>✅ On rakho. Windows 11 mein naya chhota right-click menu hota hai. Isse DropMorph seedha usi mein dikhega.</td></tr>
           <tr><td>Start at sign-in</td><td>✅ On rakho. <b>Ctrl-drag tabhi kaam karta hai jab DropMorph chalu ho.</b></td></tr>
           <tr><td>"dropmorph" command</td><td>Sirf agar command line use karte ho</td></tr>
-          <tr><td>Desktop shortcut</td><td>Aapki marzi</td></tr>
+          <tr><td>Desktop shortcut</td><td>✅ Pehle se on hai. Desktop pe icon nahi chahiye to hata do.</td></tr>
         </table>
         </div>
         <p><b>Conversion engines</b> (agla page, optional):</p>
@@ -270,6 +333,7 @@ footer a{color:var(--muted)}
             <li>Nayi file <b>original file ke bagal mein</b> ban jayegi.</li>
           </ol>
         </div>
+        <div class="tip"><b>2-key shortcuts:</b> Explorer mein files select karo aur dabao <kbd>Alt</kbd> + <kbd>I</kbd> (Images), <kbd>D</kbd> (Documents), <kbd>V</kbd> (Video) ya <kbd>O</kbd> (Other). Us type ka donut khul jayega. Keys DropMorph → <b>Settings → Shortcuts</b> mein badal sakte ho.</div>
         <p>Website pe iska <a href="/#demo">live demo</a> try kar sakte ho.</p>
         <p><b>Aur tareeke:</b></p>
         <div class="ways">
@@ -302,6 +366,8 @@ footer a{color:var(--muted)}
         <p>Nahi. Sab kuch aapke PC pe hi convert hota hai. DropMorph internet sirf naya version check karne aur aapke chune hue engines download karne ke liye use karta hai.</p></details>
     </section>
 
+    <div class="star-card"><p><b>DropMorph pasand aaya?</b> Free hai aur hamesha rahega. Developer ki help karo: GitHub pe ek ⭐ star do, isse aur log isse dhoondh paate hain.</p><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener">⭐ Star on GitHub</a></div>
+
     <div class="share">
       <h2>Dosto ko bhejo</h2>
       <p>Yeh link share karo. Isme download aur pura guide, dono hain.</p>
@@ -323,12 +389,21 @@ footer a{color:var(--muted)}
     root.dataset.theme = dark ? 'light' : 'dark';
     try { localStorage.setItem('dm-theme', root.dataset.theme); } catch {}
   });
-  const btn = document.getElementById('copyBtn');
-  btn.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(document.getElementById('shareUrl').textContent); btn.textContent = 'Copied!'; }
-    catch { btn.textContent = 'Select karke copy karo'; }
-    setTimeout(() => btn.textContent = 'Copy', 2000);
-  });
+  const ua = navigator.userAgent;
+  const phone = /Android|iPhone|iPod/i.test(ua) || (/iPad|Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  if (phone) root.classList.add('is-phone');
+  const url = document.getElementById('shareUrl').textContent;
+  const flash = (btn, text) => { const old = btn.dataset.label || (btn.dataset.label = btn.textContent); btn.textContent = text; setTimeout(() => btn.textContent = old, 2000); };
+  const copy = async (btn, text) => {
+    try { await navigator.clipboard.writeText(text); flash(btn, 'Copied!'); } catch { flash(btn, 'Select karke copy karo'); }
+  };
+  document.querySelectorAll('[data-share]').forEach(b => b.addEventListener('click', async () => {
+    if (navigator.share) { try { await navigator.share({ title: 'DropMorph', text: 'DropMorph: free file converter. Computer pe kholo:', url }); } catch {} return; }
+    copy(b, url);
+  }));
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => copy(b, b.previousElementSibling.textContent.trim())));
+  document.getElementById('copyBtn').addEventListener('click', e => copy(e.currentTarget, url));
+  
 })();
 </script>
 </body>

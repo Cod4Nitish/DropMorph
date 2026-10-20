@@ -1,4 +1,4 @@
-// Theme toggle (remembered per viewer, falls back to the system theme) and the homepage donut demo.
+// Theme toggle (remembered per viewer, falls back to the system theme), OS-aware downloads and the homepage donut demo.
 (() => {
   const root = document.documentElement;
   try { const t = localStorage.getItem('dm-theme'); if (t) root.dataset.theme = t; } catch {}
@@ -18,6 +18,80 @@
     sound.textContent = on ? '🔇 Mute' : '🔊 Sound on';
     sound.setAttribute('aria-pressed', String(on));
   });
+
+  // Visitor's computer: the matching download card goes first and "Download" buttons point at it. Phones get a
+  // notice (DropMorph runs on a computer) and a Share link button. Without JS everything stays Windows.
+  const ua = navigator.userAgent;
+  const phone = /Android|iPhone|iPod/.test(ua) || (/iPad|Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const os = phone ? '' : /Windows/.test(ua) ? 'windows' : /Macintosh|Mac OS X/.test(ua) ? 'mac' : /Linux|X11/.test(ua) && !/CrOS/.test(ua) ? 'linux' : '';
+  let arch = '';
+  // Apple silicon or Intel: Chrome and Firefox name the GPU ("Apple M2", "Intel Iris"), Safari says "Apple GPU". Unsure: no guess.
+  if (os === 'mac') try {
+    const gl = document.createElement('canvas').getContext('webgl'), ext = gl && gl.getExtension('WEBGL_debug_renderer_info');
+    const gpu = gl ? String(gl.getParameter(ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER)) : '';
+    arch = /Apple (M\d|GPU)/.test(gpu) ? 'arm' : /Intel|AMD|Radeon|NVIDIA/i.test(gpu) ? 'intel' : '';
+    const lose = gl && gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext();
+  } catch {}
+  if (phone) root.classList.add('is-phone');
+  const guides = { mac: '/install/mac/', linux: '/install/linux/' };
+  document.querySelectorAll('[data-dl]').forEach(a => {
+    const label = a.querySelector('span');
+    if (phone) { a.href = '/#download'; label.textContent = 'Download options'; }
+    else if (os === 'mac') { a.href = arch ? a.dataset[arch] : guides.mac; label.textContent = 'Download for Mac'; }
+    else if (os === 'linux') { a.href = guides.linux; label.textContent = 'Download for Linux'; }
+  });
+  if (guides[os]) document.querySelectorAll('[data-guide]').forEach(a => { a.href = guides[os]; });
+  // On a phone its own card (Android or iPhone), and the phone cards come before the computer ones.
+  const phoneOs = phone ? (/Android/i.test(navigator.userAgent) ? 'android' : 'ios') : '';
+  if (phoneOs) { const grid = document.querySelector('.phone-grid'), head = document.querySelector('.phone-head'), pcs = document.querySelector('.os-grid:not(.phone-grid)');
+    if (grid && pcs) { pcs.before(head, grid); } }
+  const card = document.querySelector(`.os-card[data-os="${phoneOs || os}"]`);
+  if (card) {
+    card.classList.add('is-you');
+    card.parentElement.prepend(card);
+    const pick = arch && card.querySelector(`[data-arch="${arch}"]`);
+    if (pick) card.querySelectorAll('[data-arch]').forEach(b => {
+      b.classList.toggle('rec', b === pick); b.classList.toggle('btn-accent', b === pick); b.classList.toggle('btn-line', b !== pick);
+    });
+  }
+
+  // Copy buttons for the install commands, and Share (falls back to copying the link).
+  const status = document.createElement('span');
+  status.className = 'sr-only'; status.setAttribute('aria-live', 'polite'); document.body.append(status);
+  const flash = (btn, text) => {
+    const old = btn.dataset.label || (btn.dataset.label = btn.textContent);
+    btn.textContent = status.textContent = text;
+    setTimeout(() => { btn.textContent = old; }, 2000);
+  };
+  const copy = async (btn, text, el) => {
+    try { await navigator.clipboard.writeText(text); flash(btn, 'Copied!'); return; } catch {}
+    if (el) { getSelection().selectAllChildren(el); flash(btn, 'Selected'); } else prompt('Copy this link:', text);
+  };
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+    const pre = b.previousElementSibling; copy(b, pre.textContent.trim(), pre);
+  }));
+  document.querySelectorAll('[data-share]').forEach(b => b.addEventListener('click', async () => {
+    const url = location.origin + '/#download';
+    if (navigator.share) { try { await navigator.share({ title: 'DropMorph', text: 'DropMorph, a free file converter. Open this on your computer:', url }); } catch {} return; }
+    copy(b, url);
+  }));
+
+  // GitHub star count on the Star buttons: fetched once per session (the API allows 60 calls an hour), silent on failure.
+  const starEls = document.querySelectorAll('[data-stars]');
+  const showStars = n => {
+    if (!(n > 0)) return;
+    const text = '⭐ ' + (n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : n);
+    starEls.forEach(el => { el.textContent = text; el.hidden = false; });
+  };
+  if (starEls.length) {
+    let cached = null; try { cached = sessionStorage.getItem('dm-stars'); } catch {}
+    if (cached) showStars(+cached);
+    else fetch('https://api.github.com/repos/Cod4Nitish/DropMorph').then(r => r.ok ? r.json() : null).then(j => {
+      if (!j) return;
+      showStars(j.stargazers_count);
+      try { sessionStorage.setItem('dm-stars', j.stargazers_count); } catch {}
+    }).catch(() => {});
+  }
 
   const stage = document.getElementById('stage');
   if (!stage) return;

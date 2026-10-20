@@ -2,6 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://dropmorph.vercel.app/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://dropmorph.vercel.app/install/</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://dropmorph.vercel.app/install/mac/</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://dropmorph.vercel.app/install/linux/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://dropmorph.vercel.app/formats/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://dropmorph.vercel.app/cli/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://dropmorph.vercel.app/convert/heic-to-jpg/</loc><lastmod>2026-10-20</lastmod></url>
