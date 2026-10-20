@@ -74,6 +74,12 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "ko"; MessagesFile: "compiler:Languages\Korean.isl"
 Name: "zhcn"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 
+; The credit at the bottom left of every Setup page.
+[Messages]
+en.BeveledLabel= Developed by Nitish Singh · github.com/cod4nitish
+ko.BeveledLabel= 개발: Nitish Singh · github.com/cod4nitish
+zhcn.BeveledLabel= 开发者：Nitish Singh · github.com/cod4nitish
+
 ; Texts shared with the app (engine names, the two options of the General page) are generated into obj\engines.iss.
 [CustomMessages]
 en.GroupOptions=Options:
@@ -94,6 +100,9 @@ zhcn.ExplorerMenuFailed=Windows 未能将 DropMorph 添加到资源管理器主�
 en.ReadyEngines=Conversion engines (DropMorph downloads them when it starts):
 ko.ReadyEngines=변환 엔진 (DropMorph가 시작하면서 내려받아요):
 zhcn.ReadyEngines=转换引擎（DropMorph 启动后下载）：
+en.FinishedCredit=DropMorph is free, developed by Nitish Singh. Like it? Give it a star on GitHub: github.com/cod4nitish/DropMorph
+ko.FinishedCredit=DropMorph는 무료이며 Nitish Singh가 개발했어요. 마음에 드시면 GitHub에서 별을 눌러 주세요: github.com/cod4nitish/DropMorph
+zhcn.FinishedCredit=DropMorph 免费，由 Nitish Singh 开发。喜欢的话，请在 GitHub 上点个星：github.com/cod4nitish/DropMorph
 en.FinishedRunning=DropMorph is installed and running in the notification area of the taskbar.%n%nTo convert files, drag them while holding the trigger key, or right-click them in File Explorer.
 ko.FinishedRunning=DropMorph가 설치되어 작업 표시줄 알림 영역에서 실행 중이에요.%n%n파일을 변환하려면 지정한 키를 누른 채 파일을 끌거나, 탐색기에서 파일을 우클릭하세요.
 zhcn.FinishedRunning=DropMorph 已安装，正在任务栏通知区域运行。%n%n要转换文件，请按住触发键拖动文件，或在资源管理器中右键单击文件。
@@ -564,6 +573,7 @@ begin
   if CurPageID = wpFinished then
   begin
     WizardForm.FinishedLabel.Caption := CustomMessage('FinishedRunning');
+    WizardForm.FinishedLabel.Caption := WizardForm.FinishedLabel.Caption + #13#10#13#10 + CustomMessage('FinishedCredit');
     if not WasInstalled and (SelectedEngines <> '') then
       WizardForm.FinishedLabel.Caption := WizardForm.FinishedLabel.Caption + #13#10#13#10 + CustomMessage('FinishedEngines');
     WizardForm.AdjustLabelHeight(WizardForm.FinishedLabel);

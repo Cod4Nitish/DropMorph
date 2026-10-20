@@ -165,3 +165,4 @@ if [ "${XDG_SESSION_TYPE:-}" = 'wayland' ]; then
     printf '%s\n' 'This is a Wayland session: the Ctrl-drag donut needs X11. Use the drop window and the file manager' \
         "menu, or choose an \"X11\"/\"Xorg\" session on the login screen (see INSTALL.txt for KDE Plasma's experimental option)."
 fi
+printf '%s\n' '' 'DropMorph is free, developed by Nitish Singh.' 'Like it? Star it on GitHub: https://github.com/cod4nitish/DropMorph'

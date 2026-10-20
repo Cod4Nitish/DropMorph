@@ -96,3 +96,4 @@ if [ "$updating" = 1 ]; then
         '  select DropMorph in that list, remove it with "-", then add it again with "+" (or reopen DropMorph).'
 fi
 /usr/bin/open "$install_dir" 2>/dev/null || true
+printf '%s\n' '' 'DropMorph is free, developed by Nitish Singh.' 'Like it? Star it on GitHub: https://github.com/cod4nitish/DropMorph'

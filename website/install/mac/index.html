@@ -192,6 +192,14 @@ pre.term .c{color:#7FA8A3}
 pre.term,.cmd{max-width:100%}
 @media (max-width:480px){nav .wrap{gap:8px}.theme-toggle{display:none}nav .btn-small{padding:7px 10px}.brand{font-size:16px}}
 nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
+
+#dlThanks{position:fixed;left:50%;bottom:20px;transform:translate(-50%,140%);z-index:99;display:flex;flex-direction:column;gap:4px;width:min(92vw,380px);padding:16px 40px 16px 18px;border-radius:16px;background:linear-gradient(135deg,#0B3B38,#0D9488);color:#fff;box-shadow:0 18px 40px rgba(0,0,0,.3);transition:transform .35s ease;font-size:14px}
+#dlThanks.on{transform:translate(-50%,0)}
+#dlThanks b{font-size:16px}
+#dlThanks span a{color:#FFB599;font-weight:800;text-decoration:none}
+#dlThanks .t-star{color:#fff;font-weight:700;margin-top:6px}
+#dlThanks button{position:absolute;right:10px;top:8px;background:none;border:0;color:#fff;font-size:22px;cursor:pointer;line-height:1}
+@media (prefers-reduced-motion:reduce){#dlThanks{transition:none}}
 </style>
 </head>
 <body>
@@ -379,6 +387,24 @@ brew install ffmpeg ghostscript</pre>
 
 <script>
 (() => {
+  // After a download starts: thanks, who made it, and a star link.
+  const thanks = () => {
+    let t = document.getElementById('dlThanks');
+    if (!t) {
+      t = document.createElement('div'); t.id = 'dlThanks'; t.setAttribute('role', 'status');
+      t.innerHTML = '<button type="button" aria-label="Close">×</button><b>Thanks for downloading DropMorph!</b>'
+        + '<span>Developed by <a href="https://github.com/cod4nitish">Nitish Singh</a></span>'
+        + '<a class="t-star" href="https://github.com/Cod4Nitish/DropMorph">⭐ Star on GitHub to help the developer</a>';
+      t.querySelector('button').onclick = () => t.classList.remove('on');
+      document.body.append(t);
+    }
+    t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 12000);
+  };
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href]');
+    if (a && /\/releases\/(latest\/)?download\//.test(a.href)) thanks();
+  });
+
   const root = document.documentElement;
   try { const t = localStorage.getItem('dm-theme'); if (t) root.dataset.theme = t; } catch {}
   document.getElementById('themeToggle').addEventListener('click', () => {

@@ -1,5 +1,23 @@
 // Theme toggle (remembered per viewer, falls back to the system theme), OS-aware downloads and the homepage donut demo.
 (() => {
+  // After a download starts: thanks, who made it, and a star link.
+  const thanks = () => {
+    let t = document.getElementById('dlThanks');
+    if (!t) {
+      t = document.createElement('div'); t.id = 'dlThanks'; t.setAttribute('role', 'status');
+      t.innerHTML = '<button type="button" aria-label="Close">×</button><b>Thanks for downloading DropMorph!</b>'
+        + '<span>Developed by <a href="https://github.com/cod4nitish">Nitish Singh</a></span>'
+        + '<a class="t-star" href="https://github.com/Cod4Nitish/DropMorph">⭐ Star on GitHub to help the developer</a>';
+      t.querySelector('button').onclick = () => t.classList.remove('on');
+      document.body.append(t);
+    }
+    t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 12000);
+  };
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href]');
+    if (a && /\/releases\/(latest\/)?download\//.test(a.href)) thanks();
+  });
+
   const root = document.documentElement;
   try { const t = localStorage.getItem('dm-theme'); if (t) root.dataset.theme = t; } catch {}
   const toggle = document.getElementById('themeToggle');

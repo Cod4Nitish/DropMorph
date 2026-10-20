@@ -11,7 +11,7 @@ set -eu
 
 repo='https://github.com/Cod4Nitish/DropMorph'
 
-say() { printf '%s\n' "$*"; }
+say() { printf '%s\n' "$@"; }
 fail() { printf 'Error: %s\n' "$*" >&2; exit 1; }
 
 command -v curl >/dev/null 2>&1 || fail 'curl is required.'
@@ -54,6 +54,7 @@ base="$repo/releases/download/v$version"
 work=$(mktemp -d 2>/dev/null || mktemp -d -t dropmorph)
 trap 'rm -rf -- "$work"' EXIT INT TERM
 
+say '' 'DropMorph - free file converter' 'Developed by Nitish Singh  (https://github.com/cod4nitish)' ''
 say "Downloading DropMorph $version for $runtime..."
 curl -fL --progress-bar -o "$work/$package.tar.gz" "$base/$package.tar.gz" || fail "Download failed: $base/$package.tar.gz"
 curl -fsSL -o "$work/sums.txt" "$base/$package-SHA256SUMS.txt" || fail 'Could not download the checksum file.'
@@ -69,4 +70,5 @@ say 'Checksum OK.'
 
 tar -xzf "$work/$package.tar.gz" -C "$work"
 # The package's installer reads from the terminal, not from this script's pipe.
-sh "$work/$package/install.sh" </dev/null
+sh "$work/$package/install.sh" </dev/null || exit $?
+say '' 'Thanks for installing DropMorph, developed by Nitish Singh.' 'Like it? Star it on GitHub: https://github.com/Cod4Nitish/DropMorph'
