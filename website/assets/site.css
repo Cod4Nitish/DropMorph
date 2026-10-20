@@ -214,3 +214,10 @@ footer.site{padding:56px 0 40px;color:var(--muted);font-size:14px;margin-top:72p
 .foot-grid a{display:block;color:var(--muted);text-decoration:none;margin:6px 0}
 .foot-grid a:hover{color:var(--accent)}
 .foot-bottom{margin-top:32px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+
+/* 30-second video */
+.video-grid{display:grid;grid-template-columns:380px 1fr;gap:56px;align-items:center}
+@media (max-width:860px){.video-grid{grid-template-columns:1fr;gap:32px}}
+.phone{width:100%;max-width:380px;margin:0 auto;aspect-ratio:9/16;border-radius:34px;overflow:hidden;background:#091213;border:8px solid #10201F;box-shadow:0 30px 60px rgba(11,59,56,.25)}
+.phone video{width:100%;height:100%;object-fit:cover;display:block}
+.video-lead{color:var(--muted);font-size:17px;margin:0}

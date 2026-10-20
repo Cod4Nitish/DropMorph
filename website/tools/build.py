@@ -364,7 +364,22 @@ def home():
   </div>
 </header>
 
-<section class="sec" id="how"><div class="wrap">
+<section class="sec" id="video"><div class="wrap video-grid">
+  <div class="phone"><video src="/media/dropmorph-30s.mp4" poster="/media/dropmorph-30s-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="30-second DropMorph demo: Ctrl-drag a file onto the format ring and it converts"></video></div>
+  <div>
+    <div class="kicker">See it in 30 seconds</div>
+    <h2>One drag. That's the whole app.</h2>
+    <p class="video-lead">Hold Ctrl, drag a photo, drop it on PDF. A progress ring, and the PDF appears next to the original. The same works for Word, Excel, videos and 250 other formats.</p>
+    <div class="feat-list" style="grid-template-columns:1fr">
+      <div>{tick()}<p style="margin:0"><b>No window to open</b><span>The formats come to your cursor, wherever you are.</span></p></div>
+      <div>{tick()}<p style="margin:0"><b>Only formats that fit</b><span>Drag a PDF and you see PDF options; drag a video and you see video ones.</span></p></div>
+      <div>{tick()}<p style="margin:0"><b>Nothing uploaded</b><span>Converted on your PC, saved next to the original.</span></p></div>
+    </div>
+    <p style="margin-top:22px"><a class="btn btn-line" href="#demo">Try the live demo above ↑</a></p>
+  </div>
+</div></section>
+
+<section class="sec alt" id="how"><div class="wrap">
   <div class="sec-head center"><div class="kicker">How it works</div><h2>Convert files in three steps</h2><p>No window to open and no menu to dig through.</p></div>
   <div class="steps">
     <div class="stepc"><div class="n">1</div><h3>Hold a key and drag</h3><p>Hold <kbd>Ctrl</kbd> (<kbd>Option</kbd> on macOS) and start dragging one file or a whole selection, from Explorer, the desktop or any folder.</p></div>
@@ -373,12 +388,12 @@ def home():
   </div>
 </div></section>
 
-<section class="sec alt" id="features"><div class="wrap">
+<section class="sec" id="features"><div class="wrap">
   <div class="sec-head"><div class="kicker">What DropMorph does</div><h2>Everything a converter should do. Nothing it shouldn't.</h2><p>No uploading to some random site, no ads, no limits. The formats come to your cursor.</p></div>
   <div class="grid3">{feats}</div>
 </div></section>
 
-<section class="sec" id="office"><div class="wrap">
+<section class="sec alt" id="office"><div class="wrap">
   <div class="sec-head"><div class="kicker">For everyday office work</div><h2>The conversions you do every week</h2><p>Each one is a single drag. Tap one for a step-by-step guide.</p></div>
   <div class="pills">{pills}</div>
   <div class="feat-list" style="margin-top:34px">
@@ -389,7 +404,7 @@ def home():
   </div>
 </div></section>
 
-<section class="sec alt"><div class="wrap">
+<section class="sec"><div class="wrap">
   <div class="sec-head"><div class="kicker">Compared</div><h2>DropMorph vs online converters</h2></div>
   <div class="vs">
     <div class="card"><h3>Online converter sites</h3><ul>
@@ -405,13 +420,13 @@ def home():
   </div>
 </div></section>
 
-<section class="sec" id="formats"><div class="wrap">
+<section class="sec alt" id="formats"><div class="wrap">
   <div class="sec-head"><div class="kicker">Formats</div><h2>{FORMAT_COUNT} formats in 18 groups</h2><p>A quick look at what goes in. Marked ones use an optional engine.</p></div>
   <div class="formats">{teaser}</div>
   <p style="margin-top:24px"><a class="btn btn-line" href="/formats/">See every format and what it converts to →</a></p>
 </div></section>
 
-<section class="sec alt" id="cli"><div class="wrap grid2" style="align-items:center">
+<section class="sec" id="cli"><div class="wrap grid2" style="align-items:center">
   <div class="sec-head" style="margin:0"><div class="kicker">Command line &amp; watch folders</div><h2>Prefer typing? Or no typing at all?</h2>
     <p>The <code>dropmorph</code> command uses the same engines and presets as the app. Point a watch folder at your Downloads or a scanner's output and every new file is converted on its own.</p>
     <p style="margin-top:18px"><a class="btn btn-line" href="/cli/">Command line reference →</a></p></div>
@@ -428,7 +443,7 @@ def home():
 <span class="p">&gt;</span> dropmorph watch D:\\Inbox --to pdf --move-originals</pre>
 </div></section>
 
-<section class="sec"><div class="wrap">
+<section class="sec alt"><div class="wrap">
   <div class="sec-head"><div class="kicker">Make it yours</div><h2>Your donut, your colours, your language</h2></div>
   <div class="grid3">
     <div class="card"><div class="icon">{icon("sliders")}</div><h3>Arrange the donut</h3><p>One toolbar per file type. Drag formats and presets into the order you use most, and save your own presets.</p></div>
@@ -437,17 +452,17 @@ def home():
   </div>
 </div></section>
 
-<section class="sec alt" id="faq"><div class="wrap narrow">
+<section class="sec" id="faq"><div class="wrap narrow">
   <div class="sec-head"><div class="kicker">FAQ</div><h2>Questions &amp; answers</h2></div>
   {faq}
 </div></section>
 
-<section class="sec" id="glance"><div class="wrap narrow">
+<section class="sec alt" id="glance"><div class="wrap narrow">
   <div class="sec-head"><div class="kicker">At a glance</div><h2>DropMorph in one table</h2></div>
   <div class="tbl-wrap"><table class="tbl"><tbody>{glance_rows}</tbody></table></div>
 </div></section>
 
-<section class="sec alt" id="download"><div class="wrap">
+<section class="sec" id="download"><div class="wrap">
   <div class="sec-head"><div class="kicker">Download</div><h2>Get DropMorph. It's free.</h2><p>Settings and engines are kept when DropMorph updates itself.</p></div>
   <div class="grid3">
     <div class="card"><h3 style="margin-top:0">Windows 10 &amp; 11</h3><p>Setup adds the right-click menu, start at sign-in and the <code>dropmorph</code> command. Or use the portable ZIP.</p>
