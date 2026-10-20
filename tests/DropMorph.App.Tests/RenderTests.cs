@@ -963,7 +963,7 @@ public class RenderTests
             // Applying without a theme file (deleted, or emptied) restores the built-in colours on the open window.
             service.Apply(dark, "en");
             Pump();
-            Assert.Equal(Avalonia.Media.Color.Parse("#1B1B19"), Assert.IsAssignableFrom<Avalonia.Media.ISolidColorBrush>(window.Background).Color);
+            Assert.Equal(Avalonia.Media.Color.Parse("#121A1B"), Assert.IsAssignableFrom<Avalonia.Media.ISolidColorBrush>(window.Background).Color);
             window.Close();
 
             service.Apply(dark, "en", custom);

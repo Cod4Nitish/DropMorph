@@ -61,11 +61,11 @@ def subset_font(source, text, **options):
 def truetype(fonts):
     """Hinted TrueType glyphs with composites (accented letters), kerning, and overlap flags set on purpose."""
     font = subset_font(os.path.join(fonts, "NotoSans-Regular.ttf"),
-                       "DropMorph Hamburgefonstiv ÁáéÅçÑü 0123 .,!-")
+                       "Filee Hamburgefonstiv ÁáéÅçÑü 0123 .,!-")
     glyf = font["glyf"]
     glyf["A"].flags[0] |= 0x40  # OVERLAP_SIMPLE
     glyf["Aacute"].components[0].flags |= 0x400  # OVERLAP_COMPOUND
-    rename(font, "DropMorph Test TrueType", "DropMorphTest-TrueType")
+    rename(font, "Filee Test TrueType", "FileeTest-TrueType")
     path = os.path.join(HERE, "DropMorphTest-TrueType.ttf")
     font.save(path)
     return path
@@ -73,8 +73,8 @@ def truetype(fonts):
 
 def cid_keyed(fonts):
     """CID-keyed CFF with local and global subroutines, hints, hint masks, VORG and vertical metrics."""
-    font = subset_font(os.path.join(fonts, "NotoSansKR-Regular.otf"), "DropMorph 한글 변환 Hamburg 0123 ,.")
-    rename(font, "DropMorph Test CID", "DropMorphTest-CID")
+    font = subset_font(os.path.join(fonts, "NotoSansKR-Regular.otf"), "Filee 한글 변환 Hamburg 0123 ,.")
+    rename(font, "Filee Test CID", "FileeTest-CID")
     path = os.path.join(HERE, "DropMorphTest-CID.otf")
     font.save(path)
 
@@ -119,7 +119,7 @@ def name_keyed(fonts):
     builder.setupGlyphOrder(order)
     builder.setupCharacterMap({**{code: name for name, code in names.items()}, 0xC1: "Aacute",
                                0xE000: "flexbar", 0xE001: "box"})
-    builder.setupCFF("DropMorphTest-NameKeyed", {"FullName": "DropMorph Test NameKeyed Regular"}, char_strings, {})
+    builder.setupCFF("FileeTest-NameKeyed", {"FullName": "Filee Test NameKeyed Regular"}, char_strings, {})
     cff = builder.font["CFF "].cff
     top = cff.topDictIndex[0]
     subrs = SubrsIndex()
@@ -132,7 +132,7 @@ def name_keyed(fonts):
         cs.globalSubrs = cff.GlobalSubrs
     builder.setupHorizontalMetrics(metrics)
     builder.setupHorizontalHeader(ascent=880, descent=-120)
-    builder.setupNameTable({"familyName": "DropMorph Test NameKeyed", "styleName": "Regular",
+    builder.setupNameTable({"familyName": "Filee Test NameKeyed", "styleName": "Regular",
                             "copyright": source["name"].getDebugName(0),
                             "licenseDescription": "This Font Software is licensed under the SIL Open Font License, Version 1.1.",
                             "licenseInfoURL": "https://openfontlicense.org"})
