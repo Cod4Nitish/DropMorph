@@ -28,6 +28,9 @@ public partial class MainWindow : Window
             await Launcher.LaunchUriAsync(new Uri(vm.RepositoryUrl));
     }
 
+    private async void OnOpenDeveloper(object? sender, RoutedEventArgs e) =>
+        await Launcher.LaunchUriAsync(new Uri(SponsorLinks.DeveloperUrl));
+
     private async void OnSponsor(object? sender, RoutedEventArgs e) =>
         await SponsorWindow.Create(AppHost.Get<ILocalizer>()).ShowDialog(this);
 

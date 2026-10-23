@@ -16,6 +16,12 @@ public partial class AboutPage : UserControl
             await top.Launcher.LaunchUriAsync(new Uri(vm.RepositoryUrl));
     }
 
+    private async void OnOpenDeveloper(object? sender, RoutedEventArgs e)
+    {
+        if (TopLevel.GetTopLevel(this) is { } top)
+            await top.Launcher.LaunchUriAsync(new Uri(SponsorLinks.DeveloperUrl));
+    }
+
     // A star is given on the repository page itself.
     private void OnStar(object? sender, RoutedEventArgs e) => OnOpenRepository(sender, e);
 

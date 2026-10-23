@@ -37,7 +37,7 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--accent)}
 code,kbd{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
-code{font-size:.88em;background:var(--surface-alt);padding:1px 6px;border-radius:6px;word-break:break-all}
+code{font-size:.88em;background:var(--surface-alt);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 kbd{display:inline-block;padding:0 8px;border-radius:6px;border:1px solid var(--border);border-bottom-width:2px;background:var(--surface);font-size:.85em;color:var(--text)}
 .wrap{max-width:860px;margin:0 auto;padding:0 20px}
 
@@ -187,6 +187,11 @@ pre.term .c{color:#7FA8A3}
 .star-card b{color:var(--text)}
 .star-btn .lbl-s{display:none}
 @media (max-width:480px){.star-btn .lbl-s{display:inline}}
+.star-card p{flex:1 1 320px}
+.credit{font-size:14px;margin-top:8px;opacity:.92}
+.credit a{color:#fff;font-weight:700;text-underline-offset:2px}
+/* phones: wrap long commands so the whole line is readable without sideways scrolling */
+@media (max-width:560px){pre.term{white-space:pre-wrap;word-break:break-all}.cmd button{align-self:flex-start;padding:10px 14px}}
 /* grid items default to min-width:auto: a long command would widen the page */
 .step>div{min-width:0}
 pre.term,.cmd{max-width:100%}
@@ -225,6 +230,7 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <a class="btn btn-ghost" href="https://github.com/Cod4Nitish/DropMorph/releases/latest">Saari files</a>
     </div>
     <div class="meta">Version 1.12.0 · macOS 14 Sonoma ya naya · Free</div>
+    <div class="credit">Made by developer <a href="https://github.com/cod4nitish" target="_blank" rel="noopener">Nitish Singh</a></div>
   </div>
 </header>
 
@@ -354,7 +360,7 @@ brew install ffmpeg ghostscript</pre>
     <section id="help" style="margin-top:56px">
       <h2 style="font-size:26px;letter-spacing:-.02em;margin:0 0 10px">Problem aa rahi hai?</h2>
       <details open><summary>Option dabake drag karne pe donut nahi khul raha</summary>
-        <p>1) DropMorph chalu hona chahiye (menu bar mein drop wala icon). 2) <b>System Settings → Privacy &amp; Security → Accessibility</b> mein DropMorph on ho. 3) Update ke baad on dikh raha ho phir bhi kaam na kare: DropMorph ko list mein select karke <b>−</b> se hatao, phir <b>+</b> se Applications/DropMorph dobara add karke on karo.</p></details>
+        <p>1) DropMorph chalu hona chahiye (menu bar mein drop wala icon). 2) <b>System Settings → Privacy &amp; Security → Accessibility</b> mein DropMorph on ho. 3) Update ke baad on dikh raha ho phir bhi kaam na kare: DropMorph ko list mein select karke <b>−</b> se hatao, phir <b>+</b> se DropMorph app dobara add karke on karo (ek command se install kiya tha to app <b>Home → Applications</b> mein hai, warna <b>Applications</b> mein).</p></details>
       <details><summary>"Open Anyway" button nahi dikh raha</summary>
         <p>Pehle DropMorph ek baar kholne ki koshish karo (tab hi button aata hai), phir Privacy &amp; Security mein sabse neeche dekho. Ya upar wala <code>xattr</code> command chala do, ya <a href="#quick">ek command</a> se install karo.</p></details>
       <details><summary>Right-click mein "Convert with DropMorph" nahi hai</summary>
@@ -366,12 +372,14 @@ brew install ffmpeg ghostscript</pre>
       <details><summary>Update kaise karein?</summary>
         <p>Naya version aane pe DropMorph notice dikhayega. <a href="#quick">Wahi ek command</a> dobara chala do, ya nayi file download karke purane DropMorph ki jagah Applications mein daal do (Replace). Settings aur engines bache rahenge.</p></details>
       <details><summary>Uninstall kaise karein?</summary>
-        <p>DropMorph ko menu bar se Quit karo, phir Applications se <b>Bin</b> mein daal do. Pura saaf karna ho to <code>~/Library/Application Support/DropMorph</code> folder bhi delete kar do.</p></details>
+        <p>Pehle DropMorph ki login item, Finder menu aur download kiye engines hatao. Terminal mein yeh chalao:</p>
+        <div class="cmd"><pre class="term">~/Applications/DropMorph.app/Contents/MacOS/DropMorph --uninstall-cleanup; rm -f ~/.local/bin/dropmorph</pre><button type="button" data-copy>Copy</button></div>
+        <p>(App khud <b>/Applications</b> mein drag kiya tha to shuru ka <code>~</code> hata do.) Phir DropMorph app ko <b>Bin</b> mein daal do. Pura saaf karna ho to <code>~/Library/Application Support/DropMorph</code> folder (settings) bhi delete kar do.</p></details>
       <details><summary>Kya meri files kahin upload hoti hain?</summary>
         <p>Nahi. Sab kuch aapke Mac pe hi convert hota hai. DropMorph internet sirf naya version check karne aur aapke chune hue engines download karne ke liye use karta hai.</p></details>
     </section>
 
-    <div class="star-card"><p><b>DropMorph pasand aaya?</b> Free hai aur hamesha rahega. Developer ki help karo: GitHub pe ek ⭐ star do, isse aur log isse dhoondh paate hain.</p><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener">⭐ Star on GitHub</a></div>
+    <div class="star-card"><p><b>DropMorph pasand aaya?</b> Free hai aur hamesha rahega. Developer Nitish Singh ki help karo: GitHub pe ek ⭐ star do, isse aur log isse dhoondh paate hain.</p><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener">⭐ Star on GitHub</a></div>
 
     <div class="share">
       <h2>Mac wale dosto ko bhejo</h2>
@@ -382,7 +390,7 @@ brew install ffmpeg ghostscript</pre>
 </main>
 
 <footer>
-  <a href="/">DropMorph</a> · Made by <a href="https://github.com/cod4nitish">Nitish Singh</a> · <a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a>
+  <a href="/">DropMorph</a> · Made by developer <a href="https://github.com/cod4nitish" target="_blank" rel="noopener">Nitish Singh</a> · <a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a>
 </footer>
 
 <script>
@@ -439,7 +447,7 @@ brew install ffmpeg ghostscript</pre>
     const pick = document.getElementById(arch === 'arm' ? 'dlArm' : 'dlIntel');
     pick.classList.add('rec');
     document.getElementById('macMain').href = pick.href;
-    document.getElementById('macMainText').textContent = arch === 'arm' ? 'Download (Apple silicon)' : 'Download (Intel Mac)';
+    document.getElementById('macMainText').textContent = arch === 'arm' ? 'Download karo (Apple silicon)' : 'Download karo (Intel Mac)';
   }
 })();
 </script>

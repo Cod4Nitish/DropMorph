@@ -2,6 +2,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:DropMorph.App.ViewModels"
+        xmlns:s="using:DropMorph.App.Services"
         x:Class="DropMorph.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="DropMorph"
@@ -57,6 +58,12 @@
             </Button>
           </Grid>
           <TextBlock x:Name="VersionLabel" Classes="caption" Margin="8,0,0,0" Text="{Binding VersionText}" />
+          <Button Classes="ghost" Padding="0" Margin="8,-6,0,0" Click="OnOpenDeveloper" ToolTip.Tip="{x:Static s:SponsorLinks.DeveloperUrl}">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Classes="caption" Text="{DynamicResource about.developed_by}" />
+              <TextBlock Classes="caption" Text="{x:Static s:SponsorLinks.DeveloperName}" FontWeight="SemiBold" />
+            </StackPanel>
+          </Button>
         </StackPanel>
         <ListBox Classes="nav" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
           <ListBox.ItemTemplate>

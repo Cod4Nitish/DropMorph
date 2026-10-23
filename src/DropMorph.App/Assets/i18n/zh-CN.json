@@ -638,6 +638,7 @@
   "about.license": "DropMorph 是基于 MIT 许可证的免费软件。",
   "about.notices": "第三方声明",
   "about.github": "GitHub 仓库",
+  "about.developed_by": "开发者：",
   "about.support_title": "支持 DropMorph",
   "about.support_text": "DropMorph 免费开源。\n在 GitHub 上点星、报告错误、提出想法或赞助，都是很大的支持。",
   "about.sponsor": "赞助",

@@ -37,7 +37,7 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--accent)}
 code,kbd{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
-code{font-size:.88em;background:var(--surface-alt);padding:1px 6px;border-radius:6px;word-break:break-all}
+code{font-size:.88em;background:var(--surface-alt);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 kbd{display:inline-block;padding:0 8px;border-radius:6px;border:1px solid var(--border);border-bottom-width:2px;background:var(--surface);font-size:.85em;color:var(--text)}
 .wrap{max-width:860px;margin:0 auto;padding:0 20px}
 
@@ -187,6 +187,11 @@ pre.term .c{color:#7FA8A3}
 .star-card b{color:var(--text)}
 .star-btn .lbl-s{display:none}
 @media (max-width:480px){.star-btn .lbl-s{display:inline}}
+.star-card p{flex:1 1 320px}
+.credit{font-size:14px;margin-top:8px;opacity:.92}
+.credit a{color:#fff;font-weight:700;text-underline-offset:2px}
+/* phones: wrap long commands so the whole line is readable without sideways scrolling */
+@media (max-width:560px){pre.term{white-space:pre-wrap;word-break:break-all}.cmd button{align-self:flex-start;padding:10px 14px}}
 /* grid items default to min-width:auto: a long command would widen the page */
 .step>div{min-width:0}
 pre.term,.cmd{max-width:100%}
@@ -225,6 +230,7 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <a class="btn btn-ghost" href="https://github.com/Cod4Nitish/DropMorph/releases/latest">Saari files</a>
     </div>
     <div class="meta">Version 1.12.0 · glibc 2.35+ (Ubuntu 22.04 ya naya) · Free</div>
+    <div class="credit">Made by developer <a href="https://github.com/cod4nitish" target="_blank" rel="noopener">Nitish Singh</a></div>
   </div>
 </header>
 
@@ -259,14 +265,17 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <div>
         <h2>Zaroori libraries (ek baar)</h2>
         <p>Apne Linux ke hisaab se ek command chalao. (Bhool gaye to bhi <code>install.sh</code> bata dega ki kya missing hai.)</p>
-        <p><b>Ubuntu 24.04+ / Mint 22</b></p>
+        <p><b>Ubuntu 24.04+ / Debian 13 / Mint 22</b></p>
         <div class="cmd"><pre class="term">sudo apt install libicu74 libssl3t64 libfontconfig1 libfreetype6 libx11-6 libice6 libsm6 libxrandr2 libxkbcommon0 libxi6 libxtst6 libxt6 fonts-noto-cjk python3</pre><button type="button" data-copy>Copy</button></div>
-        <p><b>Ubuntu 22.04 / Mint 21</b></p>
+        <p><b>Ubuntu 22.04 / Debian 12 / Mint 21</b> <small>(Debian 12 pe <code>libicu70</code> ki jagah <code>libicu72</code> likho)</small></p>
         <div class="cmd"><pre class="term">sudo apt install libicu70 libssl3 libfontconfig1 libfreetype6 libx11-6 libice6 libsm6 libxrandr2 libxkbcommon0 libxi6 libxtst6 libxt6 fonts-noto-cjk python3</pre><button type="button" data-copy>Copy</button></div>
         <p><b>Fedora</b></p>
         <div class="cmd"><pre class="term">sudo dnf install libicu fontconfig freetype libX11 libICE libSM libXrandr libxkbcommon libXi libXtst libXt google-noto-sans-cjk-fonts python3</pre><button type="button" data-copy>Copy</button></div>
         <p><b>Arch / Manjaro</b></p>
         <div class="cmd"><pre class="term">sudo pacman -S --needed icu fontconfig freetype2 libx11 libice libsm libxrandr libxkbcommon libxi libxtst libxt noto-fonts-cjk python</pre><button type="button" data-copy>Copy</button></div>
+        <p><b>openSUSE</b></p>
+        <div class="cmd"><pre class="term">sudo zypper install libicu fontconfig libfreetype6 libX11-6 libICE6 libSM6 libXrandr2 libxkbcommon0 libXi6 libXtst6 libXt6 noto-sans-cjk-fonts python3</pre><button type="button" data-copy>Copy</button></div>
+        <div class="tip"><b>Doosra version?</b> Sahi libicu naam aise dhoondho: <code>apt-cache search libicu</code>. CJK fonts sirf Chinese/Japanese/Korean text ke liye hain.</div>
       </div>
     </section>
 
@@ -275,7 +284,8 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <div>
         <h2>Unzip karke install.sh chalao</h2>
         <pre class="term">cd ~/Downloads
-tar -xzf DropMorph-1.12.0-linux-x64.tar.gz      <span class="c"># ARM64 ho to linux-arm64</span>
+<span class="c"># ARM64: dono lines mein linux-arm64 likho</span>
+tar -xzf DropMorph-1.12.0-linux-x64.tar.gz
 cd DropMorph-1.12.0-linux-x64
 ./install.sh</pre>
         <p>Yeh DropMorph ko aapke user ke liye install karta hai (<code>sudo</code> nahi chahiye), <b>app menu</b> mein DropMorph daalta hai aur <code>dropmorph</code> command add karta hai.</p>
@@ -299,6 +309,7 @@ cd DropMorph-1.12.0-linux-x64
           <div class="way"><h3>Drop zone</h3><p>DropMorph window kholo aur file us box mein daal do.</p></div>
           <div class="way"><h3>Terminal</h3><p><code>dropmorph convert *.png --to webp</code></p></div>
         </div>
+        <div class="tip"><b>2-key shortcuts:</b> Files select karo aur dabao <kbd>Alt</kbd> + <kbd>I</kbd> (Images), <kbd>D</kbd> (Documents), <kbd>V</kbd> (Video) ya <kbd>O</kbd> (Other). Us type ka donut khul jayega. Keys DropMorph → <b>Settings → Shortcuts</b> mein badal sakte ho.</div>
         <p><b>Settings → General → Start DropMorph when I sign in</b> on rakho, taaki login hote hi ready ho.</p>
       </div>
     </section>
@@ -322,16 +333,20 @@ cd DropMorph-1.12.0-linux-x64
       <details><summary>Ctrl-drag pe donut nahi aa raha</summary>
         <p>DropMorph chalu ho (tray icon), aur session X11 ho (upar dekho).</p></details>
       <details><summary>Video ya audio convert nahi ho raha</summary>
-        <p>DropMorph → <b>Settings → Engines</b> se <b>FFmpeg</b> install karo. Purani Office files (DOC, PPT) ke liye <code>sudo apt install libreoffice</code>, phir <b>Check again</b>.</p></details>
+        <p>DropMorph → <b>Settings → Engines</b> se <b>FFmpeg</b> install karo. Purani Office files (DOC, PPT) ke liye <code>sudo apt install libreoffice</code>, EPS/PS ke liye <code>sudo apt install ghostscript</code>, phir <b>Check again</b>.</p></details>
       <details><summary><code>dropmorph: command not found</code></summary>
         <pre class="term">echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.profile && . ~/.profile</pre></details>
       <details><summary>Update kaise karein?</summary>
         <p><a href="#quick">Wahi ek command</a> dobara chala do, ya nayi file unzip karke uska <code>./install.sh</code> chalao. Settings aur engines bache rahenge.</p></details>
       <details><summary>Uninstall kaise karein?</summary>
-        <pre class="term">~/.local/share/dropmorph/application/uninstall.sh</pre></details>
+        <p>Yeh app, menu entry, <code>dropmorph</code> command, autostart aur download kiye engines hata deta hai:</p>
+        <div class="cmd"><pre class="term">~/.local/share/dropmorph/application/uninstall.sh</pre><button type="button" data-copy>Copy</button></div>
+        <p>Settings (<code>~/.config/DropMorph</code>) bache rehte hain. Pura saaf karna ho to woh folder bhi delete kar do.</p></details>
+      <details><summary>App menu mein DropMorph nahi dikh raha</summary>
+        <p>Ek baar log out / log in karo, ya chalao: <code>update-desktop-database ~/.local/share/applications</code></p></details>
     </section>
 
-    <div class="star-card"><p><b>DropMorph pasand aaya?</b> Free hai aur hamesha rahega. Developer ki help karo: GitHub pe ek ⭐ star do, isse aur log isse dhoondh paate hain.</p><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener">⭐ Star on GitHub</a></div>
+    <div class="star-card"><p><b>DropMorph pasand aaya?</b> Free hai aur hamesha rahega. Developer Nitish Singh ki help karo: GitHub pe ek ⭐ star do, isse aur log isse dhoondh paate hain.</p><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener">⭐ Star on GitHub</a></div>
 
     <div class="share">
       <h2>Linux wale dosto ko bhejo</h2>
@@ -342,7 +357,7 @@ cd DropMorph-1.12.0-linux-x64
 </main>
 
 <footer>
-  <a href="/">DropMorph</a> · Made by <a href="https://github.com/cod4nitish">Nitish Singh</a> · <a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a>
+  <a href="/">DropMorph</a> · Made by developer <a href="https://github.com/cod4nitish" target="_blank" rel="noopener">Nitish Singh</a> · <a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a>
 </footer>
 
 <script>

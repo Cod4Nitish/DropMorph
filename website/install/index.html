@@ -37,7 +37,7 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--accent)}
 code,kbd{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
-code{font-size:.88em;background:var(--surface-alt);padding:1px 6px;border-radius:6px;word-break:break-all}
+code{font-size:.88em;background:var(--surface-alt);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 kbd{display:inline-block;padding:0 8px;border-radius:6px;border:1px solid var(--border);border-bottom-width:2px;background:var(--surface);font-size:.85em;color:var(--text)}
 .wrap{max-width:860px;margin:0 auto;padding:0 20px}
 
@@ -187,6 +187,11 @@ pre.term .c{color:#7FA8A3}
 .star-card b{color:var(--text)}
 .star-btn .lbl-s{display:none}
 @media (max-width:480px){.star-btn .lbl-s{display:inline}}
+.star-card p{flex:1 1 320px}
+.credit{font-size:14px;margin-top:8px;opacity:.92}
+.credit a{color:#fff;font-weight:700;text-underline-offset:2px}
+/* phones: wrap long commands so the whole line is readable without sideways scrolling */
+@media (max-width:560px){pre.term{white-space:pre-wrap;word-break:break-all}.cmd button{align-self:flex-start;padding:10px 14px}}
 /* grid items default to min-width:auto: a long command would widen the page */
 .step>div{min-width:0}
 pre.term,.cmd{max-width:100%}
@@ -228,6 +233,7 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <a class="btn btn-ghost" href="https://github.com/Cod4Nitish/DropMorph/releases/latest">Saari files</a>
     </div>
     <div class="meta">Version 1.12.0 · Windows 10 (1809+) aur Windows 11 · Free</div>
+    <div class="credit">Made by developer <a href="https://github.com/cod4nitish" target="_blank" rel="noopener">Nitish Singh</a></div>
   </div>
 </header>
 
@@ -238,7 +244,7 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <h2>⚡ Sabse aasaan: ek command</h2>
       <p><b>Start</b> pe right-click → <b>Terminal</b> (ya <b>PowerShell</b>) kholo, yeh paste karke <kbd>Enter</kbd> dabao:</p>
       <div class="cmd"><pre class="term">irm https://dropmorph.vercel.app/install.ps1 | iex</pre><button type="button" data-copy>Copy</button></div>
-      <p style="font-size:14px">Yeh latest version GitHub se download karta hai, checksum check karta hai aur Setup chalu karta hai. Phir neeche <a href="#s3">Step 3</a> se aage badho. Command nahi chalana? Neeche ke steps follow karo.</p>
+      <p style="font-size:14px">Yeh latest version GitHub se download karta hai, checksum check karta hai aur Setup chalu karta hai. Isme Step 2 wali neeli screen nahi aati: seedha neeche <a href="#s3">Step 3</a> se aage badho. Command nahi chalana? Neeche ke steps follow karo.</p>
     </section>
     <div class="toc">
       <a href="#quick">⚡ Ek command</a><a href="#s1">1. Download</a><a href="#s2">2. Blue screen</a><a href="#s3">3. Yes dabao</a><a href="#s4">4. Options</a><a href="#s5">5. Use karo</a><a href="#help">Problem?</a>
@@ -298,23 +304,24 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <div class="num">4</div>
       <div>
         <h2>Options chuno, phir Install</h2>
-        <p>Setup mein yeh options aayenge. Inme se zyada kaam ke options ko on rakho:</p>
+        <p>Setup mein yeh options aayenge. Sab pehle se on hote hain, aur zyaadatar logon ke liye waise hi theek hain:</p>
         <div class="mock setup" aria-hidden="true">
           <div class="h">Options:</div>
-          <div class="chk"><i class="on">✓</i><span>Right-click menu<small>File pe right-click → DropMorph</small></span></div>
-          <div class="chk"><i class="on">✓</i><span>Also show it at the top of the Windows 11 menu<small>"Show more options" kholna nahi padega</small></span></div>
-          <div class="chk"><i class="on">✓</i><span>Start at sign-in<small>PC on hote hi tray mein ready</small></span></div>
-          <div class="chk"><i></i><span>Add the "dropmorph" command to PATH</span></div>
+          <div class="chk"><i class="on">✓</i><span>Show “Convert with DropMorph” in the Explorer context menu<small>File pe right-click → DropMorph</small></span></div>
+          <div class="chk"><i class="on">✓</i><span>Also show it at the top of the Windows 11 menu, not only under “Show more options”<small>"Show more options" kholna nahi padega</small></span></div>
+          <div class="chk"><i class="on">✓</i><span>Start DropMorph when I sign in<small>PC on hote hi tray mein ready</small></span></div>
+          <div class="chk"><i class="on">✓</i><span>Add the "dropmorph" command to PATH (convert from the command line)</span></div>
+          <div class="h" style="margin-top:12px">Additional shortcuts:</div>
           <div class="chk"><i class="on">✓</i><span>Create a desktop shortcut<small>Desktop pe DropMorph ka icon</small></span></div>
         </div>
         <div class="wide">
         <table class="table">
           <tr><th>Option</th><th>Kya karein</th></tr>
-          <tr><td>Right-click menu</td><td>✅ On rakho</td></tr>
+          <tr><td>Explorer context menu</td><td>✅ On rakho. File pe right-click karke bhi convert kar paoge.</td></tr>
           <tr><td>Windows 11 menu ke top pe <span class="win11">WIN 11</span></td><td>✅ On rakho. Windows 11 mein naya chhota right-click menu hota hai. Isse DropMorph seedha usi mein dikhega.</td></tr>
-          <tr><td>Start at sign-in</td><td>✅ On rakho. <b>Ctrl-drag tabhi kaam karta hai jab DropMorph chalu ho.</b></td></tr>
-          <tr><td>"dropmorph" command</td><td>Sirf agar command line use karte ho</td></tr>
-          <tr><td>Desktop shortcut</td><td>✅ Pehle se on hai. Desktop pe icon nahi chahiye to hata do.</td></tr>
+          <tr><td>Start DropMorph when I sign in</td><td>✅ On rakho. <b>Ctrl-drag tabhi kaam karta hai jab DropMorph chalu ho.</b></td></tr>
+          <tr><td>"dropmorph" command</td><td>On rehne do, koi nuksaan nahi. Sirf command line se convert karne ke kaam aata hai. (Pehle se add ho to yeh option nahi dikhega.)</td></tr>
+          <tr><td>Desktop shortcut</td><td>✅ On hai. Desktop pe icon nahi chahiye to hata do.</td></tr>
         </table>
         </div>
         <p><b>Conversion engines</b> (agla page, optional):</p>
@@ -324,7 +331,7 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
           <li><b>Ghostscript</b>: EPS/PS · <b>Pandoc</b>: LaTeX jaise text formats · <b>calibre</b>: MOBI/AZW3 e-books</li>
         </ul>
         <div class="tip"><b>Bina engine ke bhi</b> images, PDF, Word, Excel, PowerPoint, ZIP sab chalta hai. Engines baad mein bhi <b>Settings → Engines</b> se le sakte ho.</div>
-        <p><b>Install</b> → <b>Finish</b> dabao. DropMorph khul jayega, aur chune hue engines usi window mein download honge.</p>
+        <p><b>Install</b> dabao. Install poora hote hi DropMorph khud khul jayega (aur chune hue engines usi window mein download honge). Phir Setup mein <b>Finish</b> dabao.</p>
       </div>
     </section>
 
@@ -357,7 +364,7 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <details open><summary>Ctrl dabake drag karne pe donut nahi khul raha</summary>
         <p>DropMorph chalu hona chahiye. Windows 11 mein taskbar ke right side pe <b>^</b> (teer) dabao, wahan DropMorph ka drop wala icon dikhna chahiye. Na dikhe to <b>Start</b> menu mein "DropMorph" search karke kholo.</p></details>
       <details><summary>Right-click menu mein DropMorph nahi dikh raha <span class="win11">WIN 11</span></summary>
-        <p>Windows 11 ke chhote menu mein na ho to <b>Show more options</b> (ya <kbd>Shift</kbd> + right-click) dabao. Top pe chahiye to DropMorph ki <b>Settings → General</b> mein Explorer menu ka option on karo.</p></details>
+        <p>Windows 11 ke chhote menu mein na ho to <b>Show more options</b> (ya <kbd>Shift</kbd> + right-click) dabao. Top pe chahiye to DropMorph ki <b>Settings → General</b> mein <b>Add to the main menu</b> dabao (Windows ek baar admin permission maangega).</p></details>
       <details><summary>"Run anyway" ka button hi nahi hai</summary>
         <p>Yeh Smart App Control ki wajah se hai. Upar <a href="#s2">Step 2</a> ka peela box padho.</p></details>
       <details><summary>Antivirus ne file delete/block kar di</summary>
@@ -369,12 +376,12 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
       <details><summary>Update kaise karein?</summary>
         <p>Kuch karne ki zaroorat nahi. Naya version aane pe DropMorph khud notice dikhayega. Ek click mein update ho jayega, aur settings aur engines bache rahenge.</p></details>
       <details><summary>Uninstall kaise karein?</summary>
-        <p><b>Start → Settings → Apps → Installed apps</b> → DropMorph ke aage <b>⋯</b> → <b>Uninstall</b>.</p></details>
+        <p><b>Start → Settings → Apps → Installed apps</b> → DropMorph ke aage <b>⋯</b> → <b>Uninstall</b>. (Windows 10: <b>Settings → Apps → Apps &amp; features</b> → DropMorph → <b>Uninstall</b>.)</p></details>
       <details><summary>Kya meri files kahin upload hoti hain?</summary>
         <p>Nahi. Sab kuch aapke PC pe hi convert hota hai. DropMorph internet sirf naya version check karne aur aapke chune hue engines download karne ke liye use karta hai.</p></details>
     </section>
 
-    <div class="star-card"><p><b>DropMorph pasand aaya?</b> Free hai aur hamesha rahega. Developer ki help karo: GitHub pe ek ⭐ star do, isse aur log isse dhoondh paate hain.</p><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener">⭐ Star on GitHub</a></div>
+    <div class="star-card"><p><b>DropMorph pasand aaya?</b> Free hai aur hamesha rahega. Developer Nitish Singh ki help karo: GitHub pe ek ⭐ star do, isse aur log isse dhoondh paate hain.</p><a class="btn btn-primary" href="https://github.com/Cod4Nitish/DropMorph" target="_blank" rel="noopener">⭐ Star on GitHub</a></div>
 
     <div class="share">
       <h2>Dosto ko bhejo</h2>
@@ -385,7 +392,7 @@ nav.os-tabs{position:static;background:none;border:0;backdrop-filter:none;-webki
 </main>
 
 <footer>
-  <a href="/">DropMorph</a> · Made by <a href="https://github.com/cod4nitish">Nitish Singh</a> · <a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a>
+  <a href="/">DropMorph</a> · Made by developer <a href="https://github.com/cod4nitish" target="_blank" rel="noopener">Nitish Singh</a> · <a href="https://github.com/Cod4Nitish/DropMorph">GitHub</a>
 </footer>
 
 <script>

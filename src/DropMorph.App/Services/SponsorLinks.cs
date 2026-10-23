@@ -12,6 +12,10 @@ public static class SponsorLinks
 {
     public const string GitHubSponsorsUrl = "https://github.com/sponsors/cod4nitish";
 
+    /// <summary>Who makes DropMorph, named on the About page and at the bottom of the sidebar.</summary>
+    public const string DeveloperName = "Nitish Singh";
+    public const string DeveloperUrl = "https://github.com/cod4nitish";
+
     private static readonly SponsorLink GitHub = new("github", "GitHub Sponsors", GitHubSponsorsUrl, "Brand.GitHubSponsors", "#BF3989");
 
     /// <summary>Every way to support DropMorph. The same for every language.</summary>

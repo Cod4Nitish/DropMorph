@@ -25,6 +25,9 @@ LINUX_ARM_URL = f"{GH}/releases/latest/download/DropMorph-{VERSION}-linux-arm64.
 INSTALL_SH = f"curl -fsSL {BASE}/install.sh | sh"
 INSTALL_PS1 = f"irm {BASE}/install.ps1 | iex"
 FORMAT_COUNT = 254
+DEV_NAME = "Nitish Singh"
+DEV_URL = "https://github.com/cod4nitish"
+AUTHOR = {"@type": "Person", "name": DEV_NAME, "url": DEV_URL}
 
 ENGINES = {"¹": "Ghostscript", "²": "LibreOffice", "³": "Pandoc", "⁴": "calibre", "⁵": "FFmpeg"}
 ENGINE_INFO = [
@@ -63,7 +66,7 @@ def icon(name):
 
 
 def tick():
-    return f'<span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>'
+    return f'<span class="tick"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>'
 
 
 def gh_icon():
@@ -113,7 +116,10 @@ NAV = [("How it works", "/#how"), ("Features", "/#features"), ("Formats", "/form
 def page(path, title, desc, body, active=None, jsonld=(), extra_head=""):
     canonical = BASE + path
     nav = "".join(f'<a href="{href}"{" aria-current=\"page\"" if label == active else ""}>{label}</a>' for label, href in NAV)
-    ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>' for j in jsonld)
+    # every page says who made it: a WebPage entry with the author, next to the page's own structured data
+    webpage = {"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": canonical, "description": desc,
+               "author": AUTHOR, "isPartOf": {"@type": "WebSite", "name": "DropMorph", "url": BASE + "/", "author": AUTHOR}}
+    ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>' for j in [webpage, *jsonld])
     popular = "".join(f'<a href="/convert/{c["slug"]}/">{esc(c["from"])} → {esc(c["to"])}</a>' for c in CONVERSIONS[:6])
     return f"""<!doctype html>
 <html lang="en">
@@ -122,6 +128,7 @@ def page(path, title, desc, body, active=None, jsonld=(), extra_head=""):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
+<meta name="author" content="{DEV_NAME}">
 <link rel="canonical" href="{canonical}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{canonical}">
@@ -163,7 +170,7 @@ def page(path, title, desc, body, active=None, jsonld=(), extra_head=""):
       <div><h4>Popular</h4>{popular}</div>
       <div><h4>Project</h4><a href="{GH}">GitHub</a><a href="{GH}/releases">All releases</a><a href="{GH}/issues">Report an issue</a><a href="{GH}/blob/main/LICENSE">MIT License</a><a href="{GH}/blob/main/THIRD-PARTY-NOTICES.md">Third-party notices</a></div>
     </div>
-    <div class="foot-bottom"><span>© 2026 DropMorph · Developed by <a class="dev-name" href="https://github.com/cod4nitish">Nitish Singh</a></span><span>Version {VERSION}</span></div>
+    <div class="foot-bottom"><span>© 2026 DropMorph · Developed by <a class="dev-name" href="{DEV_URL}" rel="author">{DEV_NAME}</a></span><span>Version {VERSION}</span></div>
   </div>
 </footer>
 <script src="/assets/site.js" defer></script>
@@ -321,7 +328,7 @@ def conv_page(c):
 </div></section>
 {final_cta()}
 """
-    ld = [{"@context": "https://schema.org", "@type": "HowTo", "name": c["title"],
+    ld = [{"@context": "https://schema.org", "@type": "HowTo", "name": c["title"], "author": AUTHOR,
            "step": [{"@type": "HowToStep", "text": f"Hold Ctrl and drag the {c['from']} file."},
                     {"@type": "HowToStep", "text": f"Drop it on {c['drop']} in the donut that opens at the cursor."},
                     {"@type": "HowToStep", "text": "The converted file is saved next to the original."}]},
@@ -400,7 +407,7 @@ def home():
         {guide_btn()}
         <small>Free for Windows 10 &amp; 11, macOS 14+ and Linux · v{VERSION}</small>
         <small class="gh-line">Free &amp; open source. <a href="{GH}">⭐ Star it on GitHub</a> to help the developer.</small>
-        <a class="dev-badge" href="https://github.com/cod4nitish">Developed by <b>Nitish Singh</b></a>
+        <a class="dev-badge" href="{DEV_URL}" rel="author">Developed by <b>{DEV_NAME}</b></a>
       </div>
     </div>
     <div class="stage" id="stage" aria-label="Interactive demo: drag the file and drop it on a format">
@@ -514,8 +521,6 @@ def home():
 
 <section class="sec" id="download"><div class="wrap">
   <div class="sec-head"><div class="kicker">Download</div><h2>Get DropMorph. It's free.</h2><p>Windows, macOS and Linux, with Android and iPhone help below. Pick your computer. Download the file, or install with one command. Settings and engines are kept when DropMorph updates itself.</p></div>
-  <div class="tip phone-note" role="note"><p><b>On a phone?</b> DropMorph runs on a computer (Windows, Mac or Linux), not on Android or iPhone. The files below still download, but to install it, open this page on your computer.</p>
-    <button class="btn btn-accent btn-small" type="button" data-share>Share link</button></div>
   <div class="os-grid">
     <article class="card os-card" data-os="windows" aria-labelledby="os-win">
       <div class="os-head"><h3 id="os-win">{os_logo("windows")}Windows</h3><span class="os-you">Your computer</span></div>
@@ -543,7 +548,7 @@ def home():
       <a class="os-guide" href="/install/linux/">Linux install guide →</a>
     </article>
   </div>
-  <div class="sec-head phone-head"><h3>On a phone? Android &amp; iPhone</h3><p>DropMorph is a computer app, so there is no phone version yet. Send the link to your computer and install it there in a minute.</p></div>
+  <div class="sec-head phone-head"><h3>On a phone? Android &amp; iPhone</h3><p>DropMorph is a computer app (Windows, Mac or Linux), so there is no phone version yet. The files still download on a phone, but to install, send the link to your computer and install it there in a minute.</p></div>
   <div class="os-grid phone-grid">
     <article class="card os-card" data-os="android" aria-labelledby="os-android">
       <div class="os-head"><h3 id="os-android">{os_logo("android")}Android</h3><span class="os-soon">Coming soon</span><span class="os-you">Your phone</span></div>
@@ -566,9 +571,9 @@ def home():
            "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows 10, Windows 11, macOS 14+, Linux",
            "softwareVersion": VERSION, "downloadUrl": SETUP_URL, "url": BASE + "/", "license": GH + "/blob/main/LICENSE",
            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-           "author": {"@type": "Person", "name": "Nitish Singh", "url": "https://github.com/cod4nitish"}},
+           "author": AUTHOR},
           faq_ld(HOME_FAQ)]
-    return page("/", "DropMorph: Free File Converter for Windows, Offline | Drag. Drop. Morphed.",
+    return page("/", "DropMorph: Free Offline File Converter for Windows, Mac & Linux | Drag. Drop. Morphed.",
                 f"Convert {FORMAT_COUNT} file formats by dragging: PDF to Word, Excel to PDF, HEIC to JPG, MP4 to MP3 and more. Free, offline, nothing uploaded. Windows, macOS and Linux.",
                 body, jsonld=ld)
 
@@ -635,8 +640,9 @@ WATCH_OPTS = [("-t, --to <format>", "Target format"), ("-p, --preset <preset>", 
 
 def cli_page():
     def table(rows):
+        # each token in a nowrap span: on phones an option wraps between words, never after "--"
         return "<div class='tbl-wrap'><table class='tbl'><thead><tr><th>Option</th><th>What it does</th></tr></thead><tbody>" + \
-            "".join(f"<tr><td><code>{esc(o)}</code></td><td>{d}</td></tr>" for o, d in rows) + "</tbody></table></div>"
+            "".join(f"<tr><td><code>{' '.join(f'<span>{esc(t)}</span>' for t in o.split(' '))}</code></td><td>{d}</td></tr>" for o, d in rows) + "</tbody></table></div>"
     body = f"""
 <header class="hero"><div class="wrap hero-simple">
   <div class="crumbs"><a href="/">DropMorph</a> › Command line</div>

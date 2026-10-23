@@ -3,6 +3,7 @@
              xmlns:vm="using:DropMorph.App.ViewModels.Pages"
              xmlns:c="using:DropMorph.App.Controls"
              xmlns:v="using:DropMorph.App.Views"
+             xmlns:s="using:DropMorph.App.Services"
              x:Class="DropMorph.App.Views.Pages.AboutPage"
              x:DataType="vm:AboutPageViewModel">
   <StackPanel Spacing="18">
@@ -14,6 +15,12 @@
           <TextBlock Text="DropMorph" FontSize="24" FontWeight="Bold" />
           <TextBlock Classes="muted" Text="{Binding Version}" />
           <TextBlock Classes="muted" Text="{DynamicResource about.license}" />
+          <Button Classes="ghost" Padding="0" Click="OnOpenDeveloper" ToolTip.Tip="{x:Static s:SponsorLinks.DeveloperUrl}">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Classes="muted" Text="{DynamicResource about.developed_by}" />
+              <TextBlock Text="{x:Static s:SponsorLinks.DeveloperName}" FontWeight="SemiBold" Foreground="{DynamicResource AccentBrush}" />
+            </StackPanel>
+          </Button>
           <Button Classes="ghost" Padding="0" Click="OnOpenRepository" Margin="0,4,0,0">
             <StackPanel Orientation="Horizontal" Spacing="6">
               <PathIcon Width="13" Height="13" Data="{StaticResource Icon.Link}" Foreground="{DynamicResource AccentBrush}" />

@@ -638,6 +638,7 @@
   "about.license": "DropMorph는 MIT 라이선스의 무료 소프트웨어예요.",
   "about.notices": "서드파티 고지",
   "about.github": "GitHub 저장소",
+  "about.developed_by": "개발자:",
   "about.support_title": "DropMorph 응원하기",
   "about.support_text": "DropMorph는 무료 오픈소스예요.\nGitHub 별, 버그 신고, 기능 제안, 후원 모두 큰 힘이 돼요.",
   "about.sponsor": "후원하기",
